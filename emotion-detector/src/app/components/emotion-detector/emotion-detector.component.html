@@ -1,0 +1,54 @@
+<div class="emotion-detector-container">
+  <h1>Detector de Emociones</h1>
+
+  <div class="main-content">
+    <div class="video-section">
+      <div class="video-container">
+        <video #video [hidden]="!isCapturing" autoplay playsinline></video>
+        <canvas #canvas></canvas>
+      </div>
+      <div class="controls">
+        <button (click)="startCamera()" [disabled]="isCapturing">
+          Iniciar Cámara
+        </button>
+        <button (click)="stopCamera()" [disabled]="!isCapturing">
+          Detener Cámara
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="isLoading" class="loading-indicator">
+      Cargando...
+    </div>
+
+    <!-- Mostrar mensaje si no se detectan rostros después de cargar y no hay error -->
+    <div *ngIf="!isLoading && predictions.length === 0 && isCapturing && !error" class="no-faces-detected">
+      No se detectaron rostros.
+    </div>
+
+    <!-- Mostrar la predicción más fuerte si existe -->
+    <div class="prediction" *ngIf="strongestPrediction">
+      <h2>Resultado:</h2>
+      <div class="emotion-result">
+        <span class="emotion-emoji">{{ getEmotionEmoji(strongestPrediction.emotion) }}</span>
+        <span class="emotion-text">{{ strongestPrediction.emotion }}</span>
+        <span class="confidence">({{ (strongestPrediction.confidence * 100).toFixed(1) }}% de confianza)</span>
+      </div>
+
+      <div class="all-predictions">
+        <h3>Probabilidades:</h3>
+        <div class="prediction-bar" *ngFor="let emotion of strongestPrediction.all_predictions | keyvalue">
+          <span class="emotion-label">{{ emotion.key }}</span>
+          <div class="progress-bar">
+            <div class="progress" [style.width.%]="emotion.value * 100"></div>
+          </div>
+          <span class="percentage">{{ (emotion.value * 100).toFixed(1) }}%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="error" *ngIf="error">
+      {{ error }}
+    </div>
+  </div>
+</div> 

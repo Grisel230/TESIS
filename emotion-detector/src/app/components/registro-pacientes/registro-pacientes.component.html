@@ -1,0 +1,129 @@
+<div class="registro-paciente-container">
+  <h2>Datos del Paciente</h2>
+
+  <form>
+    <div class="form-group">
+      <label for="nombreCompletoPaciente">Nombre completo:</label>
+      <input type="text" id="nombreCompletoPaciente">
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="edadPaciente">Edad:</label>
+        <input type="number" id="edadPaciente">
+      </div>
+      <div class="form-group">
+        <label for="diagnosticoPreliminar">Diagnóstico preliminar:</label>
+        <textarea id="diagnosticoPreliminar"></textarea>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="generoPaciente">Género:</label>
+      <select id="generoPaciente">
+        <option value="">Seleccionar</option>
+        <!-- Add more options here -->
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="notasSesion">Notas de la sesión:</label>
+      <textarea id="notasSesion"></textarea>
+    </div>
+
+    <h3>Captura de Emociones</h3>
+
+    <!-- Placeholder for the emotion capture module -->
+    <div class="emotion-capture-placeholder">
+      <!-- Previously app-emotion-detector was here. Now integrating its content directly. -->
+      <div class="emotion-detector-container">
+        <!-- <h1>Detector de Emociones</h1> -- Titulo general ya en la pagina -->
+
+        <div class="main-content">
+          <div class="video-section">
+            <div class="video-container">
+              <video #video [hidden]="!isCapturingInChild" autoplay playsinline></video>
+              <canvas #canvas></canvas>
+            </div>
+            <!-- Los controles de Iniciar/Detener Cámara -->
+            <div class="controls">
+              <button (click)="startCamera()" [disabled]="isCapturingInChild">
+                Iniciar Cámara
+              </button>
+              <button (click)="stopCamera()" [disabled]="!isCapturingInChild">
+                Detener Cámara
+              </button>
+            </div>
+          </div>
+
+          <!-- La sección de resultados ahora está aquí, PERO la mostraremos abajo -->
+          <!-- La lógica de visualización está en la sección de abajo -->
+
+        </div>
+      </div>
+      <!-- End of integrated emotion detector content -->
+    </div>
+
+    <!-- Los botones de captura/sesión generales pueden ir aquí o ser gestionados por el padre -->
+    <!-- Los controles específicos de camara/captura van con el video arriba -->
+    <!-- <div class="capture-controls"> -->
+    <!-- <button type="button" class="btn-iniciar-captura">Iniciar Captura</button> -->
+    <!-- <button type="button" class="btn-detener-captura" disabled>Detener Captura</button> -->
+    <!-- <button type="button" class="btn-guardar-sesion" disabled>Guardar Sesión</button> -->
+    <!-- </div> -->
+
+    <!-- Placeholder for detected emotions and session summary -->
+    <div class="emociones-detectadas-placeholder">
+        <h4>Emociones Detectadas</h4>
+
+        <!-- Contenedor para los resultados dinámicos -->
+        <div class="resultados-dinamicos">
+          <!-- Mostrar mensajes de estado (Cargando, Error, No se detectaron rostros) -->
+          <!-- Eliminados para evitar movimiento -->
+          <!-- <div *ngIf="isLoading" class="loading-indicator"> -->
+          <!--   Cargando... -->
+          <!-- </div> -->
+
+          <!-- <div *ngIf="!isLoading && predictions.length === 0 && isCapturingInChild && !error" class="no-faces-detected"> -->
+          <!--   No se detectaron rostros. -->
+          <!-- </div> -->
+
+          <!-- <div class="error" *ngIf="error"> -->
+          <!--   {{ error }} -->
+          <!-- </div> -->
+
+          <!-- Mostrar la predicción más fuerte si existe -->
+          <div class="prediction" *ngIf="strongestPrediction">
+            <h2>Resultado:</h2>
+            <div class="emotion-result">
+              <span class="emotion-emoji">{{ getEmotionEmoji(strongestPrediction.emotion) }}</span>
+              <span class="emotion-text">{{ strongestPrediction.emotion }}</span>
+              <span class="confidence">({{ (strongestPrediction.confidence * 100).toFixed(1) }}% de confianza)</span>
+            </div>
+
+            <div class="all-predictions">
+              <h3>Probabilidades:</h3>
+              <div class="prediction-bar" *ngFor="let emotion of strongestPrediction.all_predictions | keyvalue">
+                <span class="emotion-label">{{ emotion.key }}</span>
+                <div class="progress-bar">
+                  <div class="progress" [style.width.%]="emotion.value * 100"></div>
+                </div>
+                <span class="percentage">{{ (emotion.value * 100).toFixed(1) }}%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+         <!-- Fin Contenedor para los resultados dinámicos -->
+
+        <h4>Resumen de la Sesión</h4>
+        <!-- Asegúrate de tener estas propiedades en el componente TS del padre -->
+        <p>Duración: {{ sessionDuration }}</p>
+        <p>Emoción predominante: {{ predominantEmotion }}</p>
+    </div>
+
+
+    <!-- Assuming a button to save the patient record -->
+    <!-- <button type="submit" class="btn-guardar-paciente">Guardar Paciente</button> -->
+
+  </form>
+</div> 

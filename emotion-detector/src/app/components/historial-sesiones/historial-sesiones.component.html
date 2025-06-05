@@ -1,0 +1,75 @@
+<div class="historial-sesiones-container">
+  <h2>Historial de Sesiones</h2>
+
+  <div class="filters">
+    <div class="form-group">
+      <label for="fechaDesde">Desde:</label>
+      <input type="date" id="fechaDesde">
+    </div>
+    <div class="form-group">
+      <label for="fechaHasta">Hasta:</label>
+      <input type="date" id="fechaHasta">
+    </div>
+    <div class="form-group">
+      <label for="buscarPaciente">Paciente:</label>
+      <input type="text" id="buscarPaciente" placeholder="Buscar paciente...">
+    </div>
+    <div class="form-group">
+      <label for="filtrarEmocion">Emoción:</label>
+      <select id="filtrarEmocion">
+        <option value="">Todas las emociones</option>
+        <!-- Add emotion options here -->
+      </select>
+    </div>
+  </div>
+
+  <table class="sesiones-table">
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Hora</th>
+        <th>Paciente</th>
+        <th>Edad</th>
+        <th>Diagnóstico</th>
+        <th>Duración</th>
+        <th>Emoción Predominante</th>
+        <th>Confianza</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Example row - will be replaced by dynamic data -->
+      <tr>
+        <td>18/03/2024</td>
+        <td>10:30 AM</td>
+        <td>Juan Pérez</td>
+        <td>25</td>
+        <td>Ansiedad</td>
+        <td>45 min</td>
+        <td>Neutral</td>
+        <td>
+            <div class="confidence-bar-container">
+                 <div class="confidence-bar" style="width: 85%;"></div>
+            </div>
+            85%
+        </td>
+        <td>
+          <button class="btn-accion">👁️</button>
+          <button class="btn-accion">⬇️</button>
+        </td>
+      </tr>
+      <!-- More rows here -->
+    </tbody>
+  </table>
+
+  <div class="pagination-controls">
+    <button disabled>Anterior</button>
+    <span>Página 1 de 1</span>
+     <select>
+        <option>10 por página</option>
+        <!-- Options for items per page -->
+     </select>
+    <button disabled>Siguiente</button>
+  </div>
+
+</div> 
