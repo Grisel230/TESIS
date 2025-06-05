@@ -104,24 +104,6 @@ def predict():
             print("Error: No se pudo decodificar la imagen.")
             return jsonify({'error': 'No se pudo decodificar la imagen'}), 400
 
-        # --- Inicio: Guardar imagen recibida para depuración ---
-        # Puedes cambiar la ruta y nombre del archivo según necesites
-        # Considera guardar solo algunas imágenes para evitar llenar el disco
-        # Ejemplo: Guardar una imagen cada 100 peticiones, o añadir un timestamp al nombre
-        # Para esta prueba, guardaremos la primera imagen recibida después de iniciar el backend
-        # if not hasattr(predict, 'image_saved'):
-        #    image_save_path = "received_image.jpg"
-        #    cv2.imwrite(image_save_path, frame)
-        #    print(f"Imagen recibida guardada en: {image_save_path}")
-        #    predict.image_saved = True
-        # Para guardar cada imagen, puedes usar un timestamp en el nombre:
-        timestamp = int(time.time() * 1000)
-        image_save_path = os.path.join("received_images", f"frame_{timestamp}.jpg")
-        # Crear directorio si no existe
-        os.makedirs(os.path.dirname(image_save_path), exist_ok=True)
-        cv2.imwrite(image_save_path, frame)
-        # --- Fin: Guardar imagen recibida para depuración ---
-
         # Procesar la imagen y obtener resultados de emociones
         emotion_results = process_image_for_emotion(frame, faceNet, emotionModel)
         
