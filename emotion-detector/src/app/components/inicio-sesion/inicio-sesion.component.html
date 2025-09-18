@@ -1,39 +1,104 @@
 <div class="login-container">
-  <div class="login-box">
-    <h2>Iniciar Sesión</h2>
+  <div class="login-content">
+    <!-- Formulario de login -->
+    <div class="login-card">
+      <div class="login-header">
+        <h1>Iniciar Sesión</h1>
+        <p>Accede a tu cuenta para comenzar</p>
+      </div>
+      
+      <form class="login-form" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="email">Correo electrónico</label>
+          <input 
+            type="email" 
+            id="email" 
+            name="email" 
+            [(ngModel)]="email" 
+            required 
+            email
+            placeholder="ejemplo@correo.com"
+            class="form-control"
+          >
+        </div>
+        
+        <div class="form-group">
+          <label for="password">Contraseña</label>
+          <div class="password-input">
+            <input 
+              [type]="showPassword ? 'text' : 'password'" 
+              id="password" 
+              name="password" 
+              [(ngModel)]="password" 
+              required
+              placeholder="Tu contraseña"
+              class="form-control"
+            >
+            <button type="button" class="password-toggle" (click)="togglePasswordVisibility()">
+              <svg *ngIf="!showPassword" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+              <svg *ngIf="showPassword" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                <line x1="1" y1="1" x2="23" y2="23"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+        
+        <div class="form-options">
+          <label class="remember-me">
+            <input type="checkbox" name="remember">
+            <span class="checkmark"></span>
+            Recuérdame
+          </label>
+          <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
+        </div>
+        
+        <button 
+          type="submit" 
+          class="btn-login"
+          [disabled]="isLoading"
+        >
+          <span *ngIf="!isLoading">Iniciar Sesión</span>
+          <span *ngIf="isLoading">Iniciando...</span>
+        </button>
+        
+        <div *ngIf="errorMessage" class="error-message">
+          {{ errorMessage }}
+        </div>
+      </form>
+      
+      <div class="login-footer">
+        <p>¿No tienes una cuenta? <a routerLink="/registro-psicologo">Regístrate</a></p>
+        
+        <div class="divider">
+          <span>O inicia sesión con</span>
+        </div>
+        
+        <button class="btn-google">
+          <span class="google-icon">G</span>
+          Acceder con Google
+        </button>
+      </div>
+    </div>
     
-    <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
-      <div class="form-group">
-        <label for="email">Correo Electrónico</label>
-        <input 
-          type="email" 
-          id="email" 
-          name="email" 
-          [(ngModel)]="email" 
-          required 
-          placeholder="Ingrese su correo electrónico">
+    <!-- Imagen lateral -->
+    <div class="login-image">
+      <div class="image-container">
+        <img src="/assets/emocion.jpeg" alt="Reconocimiento Facial con IA">
+        <div class="scan-overlay">
+          <div class="scan-line"></div>
+          <div class="scan-grid">
+            <div class="grid-line horizontal" *ngFor="let i of [1,2,3,4,5]"></div>
+            <div class="grid-line vertical" *ngFor="let i of [1,2,3,4,5]"></div>
+          </div>
+          <div class="scan-dots">
+            <div class="dot" *ngFor="let i of [1,2,3,4,5,6,7,8,9,10,11,12]"></div>
+          </div>
+        </div>
       </div>
-
-      <div class="form-group">
-        <label for="password">Contraseña</label>
-        <input 
-          type="password" 
-          id="password" 
-          name="password" 
-          [(ngModel)]="password" 
-          required 
-          placeholder="Ingrese su contraseña">
-      </div>
-
-      <div class="error-message" *ngIf="errorMessage">
-        {{ errorMessage }}
-      </div>
-
-      <button type="submit" class="login-button">Iniciar Sesión</button>
-    </form>
-
-    <div class="register-link">
-      ¿No tienes una cuenta? <a routerLink="/registro-psicologo">Regístrate aquí</a>
     </div>
   </div>
-</div> 
+</div>

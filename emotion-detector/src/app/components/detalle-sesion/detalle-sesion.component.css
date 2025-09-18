@@ -1,117 +1,223 @@
-/* Estilos para el componente de detalles de sesión */ 
+/* Estilos para el componente de detalle de sesión */
 
-.detalle-sesion-container {
-  max-width: 900px;
-  margin: 40px auto;
-  padding: 30px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+.detalle-container {
+  padding: 2rem;
+  /* Usar el mismo gradiente que en la página de inicio */
+  background: linear-gradient(to right, #0a2a55 0%, #4a69a9 50%, #667eea 100%);
+  min-height: calc(100vh - 60px);
+  color: white; /* Asegurar que el texto principal sea legible */
 }
 
-.detalle-sesion-container h2 {
+.detalle-container h2 {
   text-align: center;
-  margin-bottom: 20px;
-  color: #333;
+  margin-bottom: 2rem;
+  color: white; /* Asegurar que el título principal sea blanco */
+  font-weight: 600;
+  font-size: 1.8rem;
 }
 
-.session-info {
-    text-align: center;
-    margin-bottom: 30px;
-    font-size: 1.1rem;
-    color: #555;
+/* Información de la sesión */
+.sesion-info {
+  /* Estilo de tarjeta blanca con transparencia y blur */
+  background: rgba(255, 255, 255, 0.95);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem;
+  backdrop-filter: blur(10px);
+  color: #333; /* Texto oscuro dentro de la tarjeta */
 }
 
-.session-info span {
-    margin: 0 15px;
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
-.card {
-    border: 1px solid #eee;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+.info-item {
+  padding: 1rem;
+  background: #f8fafc; /* Fondo ligeramente gris para items internos */
+  border-radius: 8px;
+  border: 1px solid #ccc; /* Borde sutil */
 }
 
-.card-header {
-    background-color: #f8f9fa;
-    padding: 15px;
-    border-bottom: 1px solid #eee;
-    font-weight: bold;
-    color: #333;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
+.info-item label {
+  display: block;
+  font-weight: 500;
+  color: #4a5568; /* Color oscuro para etiquetas */
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
 }
 
-.card-body {
-    padding: 20px;
+.info-item .valor {
+  color: #2d3748; /* Color oscuro para valores */
+  font-size: 1.1rem;
+  font-weight: 600;
 }
 
-.card-body p {
-    margin-bottom: 10px;
-    color: #555;
+/* Gráfico de emociones */
+.grafico-container {
+  /* Estilo de tarjeta blanca con transparencia y blur */
+  background: rgba(255, 255, 255, 0.95);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem;
+  backdrop-filter: blur(10px);
+  color: #333; /* Texto oscuro dentro de la tarjeta */
 }
 
-.emotion-breakdown p {
-    margin-bottom: 5px;
-    font-weight: normal;
+.grafico-container h3 {
+  color: #2d3748; /* Color oscuro para el título del gráfico */
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  font-size: 1.4rem;
 }
 
-.progress-bar-container {
-    width: 100%;
-    background-color: #e9ecef;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    overflow: hidden; /* Ensure the inner bar is contained */
+.chart-container {
+  position: relative;
+  height: 400px;
+  width: 100%;
 }
 
-.progress-bar {
-    height: 15px;
-    background-color: #007bff; /* Default color */
-    border-radius: 5px; /* Match container */
-    text-align: center;
-    color: white;
-    font-size: 0.8rem;
-    line-height: 15px; /* Vertically center text */
+/* Resumen de emociones */
+.resumen-emociones {
+  /* Estilo de tarjeta blanca con transparencia y blur */
+  background: rgba(255, 255, 255, 0.95);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem;
+  backdrop-filter: blur(10px);
+  color: #333; /* Texto oscuro dentro de la tarjeta */
 }
 
-/* Basic colors for the legend - might need adjustment */
-.emotion-legend span {
-    display: inline-block;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    margin-right: 5px;
+.resumen-emociones h3 {
+  color: #2d3748; /* Color oscuro para el título del resumen */
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  font-size: 1.4rem;
 }
 
-.emotion-legend .neutral {
-    background-color: gray;
+.emocion-item {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  background: #f8fafc; /* Fondo ligeramente gris para items internos */
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc; /* Borde sutil */
 }
 
-.emotion-legend .feliz {
-    background-color: green;
+.emocion-emoji {
+  font-size: 2rem;
+  margin-right: 1rem;
 }
 
-.emotion-legend .triste {
-    background-color: blue;
-}
-/* Add colors for other emotions */
-
-.emotion-chart-placeholder {
-    width: 100%;
-    height: 300px; /* Adjust as needed for the chart */
-    background-color: #eee;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 15px;
-    border: 1px dashed #ccc;
+.emocion-info {
+  flex: 1;
 }
 
-.actions {
-    text-align: center;
+.emocion-nombre {
+  font-weight: 600;
+  color: #2d3748; /* Color oscuro */
+  margin-bottom: 0.25rem;
 }
 
-.actions button {
-    margin: 0 10px;
-} 
+.emocion-porcentaje {
+  color: #4a5568; /* Color oscuro */
+  font-size: 0.95rem;
+}
+
+/* Botones de acción */
+.acciones {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.btn-accion {
+  padding: 0.875rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-descargar {
+  /* Estilo de botón principal (Descargar) */
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.btn-imprimir {
+  /* Estilo de botón secundario (Imprimir) */
+  background: #f8fafc;
+  color: #4a5568;
+  border: 1px solid #ccc; /* Borde sutil */
+}
+
+.btn-accion:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.btn-imprimir:hover {
+    background: #e2e8f0;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* Sombra sutil */
+}
+
+.btn-accion:active {
+  transform: translateY(0);
+}
+
+/* Notas de la sesión */
+.notas-sesion {
+  /* Estilo de tarjeta blanca con transparencia y blur */
+  background: rgba(255, 255, 255, 0.95);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem;
+  backdrop-filter: blur(10px);
+  color: #333; /* Texto oscuro dentro de la tarjeta */
+}
+
+.notas-sesion h3 {
+  color: #2d3748; /* Color oscuro para el título de notas */
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  font-size: 1.4rem;
+}
+
+.notas-contenido {
+  background: #f8fafc; /* Fondo ligeramente gris */
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #ccc; /* Borde sutil */
+  color: #4a5568; /* Color oscuro para el texto */
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+/* Mensajes de estado (carga, error) */
+.cargando,
+.error {
+  text-align: center;
+  padding: 2rem; /* Ajustar padding */
+  color: #333; /* Color oscuro */
+  background: rgba(255, 255, 255, 0.95); /* Fondo blanco con transparencia */
+  border-radius: 12px;
+  margin: 2rem 0;
+  border: 1px solid #ccc; /* Borde sutil */
+}
+
+.error {
+  color: #dc3545; /* Color rojo para errores */
+  background: #fff5f5; /* Fondo rojo claro */
+  border: 1px solid #f5c6cb; /* Borde rojo sutil */
+}

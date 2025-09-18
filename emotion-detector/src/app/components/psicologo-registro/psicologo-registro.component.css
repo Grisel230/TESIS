@@ -1,67 +1,322 @@
-/* Estilos para el componente de registro de psicólogo */ 
+/* Estilos para el registro centrado sin imagen */
 
-.registro-container {
-  max-width: 500px;
-  margin: 40px auto;
-  padding: 30px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+/* Estilos para el ojito profesional de contraseña */
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  cursor: pointer;
+  font-size: 16px;
+  opacity: 0.5;
+  transition: opacity 0.2s ease;
+  padding: 2px;
+  border-radius: 3px;
+  color: #718096;
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
 }
 
-.registro-container h2 {
+.password-toggle:hover {
+  opacity: 0.8;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.registro-container {
+  display: flex;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #4a69a9 0%, #667eea 100%);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.registro-box {
+  background: white;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 600px;
+  animation: fadeInUp 0.6s ease-out;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.registro-header {
   text-align: center;
-  margin-bottom: 30px;
-  color: #333;
+  margin-bottom: 32px;
+}
+
+.registro-header h2 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 8px 0;
+}
+
+.registro-header p {
+  font-size: 16px;
+  color: #666;
+  margin: 0;
+}
+
+.section-title {
+  margin: 24px 0 16px 0;
+  color: #4a69a9;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 8px;
+}
+
+.section-title:first-of-type {
+  margin-top: 0;
+}
+
+.section-title h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 500;
+  color: #4a69a9;
 }
 
 .form-group {
   margin-bottom: 20px;
 }
 
+.form-row {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.form-group {
+  flex: 1;
+}
+
 .form-group label {
   display: block;
   margin-bottom: 8px;
-  font-weight: bold;
-  color: #555;
+  font-weight: 500;
+  color: #333;
+  font-size: 14px;
 }
 
-.form-group input[type="text"],
-.form-group input[type="email"],
-.form-group input[type="tel"],
-.form-group input[type="password"] {
+.form-group input,
+.form-group select {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box; /* Include padding and border in the element's total width and height */
-  font-size: 1rem;
+  padding: 12px 16px;
+  border: 2px solid #e1e5e9;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  background: #fff;
 }
 
-.form-row {
-    display: flex;
-    gap: 20px; /* Espacio entre elementos en la fila */
-    margin-bottom: 20px;
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #4a69a9;
+  box-shadow: 0 0 0 3px rgba(74, 105, 169, 0.1);
 }
 
-.form-row .form-group {
-    flex: 1; /* Hace que cada grupo ocupe espacio igual en la fila */
-    margin-bottom: 0; /* Elimina el margen inferior en los grupos dentro de la fila */
+.form-group input::placeholder {
+  color: #aaa;
 }
 
-.btn-registro {
-  display: block;
-  width: 100%;
-  padding: 12px;
-  background-color: #007bff;
-  color: white;
+.password-input-container {
+  position: relative;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
   border: none;
-  border-radius: 4px;
-  font-size: 1.1rem;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  color: #666;
+  padding: 4px;
+  border-radius: 4px;
+  transition: color 0.2s ease;
 }
 
-.btn-registro:hover {
-  background-color: #0056b3;
-} 
+.password-toggle:hover {
+  color: #4a69a9;
+}
+
+.password-toggle span {
+  font-size: 20px;
+}
+
+.terms-section {
+  margin: 24px 0;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #4a69a9;
+}
+
+.terms-text {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0;
+  font-size: 14px;
+  color: #666;
+  line-height: 1.5;
+}
+
+.terms-text span {
+  color: #4a69a9;
+  font-size: 18px;
+  margin-top: 2px;
+}
+
+.registro-button {
+  width: 100%;
+  padding: 14px;
+  background: #d1d5db;
+  color: #6b7280;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 24px;
+}
+
+.registro-button:hover {
+  background: #c4c9d1;
+  transform: translateY(-1px);
+}
+
+.login-section {
+  text-align: center;
+}
+
+.login-text {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.login-text a {
+  color: #4a69a9;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.login-text a:hover {
+  text-decoration: underline;
+}
+
+.error-message {
+  background-color: #fee;
+  color: #c33;
+  padding: 0.75rem;
+  border-radius: 6px;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  border: 1px solid #fcc;
+}
+
+.success-message {
+  background: linear-gradient(135deg, #c6f6d5 0%, #9ae6b4 100%);
+  color: #22543d;
+  padding: 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  text-align: center;
+  border: 1px solid #68d391;
+  margin-top: 8px;
+  font-weight: 500;
+  animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .registro-container {
+    padding: 10px;
+  }
+  
+  .registro-box {
+    padding: 30px 20px;
+    max-height: 95vh;
+  }
+  
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+  
+  .section-title {
+    margin: 20px 0 12px 0;
+  }
+  
+  .section-title h3 {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .registro-box {
+    padding: 20px 15px;
+  }
+  
+  .registro-header h2 {
+    font-size: 24px;
+  }
+  
+  .registro-header p {
+    font-size: 14px;
+  }
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Custom scrollbar for registro box */
+.registro-box::-webkit-scrollbar {
+  width: 6px;
+}
+
+.registro-box::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.registro-box::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.registro-box::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}

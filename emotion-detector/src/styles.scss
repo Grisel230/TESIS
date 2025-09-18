@@ -1,1 +1,45 @@
 /* You can add global styles to this file, and also import other style files */
+
+// Import Angular Material pre-built theme
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+
+// Global styles
+html, body { 
+  height: 100%; 
+  margin: 0; 
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+// Custom overrides for better design
+.mat-mdc-form-field {
+  width: 100%;
+}
+
+.mat-mdc-card {
+  margin: 20px;
+  padding: 20px;
+}
+
+// Custom styles for our components
+body {
+  background-color: #fafafa;
+}
+
+// Fix for material design components
+.mat-mdc-card-actions {
+  text-align: center;
+}
+
+.full-width {
+  width: 100%;
+}
+
+// Button improvements
+.mat-mdc-raised-button {
+  border-radius: 8px;
+}
+
+// Form field improvements
+.mat-mdc-form-field-outline {
+  border-radius: 8px;
+}
