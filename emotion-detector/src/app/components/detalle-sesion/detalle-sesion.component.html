@@ -1,85 +1,185 @@
-<div class="detalle-sesion-container">
-  <h2>Detalles de la Sesión</h2>
-
-  <div class="session-info">
-    <span class="session-date">18/03/2024</span>
-    <span class="session-time">10:30 AM</span>
-    <span class="session-duration">45 minutos</span>
-  </div>
-
-  <div class="row">
-    <div class="col-md-6">
-      <div class="card">
-        <div class="card-header">
-          Información del Paciente
-        </div>
-        <div class="card-body">
-          <p><strong>Nombre:</strong> Juan Pérez</p>
-          <p><strong>Edad:</strong> 25 años</p>
-          <p><strong>Diagnóstico:</strong> Ansiedad</p>
-        </div>
-      </div>
+<div class="dashboard-container">
+  <!-- Sidebar -->
+  <app-sidebar></app-sidebar>
+  
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Loading State -->
+    <div *ngIf="!sessionDetails" class="loading-container">
+      <div class="loading-spinner"></div>
+      <p>Cargando detalles de la sesión...</p>
     </div>
 
-    <div class="col-md-6">
-      <div class="card">
+    <!-- Content when loaded -->
+    <div *ngIf="sessionDetails" class="content-wrapper">
+      <!-- Header Section -->
+      <div class="page-header">
+        <div class="header-content">
+          <div class="header-title">
+            <div class="title-badge">Sesión {{ sessionDetails.id }}</div>
+            <h1>Detalle de Sesión</h1>
+            <p class="subtitle">Información completa y análisis de la sesión</p>
+          </div>
+          <div class="header-actions">
+            <button (click)="goBack()" class="btn-secondary">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+              </svg>
+              Volver
+            </button>
+            <button (click)="downloadReport()" class="btn-primary">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7,10 12,15 17,10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              Descargar PDF
+            </button>
+          </div>
+        </div>
+        <div class="session-meta">
+          <div class="meta-item">
+            <span class="meta-label">Fecha</span>
+            <span class="meta-value">{{ sessionDetails.fecha }}</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Hora</span>
+            <span class="meta-value">{{ sessionDetails.hora }}</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Duración</span>
+            <span class="meta-value">{{ sessionDetails.duracion }}</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Confianza Promedio</span>
+            <span class="meta-value">{{ (sessionDetails.confianza * 100) | number:'1.0-1' }}%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Session Details Cards -->
+      <div class="cards-grid">
+        <!-- Patient Information Card -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+              <h3>Información del Paciente</h3>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="info-grid">
+              <div class="info-item">
+                <span class="info-label">Nombre</span>
+                <span class="info-value">{{ sessionDetails.paciente }}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Edad</span>
+                <span class="info-value">{{ sessionDetails.edad }} años</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Diagnóstico</span>
+                <span class="info-value">{{ sessionDetails.diagnostico }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Emotion Summary Card with Bars -->
+        <div class="card emotion-summary-card">
+          <div class="card-header">
+            <div class="card-title">
+              <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+                <line x1="9" y1="9" x2="9.01" y2="9"/>
+                <line x1="15" y1="9" x2="15.01" y2="9"/>
+              </svg>
+              <h3>Resumen de Emociones</h3>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="emotion-summary-content">
+              <div class="predominant-emotion">
+                <span class="emotion-label">Emoción Predominante:</span>
+                <span class="emotion-value">{{ sessionDetails.emocionPredominante | titlecase }}</span>
+              </div>
+              <div class="emotion-bars" *ngIf="getEmotionSummary().length > 0; else noEmotionData">
+                <div class="emotion-bar-item" *ngFor="let emotion of getEmotionSummary()">
+                  <div class="emotion-bar-header">
+                    <span class="emotion-bar-label">{{ emotion.name }}</span>
+                    <span class="emotion-bar-percentage">{{ emotion.percentage }}%</span>
+                  </div>
+                  <div class="emotion-bar-track">
+                    <div class="emotion-bar-fill" 
+                         [style.width.%]="emotion.percentage"
+                         [attr.data-emotion]="emotion.key"></div>
+                  </div>
+                </div>
+              </div>
+              <ng-template #noEmotionData>
+                <div class="no-data-banner">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="12" />
+                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                  </svg>
+                  <div>
+                    <h4>No hay datos suficientes</h4>
+                    <p>Esta sesión aún no cuenta con histórico de emociones almacenado.</p>
+                  </div>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notes Card - Full Width -->
+      <div class="card notes-card">
         <div class="card-header">
-          Resumen de Emociones
+          <div class="card-title">
+            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14,2 14,8 20,8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+            </svg>
+            <h3>Notas de la Sesión</h3>
+          </div>
         </div>
         <div class="card-body">
-          <p><strong>Emoción Predominante:</strong> Neutral</p>
-          <div class="emotion-breakdown">
-            <p>Neutral: <span>40%</span></p>
-            <div class="progress-bar-container">
-              <div class="progress-bar" style="width: 40%;"></div>
+          <div class="notes-content">
+            <p>{{ sessionDetails.notasSesion || 'Durante la sesión, el paciente mostró signos de ansiedad moderada. Se observó una tendencia hacia estados emocionales neutrales, con momentos ocasionales de alegría durante la conversación sobre su progreso laboral.' }}</p>
+            <div class="notes-recommendations" *ngIf="sessionDetails.recomendaciones">
+              <h4>Recomendaciones para la próxima sesión:</h4>
+              <ul>
+                <li *ngFor="let rec of sessionDetails.recomendaciones">{{ rec }}</li>
+              </ul>
             </div>
-            <p>Feliz: <span>25%</span></p>
-             <div class="progress-bar-container">
-              <div class="progress-bar" style="width: 25%;"></div>
-            </div>
-            <p>Triste: <span>15%</span></p>
-             <div class="progress-bar-container">
-              <div class="progress-bar" style="width: 15%;"></div>
-            </div>
-            <!-- Add other emotions here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Emotion Chart Card - Full Width -->
+      <div class="card chart-card">
+        <div class="card-header">
+          <div class="card-title">
+            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/>
+            </svg>
+            <h3>Evolución Temporal de Emociones</h3>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="chart-container">
+            <canvas #emotionChartCanvas></canvas>
           </div>
         </div>
       </div>
     </div>
   </div>
-
-  <div class="card mt-3">
-    <div class="card-header">
-      Notas de la Sesión
-    </div>
-    <div class="card-body">
-      <p>Durante la sesión, el paciente mostró signos de ansiedad moderada. Se observó una tendencia hacia estados emocionales neutrales, con momentos ocasionales de alegría durante la conversación sobre su progreso laboral.</p>
-      <p>Recomendaciones para la próxima sesión:</p>
-      <!-- Add recommendations here -->
-    </div>
-  </div>
-
-  <div class="card mt-3">
-    <div class="card-header">
-      Evolución Temporal de Emociones
-    </div>
-    <div class="card-body">
-        <div class="emotion-legend">
-            <span class="neutral"></span> Neutral
-            <span class="feliz"></span> Feliz
-            <span class="triste"></span> Triste
-            <!-- Add other emotions here -->
-        </div>
-      <div class="emotion-chart-placeholder">
-        <!-- This is where the chart will be rendered -->
-        Gráfico de evolución temporal de las emociones durante la sesión
-      </div>
-    </div>
-  </div>
-
-  <div class="actions mt-3">
-      <button class="btn btn-primary"><i class="fas fa-download"></i> Descargar Reporte Completo</button>
-      <button class="btn btn-secondary"><i class="fas fa-print"></i> Imprimir</button>
-  </div>
-
-</div> 
+</div>

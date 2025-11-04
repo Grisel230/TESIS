@@ -1,49 +1,194 @@
 <div class="registro-container">
-  <h2>Registro de Psicólogo</h2>
+  <div class="registro-box">
+      <div class="registro-header">
+        <h2>Registro</h2>
+        <p>Complete sus datos profesionales para crear su cuenta</p>
+      </div>
+    
+    <form (ngSubmit)="onSubmit()" #registroForm="ngForm">
+      
+      <!-- Información Personal -->
+      <div class="section-title">
+        <h3>Información Personal</h3>
+      </div>
 
-  <form>
-    <div class="form-group">
-      <label for="nombreCompleto">Nombre completo</label>
-      <input type="text" id="nombreCompleto" placeholder="Ingrese su nombre completo">
-    </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="nombres">Nombres</label>
+          <input 
+            type="text" 
+            id="nombres" 
+            name="nombres" 
+            [(ngModel)]="nombres" 
+            required 
+            placeholder="Ingrese sus nombres">
+        </div>
+        <div class="form-group">
+          <label for="apellidoPaterno">Apellido Paterno</label>
+          <input 
+            type="text" 
+            id="apellidoPaterno" 
+            name="apellidoPaterno" 
+            [(ngModel)]="apellidoPaterno" 
+            required 
+            placeholder="Ingrese su apellido paterno">
+        </div>
+        <div class="form-group">
+          <label for="apellidoMaterno">Apellido Materno</label>
+          <input 
+            type="text" 
+            id="apellidoMaterno" 
+            name="apellidoMaterno" 
+            [(ngModel)]="apellidoMaterno" 
+            required 
+            placeholder="Ingrese su apellido materno">
+        </div>
+      </div>
 
-    <div class="form-group">
-      <label for="cedulaProfesional">Cédula Profesional</label>
-      <input type="text" id="cedulaProfesional" placeholder="Ingrese su cédula profesional">
-    </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="cedulaProfesional">Cédula Profesional</label>
+          <input 
+            type="text" 
+            id="cedulaProfesional" 
+            name="cedulaProfesional" 
+            [(ngModel)]="cedulaProfesional" 
+            required 
+            placeholder="Ej: 12345678">
+        </div>
+        <div class="form-group">
+          <label for="especializacion">Especialización</label>
+          <select 
+            id="especializacion" 
+            name="especializacion" 
+            [(ngModel)]="especializacion" 
+            required>
+            <option value="">Seleccione una especialización</option>
+            <option *ngFor="let esp of especializaciones" [value]="esp">
+              {{esp}}
+            </option>
+          </select>
+        </div>
+      </div>
 
-    <div class="form-group">
-      <label for="especializacion">Especialización</label>
-      <input type="text" id="especializacion" placeholder="Ej: Psicología Clínica">
-    </div>
+      <!-- Información de Contacto -->
+      <div class="section-title">
+        <h3>Información de Contacto</h3>
+      </div>
 
-    <div class="form-group">
-      <label for="correoElectronico">Correo electrónico</label>
-      <input type="email" id="correoElectronico" placeholder="correo@ejemplo.com">
-    </div>
+      <div class="form-group">
+        <label for="correoElectronico">Correo electrónico</label>
+        <input 
+          type="email" 
+          id="correoElectronico" 
+          name="correoElectronico" 
+          [(ngModel)]="correoElectronico" 
+          required 
+          placeholder="correo@ejemplo.com">
+      </div>
 
-    <div class="form-row">
       <div class="form-group">
         <label for="telefono">Teléfono</label>
-        <input type="tel" id="telefono" placeholder="Ingrese su número telefónico">
+        <input 
+          type="tel" 
+          id="telefono" 
+          name="telefono" 
+          [(ngModel)]="telefono" 
+          required 
+          placeholder="Ej: +52 555 123 4567">
       </div>
+
+      <!-- Credenciales de Acceso -->
+      <div class="section-title">
+        <h3>Credenciales de Acceso</h3>
+      </div>
+
       <div class="form-group">
         <label for="nombreUsuario">Nombre de usuario</label>
-        <input type="text" id="nombreUsuario" placeholder="Elija un nombre de usuario">
+        <input 
+          type="text" 
+          id="nombreUsuario" 
+          name="nombreUsuario" 
+          [(ngModel)]="nombreUsuario" 
+          required 
+          placeholder="Elija un nombre de usuario único">
       </div>
-    </div>
 
-    <div class="form-row">
-      <div class="form-group">
-        <label for="contrasena">Contraseña</label>
-        <input type="password" id="contrasena" placeholder="Ingrese su contraseña">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="contrasena">Contraseña</label>
+          <div class="password-input-container">
+            <input 
+              [type]="hidePassword ? 'password' : 'text'" 
+              id="contrasena" 
+              name="contrasena" 
+              [(ngModel)]="contrasena" 
+              required 
+              placeholder="Mínimo 8 caracteres">
+            <button 
+              type="button" 
+              class="password-toggle"
+              (click)="hidePassword = !hidePassword">
+              <svg *ngIf="hidePassword" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+              <svg *ngIf="!hidePassword" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                <line x1="1" y1="1" x2="23" y2="23"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="confirmarContrasena">Confirmar contraseña</label>
+          <div class="password-input-container">
+            <input 
+              [type]="hideConfirmPassword ? 'password' : 'text'" 
+              id="confirmarContrasena" 
+              name="confirmarContrasena" 
+              [(ngModel)]="confirmarContrasena" 
+              required 
+              placeholder="Repita su contraseña">
+            <button 
+              type="button" 
+              class="password-toggle"
+              (click)="hideConfirmPassword = !hideConfirmPassword">
+              <svg *ngIf="hideConfirmPassword" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+              <svg *ngIf="!hideConfirmPassword" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                <line x1="1" y1="1" x2="23" y2="23"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
       </div>
-      <div class="form-group">
-        <label for="confirmarContrasena">Confirmar contraseña</label>
-        <input type="password" id="confirmarContrasena" placeholder="Confirme su contraseña">
-      </div>
-    </div>
 
-    <button type="submit" class="btn-registro">Registrarse</button>
-  </form>
-</div> 
+      <div class="terms-section">
+        <p class="terms-text">
+          <span>ℹ️</span>
+          Al registrarse, acepta nuestros términos y condiciones de uso y políticas de privacidad.
+        </p>
+      </div>
+
+      <button type="submit" class="registro-button" [disabled]="isLoading">
+        {{ isLoading ? 'Creando cuenta...' : 'Crear Cuenta' }}
+      </button>
+      
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
+      
+      <div *ngIf="successMessage" class="success-message">
+        {{ successMessage }}
+      </div>
+    </form>
+
+    <div class="login-section">
+      <p class="login-text">¿Ya tienes una cuenta? <a routerLink="/inicio-sesion">Iniciar Sesión</a></p>
+    </div>
+  </div>
+</div>

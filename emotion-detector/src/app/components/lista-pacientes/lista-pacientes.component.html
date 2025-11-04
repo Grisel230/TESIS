@@ -1,0 +1,361 @@
+<!-- Dashboard Container -->
+<div class="dashboard-container">
+  <!-- Sidebar -->
+  <div class="sidebar" [class.sidebar-hidden]="!sidebarVisible">
+    <div class="sidebar-header">
+      <button class="menu-toggle" (click)="toggleSidebar()">
+        <i class="menu-icon">☰</i>
+      </button>
+    </div>
+    
+    <nav class="sidebar-nav">
+      <a (click)="goToDashboard()" class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9,22 9,12 15,12 15,22"/>
+        </svg>
+        <span>Inicio</span>
+      </a>
+      <a (click)="goToPacientes()" class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="8.5" cy="7" r="4"/>
+          <line x1="20" y1="8" x2="20" y2="14"/>
+          <line x1="23" y1="11" x2="17" y2="11"/>
+        </svg>
+        <span>Agregar Paciente</span>
+      </a>
+      <a (click)="goToSesiones()" class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+        <span>Pacientes</span>
+      </a>
+      <a (click)="goToSesiones()" class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12,6 12,12 16,14"/>
+        </svg>
+        <span>Historial de Sesiones</span>
+      </a>
+      <a (click)="goToReports()" class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="20" x2="18" y2="10"/>
+          <line x1="12" y1="20" x2="12" y2="4"/>
+          <line x1="6" y1="20" x2="6" y2="14"/>
+        </svg>
+        <span>Informes y Estadísticas</span>
+      </a>
+      <a (click)="goToResources()" class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+        </svg>
+        <span>Recursos</span>
+      </a>
+      <a (click)="goToSettings()" class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+        <span>Configuración</span>
+      </a>
+    </nav>
+  </div>
+  
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Floating Hamburger Button (only visible when sidebar is hidden) -->
+    <button *ngIf="!sidebarVisible" class="floating-hamburger" (click)="toggleSidebar()" title="Mostrar menú">
+      <svg class="hamburger-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <line x1="3" y1="12" x2="21" y2="12"/>
+        <line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </button>
+    <!-- Header -->
+    <div class="content-header">
+      <div class="welcome-text">
+        <h2>Bienvenido {{ getFirstName() }}</h2>
+      </div>
+      <div class="header-search">
+        <div class="search-container">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="M21 21l-4.35-4.35"/>
+          </svg>
+          <input type="text" placeholder="Buscar..." class="search-input">
+        </div>
+      </div>
+      <div class="user-profile">
+        <span class="user-name">{{ getFirstName() }}</span>
+        <div class="user-avatar">
+          <svg class="avatar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Page Title -->
+    <div class="page-title">
+      <h1>Lista de Pacientes</h1>
+      <button class="add-patient-button" (click)="goToPacientes()">
+        <svg class="button-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="5" x2="12" y2="19"/>
+          <line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        Agregar Paciente
+      </button>
+    </div>
+    
+    <!-- Patients Card -->
+    <div class="patients-card">
+      <div class="card-header">
+        <div class="card-title">
+          <svg class="title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+          <h3>Pacientes Registrados</h3>
+        </div>
+        <div class="card-search">
+          <div class="search-container">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="M21 21l-4.35-4.35"/>
+            </svg>
+            <input type="text" placeholder="Buscar paciente..." class="search-input" [(ngModel)]="filterNombre" (input)="applyFilters()">
+          </div>
+        </div>
+      </div>
+      
+      <!-- Filters -->
+      <div class="filters-section">
+        <div class="filter-group">
+          <label for="edad">Edad:</label>
+          <input type="number" id="edad" [(ngModel)]="filterEdad" (change)="applyFilters()" placeholder="Filtrar por edad">
+        </div>
+        <div class="filter-group">
+          <label for="genero">Género:</label>
+          <select id="genero" [(ngModel)]="filterGenero" (change)="applyFilters()">
+            <option *ngFor="let genero of generos" [value]="genero">{{ genero }}</option>
+          </select>
+        </div>
+      </div>
+      
+      <!-- Patients Table -->
+      <div class="table-container">
+        <table class="patients-table">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Edad</th>
+              <th>Género</th>
+              <th>Contacto</th>
+              <th>Sesiones</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Indicador de carga -->
+            <tr *ngIf="isLoading" class="loading-row">
+              <td colspan="6" class="loading-cell">
+                <div class="loading-spinner">
+                  <div class="spinner"></div>
+                  <span>Cargando pacientes...</span>
+                </div>
+              </td>
+            </tr>
+            
+            <!-- Mensaje de error -->
+            <tr *ngIf="errorMessage && !isLoading" class="error-row">
+              <td colspan="6" class="error-cell">
+                <div class="error-message">
+                  <svg class="error-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="15" y1="9" x2="9" y2="15"/>
+                    <line x1="9" y1="9" x2="15" y2="15"/>
+                  </svg>
+                  {{ errorMessage }}
+                </div>
+              </td>
+            </tr>
+            
+            <!-- Mensaje de éxito -->
+            <tr *ngIf="successMessage && !isLoading" class="success-row">
+              <td colspan="6" class="success-cell">
+                <div class="success-message">
+                  <svg class="success-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="20,6 9,17 4,12"/>
+                  </svg>
+                  {{ successMessage }}
+                </div>
+              </td>
+            </tr>
+            
+            <!-- Mensaje cuando no hay pacientes -->
+            <tr *ngIf="!isLoading && !errorMessage && filteredPatients.length === 0" class="empty-row">
+              <td colspan="6" class="empty-cell">
+                <div class="empty-message">
+                  <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                    <circle cx="8.5" cy="7" r="4"/>
+                    <line x1="20" y1="8" x2="20" y2="14"/>
+                    <line x1="23" y1="11" x2="17" y2="11"/>
+                  </svg>
+                  <span>No hay pacientes registrados</span>
+                </div>
+              </td>
+            </tr>
+            
+            <!-- Lista de pacientes -->
+            <tr *ngFor="let patient of filteredPatients" class="patient-row">
+              <td class="patient-name">
+                <svg class="patient-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                  <circle cx="12" cy="7" r="4"/>
+                </svg>
+                <span class="patient-name-text">{{ patient.nombre_completo }}</span>
+              </td>
+              <td class="patient-age">{{ patient.edad }} años</td>
+              <td class="patient-gender">{{ patient.genero }}</td>
+              <td class="patient-contact">
+                <div class="contact-item">
+                  <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                  </svg>
+                  {{ patient.telefono }}
+                </div>
+                <div class="contact-item">
+                  <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                    <polyline points="22,6 12,13 2,6"/>
+                  </svg>
+                  {{ patient.email }}
+                </div>
+              </td>
+              <td class="patient-sessions">
+                <span class="session-badge">{{ patient.sesiones }} sesiones</span>
+              </td>
+              <td class="patient-actions">
+                <button class="action-btn view" (click)="viewPatient(patient)" title="Ver Detalles">
+                  <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                  </svg>
+                </button>
+                <button class="action-btn edit" (click)="editPatient(patient)" title="Editar">
+                  <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                  </svg>
+                </button>
+                <button class="action-btn add-session" (click)="addSession(patient)" title="Agregar Sesión">
+                  <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                    <circle cx="12" cy="13" r="4"/>
+                  </svg>
+                </button>
+                <button class="action-btn delete" (click)="deletePatient(patient)" title="Eliminar">
+                  <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="3,6 5,6 21,6"/>
+                    <path d="M19,6v14a2,2 0 0,1 -2,2H7a2,2 0 0,1 -2,-2V6m3,0V4a2,2 0 0,1 2,-2h4a2,2 0 0,1 2,2v2"/>
+                  </svg>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <!-- Pagination -->
+      <div class="pagination">
+        <div class="pagination-info">
+          Mostrando {{ (currentPage - 1) * itemsPerPage + 1 }} a {{ getEndIndex() }} de {{ totalItems }} pacientes
+        </div>
+        <div class="pagination-controls">
+          <button class="pagination-btn" (click)="previousPage()" [disabled]="currentPage === 1">
+            <svg class="pagination-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="15,18 9,12 15,6"/>
+            </svg>
+          </button>
+          <button class="pagination-btn active">{{ currentPage }}</button>
+          <button class="pagination-btn" (click)="nextPage()" [disabled]="currentPage === totalPages">
+            <svg class="pagination-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9,18 15,12 9,6"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Floating Action Buttons -->
+  <div class="floating-buttons">
+    <button class="fab secondary" (click)="goToPacientes()">
+      <svg class="fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="12" y1="5" x2="12" y2="19"/>
+        <line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+    </button>
+    <button class="fab primary" (click)="goToDashboard()">
+      <svg class="fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+        <polyline points="9,22 9,12 15,12 15,22"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<!-- Modal de Confirmación de Eliminación -->
+<div *ngIf="showDeleteModal" class="modal-overlay" (click)="closeDeleteModal()">
+  <div class="modal-container" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+      </div>
+      <h3>Confirmar Eliminación</h3>
+    </div>
+    
+    <div class="modal-body">
+      <p>¿Estás seguro de que quieres eliminar a <strong>{{ patientToDelete?.nombre_completo }}</strong>?</p>
+      <div class="warning-box">
+        <svg class="warning-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+        </svg>
+        <div class="warning-text">
+          <strong>Esta acción no se puede deshacer.</strong>
+          <span>Se eliminarán todos los datos del paciente, incluyendo su historial de sesiones.</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="closeDeleteModal()" [disabled]="isLoading">
+        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+        <span>Cancelar</span>
+      </button>
+      <button type="button" class="btn btn-danger" (click)="confirmDelete()" [disabled]="isLoading">
+        <svg *ngIf="!isLoading" class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2M10 11v6M14 11v6"/>
+        </svg>
+        <svg *ngIf="isLoading" class="btn-icon loading-spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 12a9 9 0 11-6.219-8.56"/>
+        </svg>
+        <span *ngIf="!isLoading">Eliminar Paciente</span>
+        <span *ngIf="isLoading">Eliminando...</span>
+      </button>
+    </div>
+  </div>
+</div>
