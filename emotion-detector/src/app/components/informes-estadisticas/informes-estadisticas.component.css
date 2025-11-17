@@ -266,14 +266,10 @@
 
 /* Page Title */
 .page-title {
-  padding: 40px 32px 20px;
+  padding: 24px 32px 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-left: 0;
-  margin-right: 0;
-  width: 100%;
-  box-sizing: border-box;
 }
 
 .page-title h1 {
@@ -313,7 +309,7 @@
 
 /* Reports Card */
 .reports-card {
-  margin: 24px 32px 32px;
+  margin: 0 32px 32px;
   background: white;
   border-radius: 12px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
