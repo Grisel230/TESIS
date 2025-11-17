@@ -190,17 +190,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-left: 0;
-  margin-right: 0;
-  width: 100%;
 }
 
 .page-title h1 {
-  color: #1f2937;
-  font-size: 28px;
-  font-weight: 600;
+  color: #1e40af;
+  font-size: 32px;
+  font-weight: 700;
   margin: 0;
-  line-height: 1.2;
 }
 
 .back-button {
