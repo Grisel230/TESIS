@@ -599,25 +599,41 @@
   box-shadow: 0 6px 20px rgba(107, 114, 128, 0.4);
 }
 
-/* Responsive */
+/* Responsive Mejorado */
 @media (max-width: 768px) {
   .dashboard-container {
     flex-direction: column;
   }
   
   .sidebar {
-    width: 100%;
-    height: auto;
+    width: 280px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    transform: translateX(-100%);
+    z-index: 1000;
+    transition: transform 0.3s ease;
+  }
+  
+  .sidebar.sidebar-visible {
+    transform: translateX(0);
   }
   
   .main-content {
-    padding: 0;
+    width: 100%;
+    padding: 70px 0 0 0;
+    margin-left: 0;
   }
 
   .content-header {
     flex-direction: column;
-    gap: 16px;
+    gap: 12px;
     padding: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: white;
   }
   
   .header-search {
@@ -632,14 +648,29 @@
     align-items: flex-start;
   }
   
+  .page-title h2 {
+    font-size: 22px;
+  }
+  
+  .btn-add-patient {
+    width: 100%;
+    justify-content: center;
+  }
+  
   .patients-card {
-    margin: 0 16px 16px;
+    margin: 0 12px 16px;
+    border-radius: 12px;
   }
   
   .card-header {
     flex-direction: column;
-    gap: 16px;
+    gap: 12px;
     align-items: flex-start;
+    padding: 16px;
+  }
+  
+  .card-title {
+    font-size: 18px;
   }
   
   .card-search {
@@ -648,20 +679,48 @@
   
   .filters-section {
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
+    padding: 16px;
   }
   
   .filter-group {
     min-width: 100%;
   }
   
+  .filter-group label {
+    font-size: 13px;
+  }
+  
   .table-container {
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .patients-table {
+    min-width: 900px;
+  }
+  
+  .action-buttons {
+    gap: 6px;
+  }
+  
+  .action-btn {
+    padding: 8px;
   }
   
   .pagination {
     flex-direction: column;
     gap: 12px;
+    padding: 16px;
+  }
+  
+  .pagination-info {
+    text-align: center;
+    font-size: 13px;
+  }
+  
+  .pagination-buttons {
+    justify-content: center;
   }
 }
 

@@ -666,30 +666,122 @@
 }
 
 @media (max-width: 768px) {
+  .dashboard-container {
+    flex-direction: column;
+  }
+  
+  .sidebar {
+    width: 280px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    transform: translateX(-100%);
+    z-index: 1000;
+    transition: transform 0.3s ease;
+  }
+  
+  .sidebar.sidebar-visible {
+    transform: translateX(0);
+  }
+  
+  .main-content {
+    width: 100%;
+    padding: 70px 0 0 0;
+    margin-left: 0;
+  }
+  
+  .content-header {
+    padding: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: white;
+  }
+  
+  .page-title {
+    font-size: 22px;
+  }
+  
   .stats-overview {
     grid-template-columns: 1fr;
-    margin: 0 20px 24px 20px;
-    padding: 20px;
+    margin: 0 12px 20px;
+    padding: 16px;
+    gap: 12px;
+  }
+  
+  .stat-card {
+    padding: 16px;
+  }
+  
+  .stat-value {
+    font-size: 24px;
+  }
+  
+  .stat-label {
+    font-size: 13px;
+  }
+  
+  .filters-section {
+    padding: 16px 12px;
+  }
+  
+  .filters-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .actions-row {
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px 12px;
+  }
+  
+  .actions-row button {
+    width: 100%;
+    justify-content: center;
   }
   
   .charts-section {
-    padding: 0 20px 24px 20px;
+    padding: 0 12px 20px;
+  }
+  
+  .chart-card {
+    border-radius: 12px;
+  }
+  
+  .chart-header {
+    padding: 16px;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  
+  .chart-content {
+    padding: 16px;
+    overflow-x: auto;
   }
   
   .reports-section {
-    padding: 0 20px 24px 20px;
-  }
-  
-  .activity-section {
-    padding: 0 20px 30px 20px;
+    padding: 0 12px 20px;
   }
   
   .reports-grid {
     grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .report-card {
+    padding: 16px;
+  }
+  
+  .activity-section {
+    padding: 0 12px 20px;
   }
   
   .activity-item {
     flex-direction: column;
     text-align: center;
+    padding: 16px;
   }
 }

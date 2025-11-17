@@ -910,18 +910,43 @@
   }
   
   .sidebar {
-    width: 100%;
-    height: auto;
+    width: 280px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    transform: translateX(-100%);
+    z-index: 1000;
+    transition: transform 0.3s ease;
+    box-shadow: 4px 0 12px rgba(0,0,0,0.15);
+  }
+  
+  .sidebar.sidebar-visible {
+    transform: translateX(0);
   }
   
   .main-content {
-    padding: 0;
+    width: 100%;
+    padding: 70px 0 0 0;
+    margin-left: 0;
   }
   
   .content-header {
     flex-direction: column;
-    gap: 16px;
+    gap: 12px;
     padding: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: white;
+  }
+  
+  .welcome-text h2 {
+    font-size: 20px;
+  }
+  
+  .welcome-text p {
+    font-size: 13px;
   }
   
   .header-search {
@@ -931,21 +956,49 @@
   
   .page-title {
     padding: 16px;
+    font-size: 22px;
   }
   
   .main-stats-container {
-    padding: 0 16px 16px;
+    padding: 0 12px 16px;
   }
   
   .main-stats-grid {
     grid-template-columns: 1fr;
-    gap: 16px;
+    gap: 12px;
+  }
+  
+  .main-stat-card {
+    padding: 20px 16px;
+  }
+  
+  .stat-value {
+    font-size: 28px;
+  }
+  
+  .stat-label {
+    font-size: 13px;
   }
   
   .dashboard-sections {
-    padding: 0 16px 16px;
+    padding: 0 12px 16px;
     grid-template-columns: 1fr;
     gap: 16px;
+  }
+  
+  .dashboard-card {
+    border-radius: 12px;
+  }
+  
+  .card-header {
+    padding: 16px;
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  
+  .card-content {
+    padding: 16px;
   }
   
   .main-stat-card {
@@ -1093,6 +1146,27 @@
   margin: 0;
 }
 
+/* Overlay para cerrar sidebar en móvil */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .sidebar-overlay.active {
+    display: block;
+    opacity: 1;
+  }
+}
+
 @media (max-width: 480px) {
   .floating-hamburger {
     width: 44px;
@@ -1104,5 +1178,21 @@
   .hamburger-icon {
     width: 18px;
     height: 18px;
+  }
+  
+  .main-content {
+    padding: 60px 0 0 0;
+  }
+  
+  .page-title {
+    font-size: 20px !important;
+  }
+  
+  .stat-value {
+    font-size: 24px !important;
+  }
+  
+  .card-title {
+    font-size: 16px !important;
   }
 }
