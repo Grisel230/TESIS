@@ -25,8 +25,9 @@ if __name__ == '__main__':
         print("✅ Base de datos inicializada")
     
     print("\n" + "=" * 60)
-    print("🌐 Servidor corriendo en: http://127.0.0.1:5000")
+    print("🌐 Servidor corriendo en: http://localhost:5000")
+    print("🌐 También disponible en: http://127.0.0.1:5000")
     print("=" * 60)
     print("\n💡 Presiona CTRL+C para detener el servidor\n")
     
-    app.run(debug=False, port=5000, use_reloader=False, threaded=True)
+    app.run(debug=False, host='0.0.0.0', port=5000, use_reloader=False, threaded=True)

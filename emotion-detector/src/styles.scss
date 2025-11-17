@@ -1,4 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
+/* ÚLTIMA ACTUALIZACIÓN: Noviembre 16, 2025 - Corrección de colores de botones en modo oscuro */
 
 // Import Angular Material pre-built theme
 @import '@angular/material/prebuilt-themes/indigo-pink.css';
@@ -7,6 +8,40 @@
 html, body { 
   height: 100%; 
   margin: 0; 
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+/* ===== MODO OSCURO - FORZADO ABSOLUTO ===== */
+body.dark-mode {
+  background: #1e1e1e !important;
+}
+
+body.dark-mode > *,
+body.dark-mode app-root,
+body.dark-mode app-root > *,
+body.dark-mode .dashboard-container,
+body.dark-mode .main-content,
+body.dark-mode [class*="content"],
+body.dark-mode [class*="container"]:not(.sidebar):not([class*="sidebar"]) {
+  background: #1e1e1e !important;
+}
+
+/* Forzar fondos de cards */
+body.dark-mode [class*="card"]:not(.sidebar):not([class*="sidebar"]),
+body.dark-mode [class*="stat"]:not(.sidebar):not([class*="sidebar"]),
+body.dark-mode [class*="report"]:not(.sidebar):not([class*="sidebar"]),
+body.dark-mode [class*="chart"]:not(.sidebar):not([class*="sidebar"]),
+body.dark-mode [class*="table"]:not(.sidebar):not([class*="sidebar"]),
+body.dark-mode [class*="form"]:not(.sidebar):not([class*="sidebar"]),
+body.dark-mode [class*="patient"]:not(.sidebar):not([class*="sidebar"]),
+body.dark-mode [class*="resource"]:not(.sidebar):not([class*="sidebar"]) {
+  background: #252525 !important;
+  border-color: #3a3a3a !important;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
@@ -43,3 +78,3292 @@ body {
 .mat-mdc-form-field-outline {
   border-radius: 8px;
 }
+
+/* ============================================
+   ESTILOS BASE PARA BOTONES (MODO NORMAL)
+   ============================================ */
+
+/* Botones base */
+.btn,
+button.btn {
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Botones Primary - Azul */
+.btn-primary,
+button.btn-primary,
+.btn.btn-primary,
+button.btn.btn-primary {
+  background: #2563eb;
+  background-color: #2563eb;
+  border-color: #2563eb;
+  color: #ffffff;
+}
+
+.btn-primary:hover,
+button.btn-primary:hover,
+.btn.btn-primary:hover {
+  background: #1d4ed8;
+  background-color: #1d4ed8;
+  border-color: #1d4ed8;
+}
+
+/* Botones Success - Verde */
+.btn-success,
+button.btn-success,
+.btn.btn-success,
+button.btn.btn-success {
+  background: #10b981;
+  background-color: #10b981;
+  border-color: #10b981;
+  color: #ffffff;
+}
+
+.btn-success:hover,
+button.btn-success:hover,
+.btn.btn-success:hover {
+  background: #059669;
+  background-color: #059669;
+  border-color: #059669;
+}
+
+/* Forzar color blanco en iconos SVG de botones success */
+.btn-success svg,
+.btn-success svg *,
+button.btn-success svg,
+button.btn-success svg * {
+  stroke: #ffffff !important;
+  fill: none !important;
+  color: #ffffff !important;
+}
+
+/* Botones Danger - Rojo */
+.btn-danger,
+button.btn-danger,
+.btn.btn-danger,
+button.btn.btn-danger {
+  background: #ef4444;
+  background-color: #ef4444;
+  border-color: #ef4444;
+  color: #ffffff;
+}
+
+.btn-danger:hover,
+button.btn-danger:hover,
+.btn.btn-danger:hover {
+  background: #dc2626;
+  background-color: #dc2626;
+  border-color: #dc2626;
+}
+
+/* Botones Secondary - Rojo (Cancelar/Eliminar) */
+.btn-secondary,
+button.btn-secondary,
+.btn.btn-secondary,
+button.btn.btn-secondary {
+  background: #dc2626;
+  background-color: #dc2626;
+  border-color: #dc2626;
+  color: #ffffff;
+}
+
+.btn-secondary:hover,
+button.btn-secondary:hover,
+.btn.btn-secondary:hover {
+  background: #b91c1c;
+  background-color: #b91c1c;
+  border-color: #b91c1c;
+}
+
+/* Botones Warning - Naranja */
+.btn-warning,
+button.btn-warning,
+.btn.btn-warning,
+button.btn.btn-warning {
+  background: #f59e0b;
+  background-color: #f59e0b;
+  border-color: #f59e0b;
+  color: #ffffff;
+}
+
+.btn-warning:hover,
+button.btn-warning:hover,
+.btn.btn-warning:hover {
+  background: #d97706;
+  background-color: #d97706;
+  border-color: #d97706;
+}
+
+/* ============================================
+   ESTILOS GLOBALES PARA TÍTULOS DE PÁGINA
+   ============================================ */
+
+/* Forzar color azul en todos los títulos de página - MODO NORMAL */
+.page-title h1,
+app-dashboard .page-title h1,
+app-configuracion .page-title h1,
+app-lista-pacientes .page-title h1,
+app-nuevo-paciente .page-title h1,
+app-historial-sesiones .page-title h1,
+app-detalle-sesion .page-title h1,
+app-informes-estadisticas .page-title h1,
+app-recursos .page-title h1 {
+  color: #1e40af !important;
+}
+
+/* ============================================
+   MODO OSCURO PROFESIONAL
+   Paleta inspirada en VS Code Dark+ y GitHub Dark
+   ============================================ */
+
+/* PALETA DE COLORES PROFESIONAL - MODO OSCURO PREMIUM:
+   Esquema ultra oscuro y elegante inspirado en VS Code Dark+ y GitHub Dark
+   Optimizado para máximo contraste y legibilidad profesional
+   
+   FONDOS:
+   --bg-primary: #0d1117     (Fondo principal - negro profundo GitHub-style)
+   --bg-secondary: #161b22   (Tarjetas, paneles - gris oscuro elevado)
+   --bg-tertiary: #21262d    (Hover, elementos interactivos - gris medio)
+   --bg-input: #0d1117       (Campos de formulario - negro profundo)
+   --bg-elevated: #1c2128    (Elementos elevados como modales)
+   
+   BORDES:
+   --border-primary: #30363d (Bordes principales - gris medio visible)
+   --border-secondary: #21262d (Bordes sutiles)
+   --border-accent: #58a6ff  (Bordes de foco - azul brillante)
+   
+   TEXTOS:
+   --text-primary: #f0f6fc   (Texto principal - blanco puro profesional)
+   --text-secondary: #8b949e (Texto secundario - gris claro balanceado)
+   --text-muted: #6e7681     (Texto deshabilitado - gris medio)
+   --text-accent: #58a6ff    (Enlaces y acentos - azul GitHub)
+   
+   COLORES DE ESTADO:
+   --accent-primary: #238636  (Verde GitHub para éxito)
+   --accent-warning: #d29922  (Amarillo para advertencias)
+   --accent-danger: #da3633   (Rojo para errores)
+   --accent-info: #58a6ff     (Azul para información)
+   --accent-purple: #a5a5ff   (Púrpura para elementos especiales)
+*/
+
+/* ===== BASE STYLES - Fondo profesional GitHub Dark ===== */
+body.dark-mode {
+  background: #0d1117 !important;
+  color: #f0f6fc !important;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Main content areas - Fondo profesional */
+body.dark-mode .main-content,
+body.dark-mode .content-wrapper,
+body.dark-mode app-root,
+body.dark-mode router-outlet,
+body.dark-mode app-dashboard,
+body.dark-mode app-lista-pacientes,
+body.dark-mode app-nuevo-paciente,
+body.dark-mode app-historial-sesiones,
+body.dark-mode app-detalle-sesion,
+body.dark-mode app-recursos,
+body.dark-mode app-configuracion,
+body.dark-mode app-informes-estadisticas {
+  background: #0d1117 !important;
+  color: #f0f6fc !important;
+}
+
+/* ===== HEADERS - Fondo elevado profesional ===== */
+body.dark-mode .content-header,
+body.dark-mode .header,
+body.dark-mode .page-header {
+  background: #161b22 !important;
+  border-bottom: 1px solid #30363d !important;
+  color: #f0f6fc !important;
+}
+
+/* ===== TIPOGRAFÍA PROFESIONAL ===== */
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode h4,
+body.dark-mode h5,
+body.dark-mode h6 {
+  color: #f0f6fc !important;
+  font-weight: 600 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode p:not(.sidebar p),
+body.dark-mode span:not(.sidebar span):not(.toggle-slider),
+body.dark-mode label:not(.sidebar label):not(.toggle-switch) {
+  color: #f0f6fc !important;
+}
+
+body.dark-mode .welcome-text h2,
+body.dark-mode .welcome-text h3 {
+  color: #f0f6fc !important;
+}
+
+body.dark-mode .subtitle,
+body.dark-mode .description,
+body.dark-mode .secondary-text {
+  color: #8b949e !important;
+}
+
+/* ===== CARDS Y PANELES - Estilo GitHub Dark profesional ===== */
+body.dark-mode .card,
+body.dark-mode .section,
+body.dark-mode .panel,
+body.dark-mode .box,
+body.dark-mode .stats-card,
+body.dark-mode .chart-card,
+body.dark-mode .dashboard-card,
+body.dark-mode .patient-card,
+body.dark-mode .session-card,
+body.dark-mode .resource-card,
+body.dark-mode .info-card,
+body.dark-mode .stat-card {
+  background: #161b22 !important;
+  border: 1px solid #30363d !important;
+  color: #f0f6fc !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body.dark-mode .mat-mdc-card {
+  background: #161b22 !important;
+  border: 1px solid #30363d !important;
+  color: #f0f6fc !important;
+}
+
+body.dark-mode .card:hover,
+body.dark-mode .stats-card:hover,
+body.dark-mode .patient-card:hover,
+body.dark-mode .session-card:hover {
+  background: #21262d !important;
+  border-color: #58a6ff !important;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===== FORM INPUTS - Estilo GitHub Dark profesional ===== */
+body.dark-mode input:not([type="checkbox"]):not([type="radio"]):not(.toggle-switch input),
+body.dark-mode select,
+body.dark-mode textarea,
+body.dark-mode .form-input,
+body.dark-mode .form-select,
+body.dark-mode .form-control,
+body.dark-mode .search-input,
+body.dark-mode .input-field {
+  background: #0d1117 !important;
+  border: 1px solid #30363d !important;
+  color: #f0f6fc !important;
+  transition: all 0.2s ease;
+}
+
+body.dark-mode input:focus,
+body.dark-mode select:focus,
+body.dark-mode textarea:focus {
+  border-color: #58a6ff !important;
+  background: #161b22 !important;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.15) !important;
+}
+
+body.dark-mode input::placeholder,
+body.dark-mode textarea::placeholder {
+  color: #6e7681 !important;
+  opacity: 1;
+}
+
+body.dark-mode option {
+  background: #161b22;
+  color: #f0f6fc;
+}
+
+/* ===== TABLES - Estilo GitHub Dark profesional ===== */
+body.dark-mode table {
+  background: #0d1117 !important;
+  color: #f0f6fc !important;
+}
+
+body.dark-mode table thead {
+  background: #161b22 !important;
+  border-bottom: 2px solid #30363d !important;
+}
+
+body.dark-mode table thead th {
+  color: #f0f6fc !important;
+  font-weight: 600;
+}
+
+body.dark-mode table tbody tr {
+  border-bottom: 1px solid #21262d !important;
+  transition: background 0.2s ease;
+}
+
+body.dark-mode table tbody tr:hover {
+  background: #161b22 !important;
+}
+
+body.dark-mode table th,
+body.dark-mode table td {
+  color: #f0f6fc !important;
+  border-color: #30363d !important;
+}
+
+/* ===== BUTTONS - Estilo GitHub Dark profesional ===== */
+/* NOTA: Los estilos específicos de botones están definidos más abajo en la sección 
+   "ELIMINAR GRADIENTES Y FORZAR COLORES SÓLIDOS" para evitar conflictos */
+
+/* ===== SIDEBAR - Estilo GitHub Dark profesional ===== */
+body.dark-mode .sidebar {
+  background: #1e40af !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .sidebar-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+body.dark-mode .nav-item {
+  color: rgba(255, 255, 255, 0.9) !important;
+  transition: all 0.2s ease;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+}
+
+body.dark-mode .nav-item span {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+}
+
+body.dark-mode .nav-item:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: white !important;
+}
+
+body.dark-mode .nav-item.active {
+  background: rgba(255, 255, 255, 0.15) !important;
+  color: white !important;
+  border-left-color: #60a5fa !important;
+}
+
+/* ===== FONDOS PRINCIPALES - FORZADO GLOBAL ===== */
+body.dark-mode,
+body.dark-mode *:not(.sidebar):not(.sidebar *):not(.nav-item):not(.nav-item *),
+body.dark-mode .main-content,
+body.dark-mode .dashboard-container,
+body.dark-mode .content-area,
+body.dark-mode .stats-content,
+body.dark-mode .content-wrapper,
+body.dark-mode app-dashboard,
+body.dark-mode app-lista-pacientes,
+body.dark-mode app-historial-sesiones,
+body.dark-mode app-informes-estadisticas,
+body.dark-mode app-configuracion,
+body.dark-mode app-recursos,
+body.dark-mode app-nuevo-paciente,
+body.dark-mode app-registro-pacientes,
+body.dark-mode app-detalle-sesion,
+.dashboard-container.dark-mode,
+.dashboard-container.dark-mode .main-content,
+.dashboard-container.dark-mode .content-area,
+.dashboard-container.dark-mode .stats-content,
+.dark-mode .main-content,
+.dark-mode .dashboard-container {
+  background-color: #1e1e1e !important;
+  background: #1e1e1e !important;
+}
+
+/* ===== CARDS Y CONTAINERS ===== */
+body.dark-mode .card,
+body.dark-mode .patient-card,
+body.dark-mode .patient-form-card,
+body.dark-mode .patients-card,
+body.dark-mode .stat-card,
+body.dark-mode .main-stat-card,
+body.dark-mode .resource-card,
+body.dark-mode .resources-main-card,
+body.dark-mode .report-card,
+body.dark-mode .reports-card,
+body.dark-mode .analysis-container,
+body.dark-mode .table-container,
+body.dark-mode .form-container,
+body.dark-mode .chart-container,
+body.dark-mode .stats-overview,
+.dashboard-container.dark-mode .card,
+.dashboard-container.dark-mode .patient-card,
+.dashboard-container.dark-mode .stat-card,
+.dashboard-container.dark-mode .main-stat-card,
+.dashboard-container.dark-mode .table-container,
+.dashboard-container.dark-mode .chart-container,
+.dashboard-container.dark-mode .report-card,
+.dashboard-container.dark-mode .reports-card,
+.dark-mode .stat-card,
+.dark-mode .resource-card,
+.dark-mode .report-card,
+.dark-mode .reports-card,
+.dark-mode .chart-container {
+  background: #252525 !important;
+  border: 1px solid #3a3a3a !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* ===== HEADERS ===== */
+body.dark-mode .content-header,
+body.dark-mode .card-header,
+.dashboard-container.dark-mode .content-header,
+.dashboard-container.dark-mode .card-header {
+  background: #252525 !important;
+  border-bottom: 1px solid #3a3a3a !important;
+  color: #f0f6fc !important;
+}
+
+body.dark-mode .content-header h2,
+body.dark-mode .card-header h3,
+.dashboard-container.dark-mode .content-header h2,
+.dashboard-container.dark-mode .card-header h3 {
+  color: #f0f6fc !important;
+}
+
+/* ===== CONTENIDO Y ÁREAS ===== */
+body.dark-mode .stats-content,
+body.dark-mode .reports-content,
+body.dark-mode .resources-content,
+body.dark-mode .main-stats-container,
+body.dark-mode .page-title,
+body.dark-mode .patients-container,
+body.dark-mode .sessions-container,
+.dashboard-container.dark-mode .stats-content,
+.dashboard-container.dark-mode .reports-content,
+.dashboard-container.dark-mode .resources-content,
+.dashboard-container.dark-mode .main-stats-container,
+.dashboard-container.dark-mode .page-title,
+.dashboard-container.dark-mode .patients-container,
+.dashboard-container.dark-mode .sessions-container,
+.dark-mode .stats-content,
+.dark-mode .reports-content,
+.dark-mode .resources-content,
+.dark-mode .main-stats-container,
+.dark-mode .page-title {
+  background: #1e1e1e !important;
+}
+
+body.dark-mode .page-title h1,
+.dashboard-container.dark-mode .page-title h1,
+.dark-mode .page-title h1 {
+  color: #f0f6fc !important;
+}
+
+/* ===== TABLAS ===== */
+body.dark-mode table,
+body.dark-mode .patients-table,
+.dashboard-container.dark-mode table,
+.dashboard-container.dark-mode .patients-table {
+  background: transparent !important;
+  color: #f0f6fc !important;
+}
+
+body.dark-mode thead,
+body.dark-mode thead th,
+.dashboard-container.dark-mode thead,
+.dashboard-container.dark-mode thead th {
+  background: #252525 !important;
+  color: #f0f6fc !important;
+  border-color: #3a3a3a !important;
+}
+
+body.dark-mode tbody tr,
+.dashboard-container.dark-mode tbody tr {
+  background: #1e1e1e !important;
+  border-color: #3a3a3a !important;
+}
+
+body.dark-mode tbody tr:hover,
+.dashboard-container.dark-mode tbody tr:hover {
+  background: #252525 !important;
+}
+
+/* ===== MODALS - Estilo GitHub Dark profesional ===== */
+body.dark-mode .modal-overlay {
+  background: rgba(0, 0, 0, 0.85) !important;
+  backdrop-filter: blur(8px);
+}
+
+body.dark-mode .modal,
+body.dark-mode .modal-content,
+body.dark-mode .modal-container {
+  background: #161b22 !important;
+  border: 1px solid #30363d !important;
+  color: #f0f6fc !important;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.7) !important;
+}
+
+body.dark-mode .modal-header {
+  border-bottom: 1px solid #30363d !important;
+  background: #0d1117 !important;
+}
+
+body.dark-mode .modal-header h3,
+body.dark-mode .modal-header h4 {
+  color: #f0f6fc !important;
+}
+
+body.dark-mode .modal-body {
+  color: #f0f6fc !important;
+}
+
+body.dark-mode .modal-footer {
+  border-top: 1px solid #30363d !important;
+  background: #0d1117 !important;
+}
+
+/* Charts and graphs */
+body.dark-mode canvas {
+  filter: brightness(0.9);
+}
+
+/* ===== SCROLLBARS - Estilo GitHub Dark profesional ===== */
+body.dark-mode ::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+body.dark-mode ::-webkit-scrollbar-track {
+  background: #0d1117;
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb {
+  background: #30363d;
+  border-radius: 6px;
+  border: 2px solid #0d1117;
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb:hover {
+  background: #484f58;
+}
+
+/* ===== LISTS - Estilo GitHub Dark profesional ===== */
+body.dark-mode ul,
+body.dark-mode ol {
+  color: #f0f6fc;
+}
+
+body.dark-mode li {
+  color: #8b949e;
+}
+
+/* ===== LINKS - Estilo GitHub Dark profesional ===== */
+body.dark-mode a {
+  color: #58a6ff !important;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+body.dark-mode a:hover {
+  color: #79c0ff !important;
+  text-decoration: underline;
+}
+
+/* ===== BORDERS - Estilo GitHub Dark profesional ===== */
+body.dark-mode .border,
+body.dark-mode [class*="border"] {
+  border-color: #30363d !important;
+}
+
+/* ===== SHADOWS - Estilo GitHub Dark profesional ===== */
+body.dark-mode .shadow,
+body.dark-mode [class*="shadow"] {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* ===== STATISTICS CARDS - Estilo GitHub Dark profesional ===== */
+body.dark-mode .stat-card,
+body.dark-mode .stats-card,
+body.dark-mode .metric-card {
+  background: #161b22 !important;
+  border: 1px solid #30363d !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3) !important;
+}
+
+body.dark-mode .stat-value,
+body.dark-mode .metric-value {
+  color: #f0f6fc !important;
+  font-weight: 700;
+}
+
+body.dark-mode .stat-label,
+body.dark-mode .metric-label {
+  color: #8b949e !important;
+}
+
+/* ===== STAT ICONS - Colores GitHub Dark profesionales ===== */
+body.dark-mode .stat-icon {
+  opacity: 1;
+  filter: none;
+}
+
+body.dark-mode .stat-icon.blue {
+  background: rgba(88, 166, 255, 0.15) !important;
+  color: #58a6ff !important;
+}
+
+body.dark-mode .stat-icon.green {
+  background: rgba(35, 134, 54, 0.15) !important;
+  color: #2ea043 !important;
+}
+
+body.dark-mode .stat-icon.purple {
+  background: rgba(165, 165, 255, 0.15) !important;
+  color: #a5a5ff !important;
+}
+
+body.dark-mode .stat-icon.red {
+  background: rgba(218, 54, 51, 0.15) !important;
+  color: #f85149 !important;
+}
+
+body.dark-mode .stat-icon.yellow {
+  background: rgba(210, 153, 34, 0.15) !important;
+  color: #d29922 !important;
+}
+
+body.dark-mode .stat-icon.cyan {
+  background: rgba(88, 166, 255, 0.15) !important;
+  color: #58a6ff !important;
+}
+
+/* ===== FLOATING ELEMENTS - Estilo GitHub Dark profesional ===== */
+body.dark-mode .floating-hamburger,
+body.dark-mode .floating-button {
+  background: #161b22;
+  border: 1px solid #30363d;
+  color: #f0f6fc;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .floating-hamburger:hover,
+body.dark-mode .floating-button:hover {
+  background: #21262d;
+  border-color: #58a6ff;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
+}
+
+/* ===== DASHBOARD SPECIFIC - Estilo GitHub Dark profesional ===== */
+body.dark-mode .dashboard-container {
+  background: #0d1117 !important;
+}
+
+body.dark-mode .welcome-text h2,
+body.dark-mode .welcome-text h3 {
+  color: #f0f6fc !important;
+}
+
+body.dark-mode .page-title {
+  background: #0d1117 !important;
+  border-bottom: 1px solid #30363d !important;
+}
+
+body.dark-mode .page-title h1 {
+  color: #58a6ff !important;
+  font-weight: 700;
+}
+
+body.dark-mode .page-title p {
+  color: #8b949e !important;
+}
+
+/* Stats Grid */
+body.dark-mode .stats-grid {
+  gap: 20px;
+}
+
+body.dark-mode .quick-stats {
+  background: #18181b !important;
+  border: 1px solid #2a2a2a !important;
+}
+
+/* Charts container */
+body.dark-mode .charts-container,
+body.dark-mode .chart-wrapper {
+  background: #18181b !important;
+  border: 1px solid #2a2a2a !important;
+}
+
+body.dark-mode .chart-title {
+  color: #ffffff !important;
+  font-weight: 600;
+}
+
+/* Settings sections */
+body.dark-mode .settings-section,
+body.dark-mode .settings-content {
+  background: #252525;
+  border-color: #333333;
+}
+
+body.dark-mode .section-header {
+  border-bottom-color: #333333;
+}
+
+body.dark-mode .setting-item {
+  border-bottom-color: #333333;
+}
+
+body.dark-mode .setting-info h4 {
+  color: #ffffff;
+}
+
+body.dark-mode .setting-info p {
+  color: #fafafa;
+}
+
+/* Toggle switches */
+body.dark-mode .toggle-slider {
+  background-color: #4b5563;
+}
+
+body.dark-mode input:checked + .toggle-slider {
+  background-color: #1e40af;
+}
+
+/* Alerts */
+body.dark-mode .alert {
+  background: #18181b !important;
+  border: 1px solid #2a2a2a !important;
+  color: #fafafa !important;
+}
+
+body.dark-mode .alert-success {
+  background: rgba(16, 185, 129, 0.1) !important;
+  border-color: #10b981 !important;
+  color: #6ee7b7 !important;
+}
+
+body.dark-mode .alert-warning {
+  background: rgba(245, 158, 11, 0.1) !important;
+  border-color: #f59e0b !important;
+  color: #fbbf24 !important;
+}
+
+body.dark-mode .alert-danger {
+  background: rgba(239, 68, 68, 0.1) !important;
+  border-color: #ef4444 !important;
+  color: #fca5a5 !important;
+}
+
+body.dark-mode .alert-info {
+  background: rgba(59, 130, 246, 0.1) !important;
+  border-color: #3b82f6 !important;
+  color: #93c5fd !important;
+}
+
+/* Badges */
+body.dark-mode .badge {
+  color: #ffffff !important;
+  font-weight: 600;
+}
+
+body.dark-mode .badge-primary {
+  background: #2563eb !important;
+}
+
+body.dark-mode .badge-success {
+  background: #10b981 !important;
+}
+
+body.dark-mode .badge-warning {
+  background: #f59e0b !important;
+}
+
+body.dark-mode .badge-danger {
+  background: #ef4444 !important;
+}
+
+body.dark-mode .badge-info {
+  background: #3b82f6 !important;
+}
+
+body.dark-mode .badge-secondary {
+  background: #6b7280 !important;
+}
+
+/* Dropdowns */
+body.dark-mode .dropdown-menu {
+  background: #252525;
+  border-color: #333333;
+}
+
+body.dark-mode .dropdown-item {
+  color: #ffffff;
+}
+
+body.dark-mode .dropdown-item:hover {
+  background: #2a2a2a;
+}
+
+/* Tooltips */
+body.dark-mode .tooltip,
+body.dark-mode [data-tooltip] {
+  background: #18181b;
+  border-color: #333333;
+  color: #ffffff;
+}
+
+/* Progress bars */
+body.dark-mode .progress {
+  background: #18181b;
+}
+
+body.dark-mode .progress-bar {
+  background: #1e40af;
+}
+
+/* Tabs */
+body.dark-mode .tab,
+body.dark-mode .tabs {
+  background: #252525;
+  border-color: #333333;
+}
+
+body.dark-mode .tab-active {
+  background: #18181b;
+  color: #60a5fa;
+}
+
+/* Patient list and session history */
+body.dark-mode .patient-card,
+body.dark-mode .session-card,
+body.dark-mode .patient-item,
+body.dark-mode .session-item {
+  background: #18181b !important;
+  border: 1px solid #2a2a2a !important;
+  transition: all 0.3s ease;
+}
+
+body.dark-mode .patient-card:hover,
+body.dark-mode .session-card:hover,
+body.dark-mode .patient-item:hover,
+body.dark-mode .session-item:hover {
+  background: #252525 !important;
+  border-color: #3a3a3a !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5) !important;
+}
+
+body.dark-mode .patient-name,
+body.dark-mode .session-title {
+  color: #ffffff !important;
+  font-weight: 600;
+}
+
+body.dark-mode .patient-info,
+body.dark-mode .session-info {
+  color: #d4d4d8 !important;
+}
+
+body.dark-mode .patient-email,
+body.dark-mode .session-date {
+  color: #71717a !important;
+}
+
+/* Search and filters */
+body.dark-mode .search-input,
+body.dark-mode .filter-input,
+body.dark-mode .search-bar {
+  background: #18181b !important;
+  border: 1px solid #3a3a3a !important;
+  color: #ffffff !important;
+}
+
+body.dark-mode .search-input:focus,
+body.dark-mode .filter-input:focus {
+  border-color: #4a9eff !important;
+  background: #252525 !important;
+  box-shadow: 0 0 0 3px rgba(74, 158, 255, 0.1) !important;
+}
+
+body.dark-mode .search-input::placeholder,
+body.dark-mode .filter-input::placeholder {
+  color: #707070 !important;
+}
+
+body.dark-mode .search-icon {
+  color: #71717a !important;
+}
+
+/* Video and camera */
+body.dark-mode video {
+  border-color: #333333;
+}
+
+/* Material Design overrides for dark mode */
+body.dark-mode .mat-mdc-form-field {
+  color: #ffffff;
+}
+
+body.dark-mode .mat-mdc-input-element {
+  color: #ffffff;
+}
+
+body.dark-mode .mat-mdc-form-field-label {
+  color: #fafafa;
+}
+
+body.dark-mode .mat-mdc-select {
+  color: #ffffff;
+}
+
+body.dark-mode .mat-mdc-option {
+  background: #252525;
+  color: #ffffff;
+}
+
+body.dark-mode .mat-mdc-option:hover {
+  background: #2a2a2a;
+}
+
+/* Dividers */
+body.dark-mode hr,
+body.dark-mode .divider {
+  border-color: #333333;
+}
+
+/* Text colors */
+body.dark-mode .text-muted {
+  color: #71717a !important;
+}
+
+body.dark-mode .text-primary {
+  color: #60a5fa !important;
+}
+
+body.dark-mode .text-success {
+  color: #34d399 !important;
+}
+
+body.dark-mode .text-danger {
+  color: #f87171 !important;
+}
+
+body.dark-mode .text-warning {
+  color: #fbbf24 !important;
+}
+
+body.dark-mode .text-info {
+  color: #60a5fa !important;
+}
+
+body.dark-mode .text-secondary {
+  color: #9ca3af !important;
+}
+
+/* Background colors */
+body.dark-mode .bg-white {
+  background-color: #18181b !important;
+}
+
+body.dark-mode .bg-light {
+  background-color: #252525 !important;
+}
+
+body.dark-mode .bg-gray {
+  background-color: #2a2a2a !important;
+}
+
+/* Forzar fondos oscuros en elementos comunes */
+body.dark-mode [style*="background: white"],
+body.dark-mode [style*="background:white"],
+body.dark-mode [style*="background:#fff"],
+body.dark-mode [style*="background: #fff"] {
+  background: #18181b !important;
+}
+
+/* Dashboard specific elements */
+body.dark-mode .main-stat-card,
+body.dark-mode .dashboard-card {
+  background: #18181b !important;
+  border-color: #2a2a2a !important;
+  color: #fafafa !important;
+}
+
+body.dark-mode .main-stat-card:hover,
+body.dark-mode .dashboard-card:hover {
+  background: #252525 !important;
+}
+
+body.dark-mode .card-header {
+  border-bottom-color: #2a2a2a !important;
+  background: transparent !important;
+}
+
+body.dark-mode .card-header h3 {
+  color: #ffffff !important;
+}
+
+body.dark-mode .stat-content h3 {
+  color: #ffffff !important;
+}
+
+body.dark-mode .stat-content p {
+  color: #d4d4d8 !important;
+}
+
+body.dark-mode .patient-item,
+body.dark-mode .session-item,
+body.dark-mode .activity-row {
+  background: transparent !important;
+}
+
+body.dark-mode .patient-item:hover,
+body.dark-mode .session-item:hover,
+body.dark-mode .activity-row:hover {
+  background: #252525 !important;
+}
+
+body.dark-mode .patient-avatar,
+body.dark-mode .user-avatar {
+  background: #2a2a2a !important;
+  color: #d4d4d8 !important;
+}
+
+body.dark-mode .patient-info h4,
+body.dark-mode .patient-name {
+  color: #ffffff !important;
+}
+
+body.dark-mode .patient-info p,
+body.dark-mode .patient-email {
+  color: #71717a !important;
+}
+
+body.dark-mode .user-name {
+  color: #ffffff !important;
+}
+
+/* Elementos con fondos específicos en componentes */
+body.dark-mode .stats-grid,
+body.dark-mode .main-stats-grid,
+body.dark-mode .main-stats-container {
+  background: transparent !important;
+}
+
+body.dark-mode .dashboard-sections,
+body.dark-mode .content-sections {
+  background: transparent !important;
+}
+
+body.dark-mode .patients-list,
+body.dark-mode .sessions-list,
+body.dark-mode .activity-list {
+  background: transparent !important;
+}
+
+/* View all links */
+body.dark-mode .view-all-link,
+body.dark-mode .view-link,
+body.dark-mode a[class*="view"] {
+  color: #60a5fa !important;
+}
+
+body.dark-mode .view-all-link:hover {
+  color: #93c5fd !important;
+}
+
+/* Stat changes */
+body.dark-mode .stat-change {
+  color: #34d399 !important;
+}
+
+body.dark-mode .stat-change.negative {
+  color: #f87171 !important;
+}
+
+/* Search bar specific */
+body.dark-mode .search-bar,
+body.dark-mode .search-container {
+  background: #18181b !important;
+}
+
+/* Charts and canvas */
+body.dark-mode .chart-container,
+body.dark-mode .canvas-container {
+  background: #18181b !important;
+}
+
+/* Lists without specific class */
+body.dark-mode ul,
+body.dark-mode ol {
+  background: transparent !important;
+}
+
+body.dark-mode li {
+  background: transparent !important;
+}
+
+/* Containers and wrappers */
+body.dark-mode .container,
+body.dark-mode .wrapper,
+body.dark-mode .content,
+body.dark-mode .section-content {
+  background: transparent !important;
+}
+
+/* Grid containers */
+body.dark-mode .grid,
+body.dark-mode [class*="grid"] {
+  background: transparent !important;
+}
+
+/* Flex containers */
+body.dark-mode .flex,
+body.dark-mode [class*="flex"] {
+  background: transparent !important;
+}
+
+/* Specific dashboard elements */
+body.dark-mode .quick-stats,
+body.dark-mode .stats-overview {
+  background: #18181b !important;
+  border: 1px solid #2a2a2a !important;
+}
+
+/* Session cards */
+body.dark-mode .session-card-item {
+  background: #18181b !important;
+  border-color: #2a2a2a !important;
+}
+
+body.dark-mode .session-info-row {
+  background: transparent !important;
+  color: #d4d4d8 !important;
+}
+
+/* Activity items */
+body.dark-mode .activity-item-row {
+  background: transparent !important;
+}
+
+body.dark-mode .activity-icon {
+  background: #2a2a2a !important;
+  color: #60a5fa !important;
+}
+
+/* Info boxes */
+body.dark-mode .info-box,
+body.dark-mode .info-card {
+  background: #18181b !important;
+  border-color: #2a2a2a !important;
+}
+
+/* White box override - IMPORTANTE */
+body.dark-mode div[style*="background: white"],
+body.dark-mode div[style*="background:white"],
+body.dark-mode div[style*="background-color: white"],
+body.dark-mode div[style*="background-color:white"],
+body.dark-mode div[style*="background: #ffffff"],
+body.dark-mode div[style*="background:#ffffff"],
+body.dark-mode div[style*="background-color: #ffffff"],
+body.dark-mode div[style*="background-color:#ffffff"],
+body.dark-mode div[style*="background: #fff"],
+body.dark-mode div[style*="background:#fff"],
+body.dark-mode div[style*="background-color: #fff"],
+body.dark-mode div[style*="background-color:#fff"] {
+  background: #18181b !important;
+  background-color: #18181b !important;
+}
+
+/* Section containers */
+body.dark-mode section {
+  background: transparent !important;
+}
+
+/* Article elements */
+body.dark-mode article {
+  background: #18181b !important;
+  border-color: #2a2a2a !important;
+}
+
+/* Aside elements */
+body.dark-mode aside {
+  background: #18181b !important;
+  border-color: #2a2a2a !important;
+}
+
+/* Nav elements (no sidebar) */
+body.dark-mode nav:not(.sidebar-nav) {
+  background: #18181b !important;
+  border-color: #2a2a2a !important;
+}
+
+/* Header elements (no content-header already covered) */
+body.dark-mode header:not(.content-header) {
+  background: #18181b !important;
+  border-color: #2a2a2a !important;
+}
+
+/* REGLA ULTRA AGRESIVA - Captura fondos blancos y claros */
+body.dark-mode div[style*="background: #f"]:not(.sidebar):not(.sidebar *),
+body.dark-mode div[style*="background:#f"]:not(.sidebar):not(.sidebar *),
+body.dark-mode div[style*="background-color: #f"]:not(.sidebar):not(.sidebar *),
+body.dark-mode div[style*="background-color:#f"]:not(.sidebar):not(.sidebar *),
+body.dark-mode div[style*="background: white"]:not(.sidebar):not(.sidebar *),
+body.dark-mode span[style*="background: #f"]:not(.sidebar):not(.sidebar *),
+body.dark-mode section[style*="background: #f"]:not(.sidebar):not(.sidebar *) {
+  background-color: #18181b !important;
+}
+
+/* Clases comunes de background claro */
+body.dark-mode .bg-white,
+body.dark-mode .bg-light-gray,
+body.dark-mode .bg-gray-50,
+body.dark-mode .bg-gray-100,
+body.dark-mode .bg-gray-200,
+body.dark-mode .background-white,
+body.dark-mode .background-light {
+  background-color: #18181b !important;
+}
+
+/* Items de listas comunes */
+body.dark-mode .list-item,
+body.dark-mode .item,
+body.dark-mode [class*="-item"]:not(.nav-item) {
+  background-color: transparent !important;
+}
+
+body.dark-mode .list-item:hover,
+body.dark-mode .item:hover,
+body.dark-mode [class*="-item"]:hover:not(.nav-item) {
+  background-color: #252525 !important;
+}
+
+/* Paneles y contenedores */
+body.dark-mode .panel-white,
+body.dark-mode .container-white,
+body.dark-mode .box-white {
+  background-color: #18181b !important;
+}
+
+/* Wrappers comunes */
+body.dark-mode [class*="wrapper"],
+body.dark-mode [class*="container"]:not(.dashboard-container):not(.modal-container) {
+  background-color: transparent !important;
+}
+
+/* Cards comunes */
+body.dark-mode [class*="card"]:not([class*="card-icon"]) {
+  background: #18181b !important;
+  border-color: #2a2a2a !important;
+}
+
+/* Sections comunes */
+body.dark-mode [class*="section"]:not(.settings-section) {
+  background: transparent !important;
+}
+
+/* Rows comunes */
+body.dark-mode [class*="row"] {
+  background: transparent !important;
+}
+
+body.dark-mode [class*="row"]:hover {
+  background: #252525 !important;
+}
+
+/* Columns comunes */
+body.dark-mode [class*="col"] {
+  background: transparent !important;
+}
+
+/* Específico para elementos de Angular Material */
+body.dark-mode .mat-card,
+body.dark-mode .mat-card-content,
+body.dark-mode .mat-card-header {
+  background: #18181b !important;
+  color: #fafafa !important;
+}
+
+body.dark-mode .mat-card-title,
+body.dark-mode .mat-card-subtitle {
+  color: #ffffff !important;
+}
+
+/* Override de estilos inline muy específicos */
+body.dark-mode div[style*="color: #000"],
+body.dark-mode div[style*="color:#000"],
+body.dark-mode div[style*="color: #1f"],
+body.dark-mode div[style*="color:#1f"],
+body.dark-mode span[style*="color: #000"],
+body.dark-mode span[style*="color:#000"],
+body.dark-mode p[style*="color: #000"],
+body.dark-mode p[style*="color:#000"],
+body.dark-mode h1[style*="color: #000"],
+body.dark-mode h2[style*="color: #000"],
+body.dark-mode h3[style*="color: #000"],
+body.dark-mode h4[style*="color: #000"] {
+  color: #fafafa !important;
+}
+
+/* ============================================
+   OVERRIDE MASIVO DE FONDOS BLANCOS
+   Sobrescribe TODOS los background: white de componentes
+   ============================================ */
+
+/* Main content siempre oscuro */
+body.dark-mode .main-content {
+  background: #18181b !important;
+}
+
+/* Sobrescribir estilos específicos de configuración */
+body.dark-mode .configuracion-component .main-content,
+body.dark-mode app-configuracion .main-content {
+  background: #18181b !important;
+}
+
+/* Sobrescribir estilos específicos de dashboard */
+body.dark-mode .dashboard-component .main-content,
+body.dark-mode app-dashboard .main-content {
+  background: #18181b !important;
+}
+
+/* Todos los componentes .main-content */
+body.dark-mode app-dashboard .main-content,
+body.dark-mode app-configuracion .main-content,
+body.dark-mode app-lista-pacientes .main-content,
+body.dark-mode app-nuevo-paciente .main-content,
+body.dark-mode app-historial-sesiones .main-content,
+body.dark-mode app-detalle-sesion .main-content,
+body.dark-mode app-informes-estadisticas .main-content,
+body.dark-mode app-recursos .main-content,
+body.dark-mode app-registro-pacientes .main-content {
+  background: #18181b !important;
+}
+
+/* Content header en todos los componentes */
+body.dark-mode app-dashboard .content-header,
+body.dark-mode app-configuracion .content-header,
+body.dark-mode app-lista-pacientes .content-header,
+body.dark-mode app-nuevo-paciente .content-header,
+body.dark-mode app-historial-sesiones .content-header,
+body.dark-mode app-detalle-sesion .content-header,
+body.dark-mode app-informes-estadisticas .content-header,
+body.dark-mode app-recursos .content-header,
+body.dark-mode app-registro-pacientes .content-header {
+  background: #18181b !important;
+  border-bottom-color: #2a2a2a !important;
+}
+
+/* Page title en todos los componentes */
+body.dark-mode app-dashboard .page-title,
+body.dark-mode app-configuracion .page-title,
+body.dark-mode app-lista-pacientes .page-title,
+body.dark-mode app-nuevo-paciente .page-title,
+body.dark-mode app-historial-sesiones .page-title,
+body.dark-mode app-detalle-sesion .page-title,
+body.dark-mode app-informes-estadisticas .page-title,
+body.dark-mode app-recursos .page-title,
+body.dark-mode app-registro-pacientes .page-title {
+  background: #18181b !important;
+}
+
+/* Settings container */
+body.dark-mode .settings-container,
+body.dark-mode .page-container,
+body.dark-mode .patients-container,
+body.dark-mode .sessions-container,
+body.dark-mode .resources-container {
+  background: transparent !important;
+}
+
+/* Form container */
+body.dark-mode .form-container,
+body.dark-mode .patient-form,
+body.dark-mode .registro-form {
+  background: #18181b !important;
+  border-color: #2a2a2a !important;
+}
+
+/* Resource cards */
+body.dark-mode .resource-card,
+body.dark-mode .resource-item {
+  background: #18181b !important;
+  border-color: #2a2a2a !important;
+}
+
+body.dark-mode .resource-card:hover,
+body.dark-mode .resource-item:hover {
+  background: #252525 !important;
+}
+
+/* Categories */
+body.dark-mode .category-tabs,
+body.dark-mode .tabs-container {
+  background: #18181b !important;
+  border-color: #2a2a2a !important;
+}
+
+body.dark-mode .category-tab,
+body.dark-mode .tab-item {
+  background: transparent !important;
+  color: #d4d4d8 !important;
+}
+
+body.dark-mode .category-tab.active,
+body.dark-mode .tab-item.active {
+  background: #18181b !important;
+  color: #ffffff !important;
+  border-color: #4a9eff !important;
+}
+
+/* Resource content */
+body.dark-mode .resource-content,
+body.dark-mode .content-area {
+  background: #18181b !important;
+}
+
+/* Modal specific overrides */
+body.dark-mode .modal-body {
+  background: transparent !important;
+}
+
+/* Success modal */
+body.dark-mode .modal-success,
+body.dark-mode .success-container {
+  background: #18181b !important;
+}
+
+/* Form sections */
+body.dark-mode .form-section {
+  background: transparent !important;
+  border-color: #2a2a2a !important;
+}
+
+/* Patient list specific */
+body.dark-mode .patients-grid,
+body.dark-mode .patients-list-container {
+  background: transparent !important;
+}
+
+/* Sessions list specific */
+body.dark-mode .sessions-grid,
+body.dark-mode .sessions-list-container {
+  background: transparent !important;
+}
+
+/* Chart containers */
+body.dark-mode .chart-card,
+body.dark-mode .stats-chart {
+  background: #18181b !important;
+  border-color: #2a2a2a !important;
+}
+
+/* Empty states */
+body.dark-mode .empty-state-container {
+  background: transparent !important;
+  color: #71717a !important;
+}
+
+/* Floating button */
+body.dark-mode .floating-button,
+body.dark-mode .fab-button {
+  background: #2563eb !important;
+  color: #ffffff !important;
+}
+
+/* Loading overlay */
+body.dark-mode .loading-overlay {
+  background: rgba(10, 10, 10, 0.9) !important;
+}
+
+/* Breadcrumbs */
+body.dark-mode .breadcrumbs,
+body.dark-mode .breadcrumb {
+  background: transparent !important;
+  color: #d4d4d8 !important;
+}
+
+body.dark-mode .breadcrumb-item {
+  color: #d4d4d8 !important;
+}
+
+body.dark-mode .breadcrumb-item.active {
+  color: #ffffff !important;
+}
+
+/* Filters bar */
+body.dark-mode .filters-bar,
+body.dark-mode .filter-container {
+  background: #18181b !important;
+  border-color: #2a2a2a !important;
+}
+
+/* Info panels */
+body.dark-mode .info-panel,
+body.dark-mode .details-panel {
+  background: #18181b !important;
+  border-color: #2a2a2a !important;
+}
+
+/* Tabs content */
+body.dark-mode .tabs-content,
+body.dark-mode .tab-content {
+  background: #18181b !important;
+}
+
+/* Action buttons container */
+body.dark-mode .actions-container,
+body.dark-mode .button-group {
+  background: transparent !important;
+}
+
+/* Legend for charts */
+body.dark-mode .chart-legend {
+  background: transparent !important;
+  color: #fafafa !important;
+}
+
+/* Registration form specific */
+body.dark-mode .registro-container,
+body.dark-mode .registration-wrapper {
+  background: #18181b !important;
+}
+
+/* Welcome section */
+body.dark-mode .welcome-section {
+  background: #18181b !important;
+  border-color: #2a2a2a !important;
+}
+
+/* ============================================
+   FIX MASIVO DE COLORES DE TEXTO OSCUROS
+   Convierte TODOS los textos oscuros a claros
+   ============================================ */
+
+/* Colores de texto gris oscuro → blanco/claro */
+body.dark-mode *[style*="color: #1f2937"],
+body.dark-mode *[style*="color:#1f2937"],
+body.dark-mode *[style*="color: #1e40af"],
+body.dark-mode *[style*="color:#1e40af"],
+body.dark-mode *[style*="color: #374151"],
+body.dark-mode *[style*="color:#374151"],
+body.dark-mode *[style*="color: #4b5563"],
+body.dark-mode *[style*="color:#4b5563"],
+body.dark-mode *[style*="color: #2d3748"],
+body.dark-mode *[style*="color:#2d3748"],
+body.dark-mode *[style*="color: #18181b"],
+body.dark-mode *[style*="color:#18181b"] {
+  color: #ffffff !important;
+}
+
+/* User name y títulos principales */
+body.dark-mode .user-name,
+body.dark-mode .welcome-text h2,
+body.dark-mode .card-header h3,
+body.dark-mode .section-header h3,
+body.dark-mode .form-title {
+  color: #ffffff !important;
+}
+
+/* Títulos de página - azul en modo oscuro */
+body.dark-mode .page-title h1 {
+  color: #58a6ff !important;
+}
+
+/* Textos secundarios grises → gris claro */
+body.dark-mode *[style*="color: #6b7280"],
+body.dark-mode *[style*="color:#6b7280"],
+body.dark-mode *[style*="color: #718096"],
+body.dark-mode *[style*="color:#718096"],
+body.dark-mode *[style*="color: #9ca3af"],
+body.dark-mode *[style*="color:#9ca3af"],
+body.dark-mode *[style*="color: #a0aec0"],
+body.dark-mode *[style*="color:#a0aec0"],
+body.dark-mode *[style*="color: #64748b"],
+body.dark-mode *[style*="color:#64748b"],
+body.dark-mode *[style*="color: #4a5568"],
+body.dark-mode *[style*="color:#4a5568"],
+body.dark-mode *[style*="color: #666"],
+body.dark-mode *[style*="color:#666"],
+body.dark-mode *[style*="color: #495057"],
+body.dark-mode *[style*="color:#495057"],
+body.dark-mode *[style*="color: #6c757d"],
+body.dark-mode *[style*="color:#6c757d"] {
+  color: #d4d4d8 !important;
+}
+
+/* Placeholders y textos deshabilitados */
+body.dark-mode *[style*="color: #aaa"],
+body.dark-mode *[style*="color:#aaa"],
+body.dark-mode *[style*="color: #999"],
+body.dark-mode *[style*="color:#999"] {
+  color: #707070 !important;
+}
+
+/* Links azules → azul claro */
+body.dark-mode *[style*="color: #1976d2"],
+body.dark-mode *[style*="color:#1976d2"],
+body.dark-mode *[style*="color: #1565c0"],
+body.dark-mode *[style*="color:#1565c0"],
+body.dark-mode *[style*="color: #4a69a9"],
+body.dark-mode *[style*="color:#4a69a9"],
+body.dark-mode *[style*="color: #667eea"],
+body.dark-mode *[style*="color:#667eea"] {
+  color: #60a5fa !important;
+}
+
+/* Textos de error (mantener rojos pero más claros) */
+body.dark-mode *[style*="color: #c33"],
+body.dark-mode *[style*="color:#c33"],
+body.dark-mode *[style*="color: #dc2626"],
+body.dark-mode *[style*="color:#dc2626"] {
+  color: #f87171 !important;
+}
+
+/* Textos de éxito (mantener verdes pero más claros) */
+body.dark-mode *[style*="color: #059669"],
+body.dark-mode *[style*="color:#059669"],
+body.dark-mode *[style*="color: #22543d"],
+body.dark-mode *[style*="color:#22543d"] {
+  color: #34d399 !important;
+}
+
+/* Textos muy oscuros → blanco */
+body.dark-mode *[style*="color: #333"],
+body.dark-mode *[style*="color:#333"],
+body.dark-mode *[style*="color: #000"],
+body.dark-mode *[style*="color:#000"],
+body.dark-mode *[style*="color: black"],
+body.dark-mode *[style*="color:black"] {
+  color: #ffffff !important;
+}
+
+/* ============================================
+   FIX DE BORDES Y BACKGROUNDS CLAROS
+   ============================================ */
+
+/* Bordes claros → oscuros */
+body.dark-mode *[style*="border-color: #d1d5db"],
+body.dark-mode *[style*="border-color:#d1d5db"],
+body.dark-mode *[style*="border-color: #e5e7eb"],
+body.dark-mode *[style*="border-color:#e5e7eb"],
+body.dark-mode *[style*="border-color: #f3f4f6"],
+body.dark-mode *[style*="border-color:#f3f4f6"] {
+  border-color: #2a2a2a !important;
+}
+
+/* Backgrounds claros de toggle/slider */
+body.dark-mode *[style*="background-color: #d1d5db"],
+body.dark-mode *[style*="background-color:#d1d5db"] {
+  background-color: #4b5563 !important;
+}
+
+/* Background de errores */
+body.dark-mode *[style*="background-color: #fee"],
+body.dark-mode *[style*="background-color:#fee"],
+body.dark-mode *[style*="background-color: #fecaca"],
+body.dark-mode *[style*="background-color:#fecaca"] {
+  background-color: rgba(239, 68, 68, 0.1) !important;
+}
+
+/* ============================================
+   ELEMENTOS ESPECÍFICOS POR CLASE
+   ============================================ */
+
+/* Patient/Session info */
+body.dark-mode .patient-info p,
+body.dark-mode .session-info p,
+body.dark-mode .activity-description {
+  color: #d4d4d8 !important;
+}
+
+/* Stat labels and descriptions */
+body.dark-mode .stat-label,
+body.dark-mode .stat-description,
+body.dark-mode .metric-label {
+  color: #a1a1aa !important;
+}
+
+/* Form labels */
+body.dark-mode .form-label,
+body.dark-mode .input-label,
+body.dark-mode label:not(.toggle-switch) {
+  color: #fafafa !important;
+}
+
+/* Helper text */
+body.dark-mode .helper-text,
+body.dark-mode .hint-text,
+body.dark-mode .description-text {
+  color: #71717a !important;
+}
+
+/* Timestamps and dates */
+body.dark-mode .timestamp,
+body.dark-mode .date-text,
+body.dark-mode .time-text {
+  color: #71717a !important;
+}
+
+/* View all links */
+body.dark-mode .view-all-link,
+body.dark-mode a.link {
+  color: #60a5fa !important;
+}
+
+/* Category tabs */
+body.dark-mode .category-tab,
+body.dark-mode .tab-button {
+  color: #d4d4d8 !important;
+  border-color: #3a3a3a !important;
+}
+
+body.dark-mode .category-tab.active,
+body.dark-mode .tab-button.active {
+  color: #ffffff !important;
+  background: #18181b !important;
+  border-color: #4a9eff !important;
+}
+
+/* Resource metadata */
+body.dark-mode .resource-meta,
+body.dark-mode .resource-author,
+body.dark-mode .resource-date {
+  color: #71717a !important;
+}
+
+/* Card titles */
+body.dark-mode .card-title,
+body.dark-mode .panel-title {
+  color: #ffffff !important;
+  font-weight: 600;
+}
+
+/* Card descriptions */
+body.dark-mode .card-description,
+body.dark-mode .panel-description {
+  color: #d4d4d8 !important;
+}
+
+/* Search placeholder NO necesita cambio, ya está cubierto */
+
+/* Error messages */
+body.dark-mode .error-message,
+body.dark-mode .error-text,
+body.dark-mode .validation-error {
+  color: #f87171 !important;
+}
+
+/* Success messages */
+body.dark-mode .success-message,
+body.dark-mode .success-text {
+  color: #34d399 !important;
+}
+
+/* Warning messages */
+body.dark-mode .warning-message,
+body.dark-mode .warning-text {
+  color: #fbbf24 !important;
+}
+
+/* Info messages */
+body.dark-mode .info-message,
+body.dark-mode .info-text {
+  color: #60a5fa !important;
+}
+
+/* Breadcrumb items */
+body.dark-mode .breadcrumb-item a {
+  color: #60a5fa !important;
+}
+
+/* Disabled text */
+body.dark-mode .disabled,
+body.dark-mode [disabled] {
+  color: #606060 !important;
+  opacity: 0.6;
+}
+
+/* Empty state text */
+body.dark-mode .empty-state-title {
+  color: #ffffff !important;
+}
+
+body.dark-mode .empty-state-description {
+  color: #71717a !important;
+}
+
+/* Filter labels */
+body.dark-mode .filter-label {
+  color: #fafafa !important;
+}
+
+/* Section subtitles */
+body.dark-mode .section-subtitle,
+body.dark-mode .page-subtitle {
+  color: #d4d4d8 !important;
+}
+
+/* Legend items */
+body.dark-mode .legend-item,
+body.dark-mode .legend-label {
+  color: #fafafa !important;
+}
+
+/* Chart labels */
+body.dark-mode .chart-label,
+body.dark-mode .axis-label {
+  color: #d4d4d8 !important;
+}
+
+/* Tooltips text */
+body.dark-mode .tooltip-text {
+  color: #ffffff !important;
+}
+
+/* Tag/Badge text (ya cubierto antes pero reforzamos) */
+body.dark-mode .tag,
+body.dark-mode .label-tag {
+  color: #ffffff !important;
+  font-weight: 600;
+}
+
+/* Navigation text */
+body.dark-mode .nav-text {
+  color: #fafafa !important;
+}
+
+/* Footer text */
+body.dark-mode .footer-text {
+  color: #71717a !important;
+}
+
+/* Copyright text */
+body.dark-mode .copyright {
+  color: #707070 !important;
+}
+
+/* Avatar letters */
+body.dark-mode .avatar-text {
+  color: #d4d4d8 !important;
+}
+
+/* Count badges */
+body.dark-mode .count-badge {
+  background: #2a2a2a !important;
+  color: #ffffff !important;
+}
+
+/* Progress text */
+body.dark-mode .progress-text {
+  color: #fafafa !important;
+}
+
+/* Percentage text */
+body.dark-mode .percentage {
+  color: #ffffff !important;
+  font-weight: 700;
+}
+
+/* ============================================
+   REGLAS ULTRA AGRESIVAS - CAPTURA TODO
+   ============================================ */
+
+/* FORZAR background oscuro en CUALQUIER elemento con bg claro */
+body.dark-mode div:not(.sidebar):not(.sidebar *):not(.stat-icon):not([class*="icon"]),
+body.dark-mode section:not(.sidebar):not(.sidebar *),
+body.dark-mode article:not(.sidebar):not(.sidebar *),
+body.dark-mode aside:not(.sidebar):not(.sidebar *),
+body.dark-mode main:not(.sidebar):not(.sidebar *) {
+  /* Si tiene background claro, cambiarlo */
+  &[style*="background: rgb(255"],
+  &[style*="background: rgb(248"],
+  &[style*="background: rgb(249"],
+  &[style*="background: rgb(250"],
+  &[style*="background: rgb(251"],
+  &[style*="background: rgb(252"],
+  &[style*="background: rgb(253"],
+  &[style*="background: rgb(254"] {
+    background: #18181b !important;
+  }
+}
+
+/* REGLA UNIVERSAL: Todos los textos en elementos comunes */
+body.dark-mode h1:not(.sidebar h1),
+body.dark-mode h2:not(.sidebar h2),
+body.dark-mode h3:not(.sidebar h3),
+body.dark-mode h4:not(.sidebar h4),
+body.dark-mode h5:not(.sidebar h5),
+body.dark-mode h6:not(.sidebar h6) {
+  color: #ffffff !important;
+}
+
+body.dark-mode p:not(.sidebar p),
+body.dark-mode span:not(.sidebar span):not(.toggle-slider),
+body.dark-mode div:not(.sidebar div):not(.stat-icon):not([class*="icon"]):not([class*="badge"]):not([class*="tag"]) {
+  /* Si el texto es muy oscuro, hacerlo claro */
+  &[style*="color: rgb(0"],
+  &[style*="color: rgb(31"],
+  &[style*="color: rgb(55"],
+  &[style*="color: rgb(75"],
+  &[style*="color: rgb(45"] {
+    color: #fafafa !important;
+  }
+  /* Si el texto es gris medio-oscuro, hacerlo gris claro */
+  &[style*="color: rgb(107"],
+  &[style*="color: rgb(113"],
+  &[style*="color: rgb(156"],
+  &[style*="color: rgb(160"],
+  &[style*="color: rgb(100"],
+  &[style*="color: rgb(74"] {
+    color: #d4d4d8 !important;
+  }
+}
+
+/* Labels SIEMPRE claros */
+body.dark-mode label:not(.toggle-switch):not(.sidebar label) {
+  color: #fafafa !important;
+}
+
+/* Todos los inputs de texto claros */
+body.dark-mode input:not([type="checkbox"]):not([type="radio"]):not(.toggle-switch input),
+body.dark-mode textarea,
+body.dark-mode select {
+  background: #18181b !important;
+  border-color: #3a3a3a !important;
+  color: #ffffff !important;
+}
+
+body.dark-mode input:not([type="checkbox"]):not([type="radio"]):focus,
+body.dark-mode textarea:focus,
+body.dark-mode select:focus {
+  background: #252525 !important;
+  border-color: #4a9eff !important;
+}
+
+/* Todos los buttons con texto claro */
+body.dark-mode button:not(.sidebar button) {
+  color: #ffffff !important;
+}
+
+/* Todos los links visibles */
+body.dark-mode a:not(.sidebar a):not(.nav-item) {
+  color: #60a5fa !important;
+}
+
+/* CAPTURAR backgrounds rgb específicos */
+body.dark-mode *[style*="background: rgb(255, 255, 255)"],
+body.dark-mode *[style*="background-color: rgb(255, 255, 255)"],
+body.dark-mode *[style*="background: rgb(248, 249, 250)"],
+body.dark-mode *[style*="background-color: rgb(248, 249, 250)"],
+body.dark-mode *[style*="background: rgb(249, 250, 251)"],
+body.dark-mode *[style*="background-color: rgb(249, 250, 251)"],
+body.dark-mode *[style*="background: rgb(243, 244, 246)"],
+body.dark-mode *[style*="background-color: rgb(243, 244, 246)"] {
+  background: #18181b !important;
+  background-color: #18181b !important;
+}
+
+/* Capturar todos los grises claros de fondo */
+body.dark-mode *[style*="background: #f9"],
+body.dark-mode *[style*="background:#f9"],
+body.dark-mode *[style*="background: #fa"],
+body.dark-mode *[style*="background:#fa"],
+body.dark-mode *[style*="background: #fb"],
+body.dark-mode *[style*="background:#fb"],
+body.dark-mode *[style*="background: #fc"],
+body.dark-mode *[style*="background:#fc"],
+body.dark-mode *[style*="background: #fd"],
+body.dark-mode *[style*="background:#fd"],
+body.dark-mode *[style*="background: #fe"],
+body.dark-mode *[style*="background:#fe"],
+body.dark-mode *[style*="background: #e5"],
+body.dark-mode *[style*="background:#e5"],
+body.dark-mode *[style*="background: #e7"],
+body.dark-mode *[style*="background:#e7"],
+body.dark-mode *[style*="background: #d1"],
+body.dark-mode *[style*="background:#d1"] {
+  background: #18181b !important;
+  background-color: #18181b !important;
+}
+
+/* Stats y Cards TODOS oscuros */
+body.dark-mode *[class*="stat"]:not([class*="icon"]),
+body.dark-mode *[class*="card"]:not([class*="icon"]),
+body.dark-mode *[class*="Card"]:not([class*="icon"]) {
+  background: #18181b !important;
+  border-color: #2a2a2a !important;
+}
+
+/* Items de lista TODOS transparentes/oscuros */
+body.dark-mode *[class*="item"]:not(.nav-item):not([class*="icon"]),
+body.dark-mode *[class*="Item"]:not(.nav-item):not([class*="icon"]) {
+  background: transparent !important;
+  color: #fafafa !important;
+}
+
+body.dark-mode *[class*="item"]:not(.nav-item):hover,
+body.dark-mode *[class*="Item"]:not(.nav-item):hover {
+  background: #252525 !important;
+}
+
+/* Todas las secciones transparentes */
+body.dark-mode *[class*="section"]:not(.settings-section),
+body.dark-mode *[class*="Section"] {
+  background: transparent !important;
+}
+
+/* Todos los contenedores transparentes */
+body.dark-mode *[class*="container"]:not(.dashboard-container):not(.modal-container),
+body.dark-mode *[class*="Container"]:not(.dashboard-container):not(.modal-container) {
+  background: transparent !important;
+}
+
+/* Todas las rows transparentes */
+body.dark-mode *[class*="row"],
+body.dark-mode *[class*="Row"] {
+  background: transparent !important;
+}
+
+/* Todos los grids transparentes */
+body.dark-mode *[class*="grid"],
+body.dark-mode *[class*="Grid"] {
+  background: transparent !important;
+}
+
+/* Todos los wrappers transparentes */
+body.dark-mode *[class*="wrapper"],
+body.dark-mode *[class*="Wrapper"] {
+  background: transparent !important;
+}
+
+/* Headers TODOS oscuros */
+body.dark-mode *[class*="header"]:not(.sidebar-header),
+body.dark-mode *[class*="Header"]:not(.sidebar-header) {
+  background: #18181b !important;
+  border-color: #2a2a2a !important;
+  color: #ffffff !important;
+}
+
+/* Todos los títulos en headers blancos */
+body.dark-mode *[class*="header"] h1,
+body.dark-mode *[class*="header"] h2,
+body.dark-mode *[class*="header"] h3,
+body.dark-mode *[class*="Header"] h1,
+body.dark-mode *[class*="Header"] h2,
+body.dark-mode *[class*="Header"] h3 {
+  color: #ffffff !important;
+}
+
+/* Todos los content/body oscuros */
+body.dark-mode *[class*="content"]:not([class*="icon"]),
+body.dark-mode *[class*="Content"]:not([class*="icon"]),
+body.dark-mode *[class*="body"],
+body.dark-mode *[class*="Body"] {
+  background: transparent !important;
+  color: #fafafa !important;
+}
+
+/* Panels TODOS oscuros */
+body.dark-mode *[class*="panel"],
+body.dark-mode *[class*="Panel"] {
+  background: #18181b !important;
+  border-color: #2a2a2a !important;
+}
+
+/* Boxes TODOS oscuros */
+body.dark-mode *[class*="box"]:not([class*="icon"]),
+body.dark-mode *[class*="Box"]:not([class*="icon"]) {
+  background: #18181b !important;
+  border-color: #2a2a2a !important;
+}
+
+/* Forms TODOS oscuros */
+body.dark-mode *[class*="form"]:not([class*="icon"]),
+body.dark-mode *[class*="Form"]:not([class*="icon"]) {
+  background: transparent !important;
+}
+
+/* Form groups transparentes */
+body.dark-mode *[class*="form-group"],
+body.dark-mode *[class*="Form-group"] {
+  background: transparent !important;
+}
+
+/* Listas transparentes */
+body.dark-mode *[class*="list"]:not(.sidebar *),
+body.dark-mode *[class*="List"]:not(.sidebar *) {
+  background: transparent !important;
+}
+
+/* Tables oscuras */
+body.dark-mode table:not(.sidebar table) {
+  background: #18181b !important;
+  color: #fafafa !important;
+}
+
+body.dark-mode thead:not(.sidebar thead) {
+  background: #252525 !important;
+}
+
+body.dark-mode tbody tr:not(.sidebar tbody tr) {
+  border-color: #2a2a2a !important;
+}
+
+body.dark-mode tbody tr:hover:not(.sidebar tbody tr:hover) {
+  background: #252525 !important;
+}
+
+body.dark-mode th:not(.sidebar th),
+body.dark-mode td:not(.sidebar td) {
+  color: #fafafa !important;
+  border-color: #2a2a2a !important;
+}
+
+/* Avatares oscuros */
+body.dark-mode *[class*="avatar"]:not(.user-avatar) {
+  background: #2a2a2a !important;
+  color: #d4d4d8 !important;
+}
+
+/* Infos grises claros */
+body.dark-mode *[class*="info"]:not([class*="icon"]) {
+  color: #d4d4d8 !important;
+}
+
+/* Descriptions grises claros */
+body.dark-mode *[class*="description"],
+body.dark-mode *[class*="Description"] {
+  color: #d4d4d8 !important;
+}
+
+/* Metadata grises */
+body.dark-mode *[class*="meta"],
+body.dark-mode *[class*="Meta"] {
+  color: #71717a !important;
+}
+
+/* Subtítulos grises claros */
+body.dark-mode *[class*="subtitle"],
+body.dark-mode *[class*="Subtitle"] {
+  color: #d4d4d8 !important;
+}
+
+/* Títulos blancos */
+body.dark-mode *[class*="title"]:not([class*="subtitle"]),
+body.dark-mode *[class*="Title"]:not([class*="subtitle"]) {
+  color: #ffffff !important;
+}
+
+/* Names blancos */
+body.dark-mode *[class*="name"],
+body.dark-mode *[class*="Name"] {
+  color: #ffffff !important;
+}
+
+/* Values blancos */
+body.dark-mode *[class*="value"],
+body.dark-mode *[class*="Value"] {
+  color: #ffffff !important;
+  font-weight: 700;
+}
+
+/* Labels grises claros */
+body.dark-mode *[class*="label"]:not(.toggle-switch):not([class*="icon"]),
+body.dark-mode *[class*="Label"]:not(.toggle-switch):not([class*="icon"]) {
+  color: #a1a1aa !important;
+}
+
+/* Text elements claros */
+body.dark-mode *[class*="text"]:not([class*="icon"]),
+body.dark-mode *[class*="Text"]:not([class*="icon"]) {
+  color: #fafafa !important;
+}
+
+/* IMPORTANTE: Sobrescribir colores inline oscuros en divs y spans comunes */
+body.dark-mode div[style*="color:"],
+body.dark-mode span[style*="color:"],
+body.dark-mode p[style*="color:"],
+body.dark-mode h1[style*="color:"],
+body.dark-mode h2[style*="color:"],
+body.dark-mode h3[style*="color:"],
+body.dark-mode h4[style*="color:"],
+body.dark-mode h5[style*="color:"],
+body.dark-mode h6[style*="color:"],
+body.dark-mode label[style*="color:"],
+body.dark-mode a[style*="color:"] {
+  /* Este selector captura elementos con color inline y lo sobrescribe */
+  filter: brightness(2) contrast(0.9);
+}
+
+/* ============================================
+   REGLAS ESPECÍFICAS PARA COMPONENTES COMUNES
+   ============================================ */
+
+/* DASHBOARD CONTAINER - Fondo oscuro siempre */
+body.dark-mode .dashboard-container {
+  background: #18181b !important;
+}
+
+/* MAIN CONTENT - Completamente oscuro */
+body.dark-mode .main-content {
+  background: #18181b !important;
+}
+
+/* TODAS las cards - Oscuras */
+body.dark-mode .card,
+body.dark-mode .patient-card,
+body.dark-mode .session-card,
+body.dark-mode .stat-card,
+body.dark-mode .info-card,
+body.dark-mode .dashboard-card,
+body.dark-mode .resource-card {
+  background: #18181b !important;
+  border-color: #2a2a2a !important;
+  color: #fafafa !important;
+}
+
+/* Card headers oscuros */
+body.dark-mode .card-header,
+body.dark-mode .patient-header,
+body.dark-mode .session-header {
+  background: #252525 !important;
+  border-color: #2a2a2a !important;
+  color: #ffffff !important;
+}
+
+/* Card bodies transparentes */
+body.dark-mode .card-body,
+body.dark-mode .patient-body,
+body.dark-mode .session-body {
+  background: transparent !important;
+  color: #fafafa !important;
+}
+
+/* Títulos de página SIEMPRE blancos */
+body.dark-mode .page-title,
+body.dark-mode .section-title,
+body.dark-mode h1.title,
+body.dark-mode h2.title {
+  color: #ffffff !important;
+}
+
+/* Subtítulos grises claros */
+body.dark-mode .page-subtitle,
+body.dark-mode .section-subtitle {
+  color: #d4d4d8 !important;
+}
+
+/* Listas de items */
+body.dark-mode .patient-item,
+body.dark-mode .session-item,
+body.dark-mode .resource-item,
+body.dark-mode .list-item {
+  background: #18181b !important;
+  border-color: #2a2a2a !important;
+  color: #fafafa !important;
+}
+
+body.dark-mode .patient-item:hover,
+body.dark-mode .session-item:hover,
+body.dark-mode .resource-item:hover,
+body.dark-mode .list-item:hover {
+  background: #252525 !important;
+}
+
+/* Info sections */
+body.dark-mode .patient-info,
+body.dark-mode .session-info,
+body.dark-mode .info-section {
+  background: transparent !important;
+  color: #fafafa !important;
+}
+
+/* Patient name / Session name - blanco */
+body.dark-mode .patient-name,
+body.dark-mode .session-name,
+body.dark-mode .item-name {
+  color: #ffffff !important;
+}
+
+/* Patient details / Session details - gris claro */
+body.dark-mode .patient-details,
+body.dark-mode .session-details,
+body.dark-mode .item-details {
+  color: #d4d4d8 !important;
+}
+
+/* Stats específicos */
+body.dark-mode .stat-value {
+  color: #ffffff !important;
+  font-weight: 700;
+}
+
+body.dark-mode .stat-label {
+  color: #a1a1aa !important;
+}
+
+/* Actions bar */
+body.dark-mode .actions-bar,
+body.dark-mode .toolbar {
+  background: #18181b !important;
+  border-color: #2a2a2a !important;
+}
+
+/* Search bar */
+body.dark-mode .search-bar,
+body.dark-mode .search-input {
+  background: #18181b !important;
+  border-color: #3a3a3a !important;
+  color: #ffffff !important;
+}
+
+body.dark-mode .search-bar::placeholder,
+body.dark-mode .search-input::placeholder {
+  color: #808080 !important;
+}
+
+/* Filter buttons */
+body.dark-mode .filter-btn {
+  background: #2a2a2a !important;
+  border-color: #3a3a3a !important;
+  color: #fafafa !important;
+}
+
+body.dark-mode .filter-btn.active {
+  background: #1e40af !important;
+  color: #ffffff !important;
+}
+
+/* Tables específicas */
+body.dark-mode .data-table {
+  background: #18181b !important;
+  border-color: #2a2a2a !important;
+}
+
+body.dark-mode .data-table thead {
+  background: #252525 !important;
+}
+
+body.dark-mode .data-table tbody tr {
+  border-color: #2a2a2a !important;
+}
+
+body.dark-mode .data-table tbody tr:hover {
+  background: #252525 !important;
+}
+
+body.dark-mode .data-table th,
+body.dark-mode .data-table td {
+  color: #fafafa !important;
+  border-color: #2a2a2a !important;
+}
+
+/* Form elements específicos */
+body.dark-mode .form-control,
+body.dark-mode .input-field {
+  background: #18181b !important;
+  border-color: #3a3a3a !important;
+  color: #ffffff !important;
+}
+
+body.dark-mode .form-control:focus,
+body.dark-mode .input-field:focus {
+  background: #252525 !important;
+  border-color: #4a9eff !important;
+}
+
+body.dark-mode .form-label {
+  color: #fafafa !important;
+}
+
+/* Emotion labels */
+body.dark-mode .emotion-label {
+  color: #d4d4d8 !important;
+}
+
+/* Emotion values */
+body.dark-mode .emotion-value {
+  color: #ffffff !important;
+  font-weight: 700;
+}
+
+/* Resource cards específicos */
+body.dark-mode .resource-title {
+  color: #ffffff !important;
+}
+
+body.dark-mode .resource-description {
+  color: #d4d4d8 !important;
+}
+
+/* Session status badges */
+body.dark-mode .status-badge {
+  border-color: #3a3a3a !important;
+}
+
+body.dark-mode .status-badge.active {
+  background: #10b981 !important;
+  color: #ffffff !important;
+}
+
+body.dark-mode .status-badge.completed {
+  background: #6366f1 !important;
+  color: #ffffff !important;
+}
+
+/* Emotion chart labels */
+body.dark-mode .chart-label {
+  color: #a1a1aa !important;
+}
+
+/* Empty state messages */
+body.dark-mode .empty-state,
+body.dark-mode .no-data {
+  color: #808080 !important;
+}
+
+/* Timestamps */
+body.dark-mode .timestamp,
+body.dark-mode .date {
+  color: #71717a !important;
+}
+
+/* Pagination */
+body.dark-mode .pagination {
+  background: transparent !important;
+}
+
+body.dark-mode .pagination button {
+  background: #2a2a2a !important;
+  border-color: #3a3a3a !important;
+  color: #fafafa !important;
+}
+
+body.dark-mode .pagination button.active {
+  background: #1e40af !important;
+  color: #ffffff !important;
+}
+
+body.dark-mode .pagination button:hover:not(.active) {
+  background: #353535 !important;
+}
+
+/* Tooltips */
+body.dark-mode .tooltip {
+  background: #2a2a2a !important;
+  color: #fafafa !important;
+  border-color: #3a3a3a !important;
+}
+
+/* Dropdowns */
+body.dark-mode .dropdown-menu {
+  background: #18181b !important;
+  border-color: #2a2a2a !important;
+}
+
+body.dark-mode .dropdown-item {
+  color: #fafafa !important;
+}
+
+body.dark-mode .dropdown-item:hover {
+  background: #252525 !important;
+  color: #ffffff !important;
+}
+
+/* Modals */
+body.dark-mode .modal-content {
+  background: #18181b !important;
+  border-color: #2a2a2a !important;
+}
+
+body.dark-mode .modal-header {
+  background: #252525 !important;
+  border-color: #2a2a2a !important;
+  color: #ffffff !important;
+}
+
+body.dark-mode .modal-body {
+  background: #18181b !important;
+  color: #fafafa !important;
+}
+
+body.dark-mode .modal-footer {
+  background: #252525 !important;
+  border-color: #2a2a2a !important;
+}
+
+/* Progress bars */
+body.dark-mode .progress {
+  background: #2a2a2a !important;
+}
+
+body.dark-mode .progress-bar {
+  background: #1e40af !important;
+}
+
+/* SOBRESCRITURA FINAL MUY AGRESIVA */
+body.dark-mode * {
+  /* Capturar cualquier background gris claro que se escape */
+  &[style*="background: #f8f9fa"],
+  &[style*="background:#f8f9fa"],
+  &[style*="background-color: #f8f9fa"],
+  &[style*="background-color:#f8f9fa"],
+  &[style*="background: #f5f5f5"],
+  &[style*="background:#f5f5f5"],
+  &[style*="background-color: #f5f5f5"],
+  &[style*="background-color:#f5f5f5"],
+  &[style*="background: #efefef"],
+  &[style*="background:#efefef"],
+  &[style*="background-color: #efefef"],
+  &[style*="background-color:#efefef"] {
+    background: #18181b !important;
+    background-color: #18181b !important;
+  }
+}
+
+/* Activity feed / Recent activity */
+body.dark-mode .activity-item,
+body.dark-mode .activity-card {
+  background: #18181b !important;
+  border-left: 3px solid #3a3a3a !important;
+  color: #fafafa !important;
+}
+
+body.dark-mode .activity-item:hover {
+  background: #252525 !important;
+  border-left-color: #4a9eff !important;
+}
+
+body.dark-mode .activity-time {
+  color: #71717a !important;
+}
+
+body.dark-mode .activity-title {
+  color: #ffffff !important;
+  font-weight: 600;
+}
+
+body.dark-mode .activity-description {
+  color: #d4d4d8 !important;
+}
+
+/* Loading states */
+body.dark-mode .loading-spinner {
+  border-color: #3a3a3a !important;
+  border-top-color: #4a9eff !important;
+}
+
+body.dark-mode .skeleton {
+  background: linear-gradient(90deg, #18181b 25%, #252525 50%, #18181b 75%) !important;
+  background-size: 200% 100%;
+}
+
+/* Empty states */
+body.dark-mode .empty-state {
+  color: #71717a !important;
+}
+
+body.dark-mode .empty-state-icon {
+  color: #606060 !important;
+}
+
+/* Icons */
+body.dark-mode svg,
+body.dark-mode i {
+  color: inherit;
+  opacity: 0.9;
+}
+
+body.dark-mode .icon-blue {
+  color: #60a5fa !important;
+}
+
+body.dark-mode .icon-green {
+  color: #34d399 !important;
+}
+
+body.dark-mode .icon-red {
+  color: #f87171 !important;
+}
+
+body.dark-mode .icon-yellow {
+  color: #fbbf24 !important;
+}
+
+body.dark-mode .icon-purple {
+  color: #a78bfa !important;
+}
+
+/* Emotion badges specific */
+body.dark-mode .emotion-badge {
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 16px;
+}
+
+body.dark-mode .emotion-feliz,
+body.dark-mode .emotion-happy {
+  background: rgba(16, 185, 129, 0.2) !important;
+  color: #34d399 !important;
+  border: 1px solid rgba(16, 185, 129, 0.3) !important;
+}
+
+body.dark-mode .emotion-triste,
+body.dark-mode .emotion-sad {
+  background: rgba(59, 130, 246, 0.2) !important;
+  color: #60a5fa !important;
+  border: 1px solid rgba(59, 130, 246, 0.3) !important;
+}
+
+body.dark-mode .emotion-enojado,
+body.dark-mode .emotion-angry {
+  background: rgba(239, 68, 68, 0.2) !important;
+  color: #f87171 !important;
+  border: 1px solid rgba(239, 68, 68, 0.3) !important;
+}
+
+body.dark-mode .emotion-neutral {
+  background: rgba(156, 163, 175, 0.2) !important;
+  color: #9ca3af !important;
+  border: 1px solid rgba(156, 163, 175, 0.3) !important;
+}
+
+body.dark-mode .emotion-sorprendido,
+body.dark-mode .emotion-surprised {
+  background: rgba(245, 158, 11, 0.2) !important;
+  color: #fbbf24 !important;
+  border: 1px solid rgba(245, 158, 11, 0.3) !important;
+}
+
+/* Forms specific */
+body.dark-mode .form-group label {
+  color: #fafafa !important;
+  font-weight: 500;
+}
+
+body.dark-mode .form-helper-text {
+  color: #71717a !important;
+  font-size: 0.875rem;
+}
+
+body.dark-mode .form-error {
+  color: #f87171 !important;
+}
+
+/* Video container */
+body.dark-mode video {
+  border: 2px solid #2a2a2a !important;
+  border-radius: 8px;
+}
+
+body.dark-mode .video-container {
+  background: #18181b !important;
+  border: 1px solid #2a2a2a !important;
+}
+
+/* Pagination */
+body.dark-mode .pagination {
+  background: #18181b !important;
+}
+
+body.dark-mode .pagination button {
+  background: #252525 !important;
+  border: 1px solid #3a3a3a !important;
+  color: #fafafa !important;
+}
+
+body.dark-mode .pagination button:hover:not(:disabled) {
+  background: #2a2a2a !important;
+  border-color: #4a9eff !important;
+  color: #ffffff !important;
+}
+
+body.dark-mode .pagination button.active {
+  background: #2563eb !important;
+  border-color: #2563eb !important;
+  color: #ffffff !important;
+}
+
+body.dark-mode .pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Footer */
+body.dark-mode footer {
+  background: #18181b !important;
+  border-top: 1px solid #2a2a2a !important;
+  color: #71717a !important;
+}
+
+/* Tooltips enhanced */
+body.dark-mode .tooltip-content {
+  background: #2a2a2a !important;
+  color: #ffffff !important;
+  border: 1px solid #3a3a3a !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* Status indicators */
+body.dark-mode .status-online {
+  background: #10b981 !important;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.6) !important;
+}
+
+body.dark-mode .status-offline {
+  background: #6b7280 !important;
+}
+
+body.dark-mode .status-busy {
+  background: #ef4444 !important;
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.6) !important;
+}
+
+/* Gradient overlays */
+body.dark-mode .gradient-overlay {
+  background: linear-gradient(to bottom, rgba(10, 10, 10, 0) 0%, rgba(10, 10, 10, 0.9) 100%) !important;
+}
+
+/* Code blocks */
+body.dark-mode code {
+  background: #252525 !important;
+  color: #60a5fa !important;
+  border: 1px solid #3a3a3a !important;
+}
+
+body.dark-mode pre {
+  background: #18181b !important;
+  border: 1px solid #2a2a2a !important;
+  color: #fafafa !important;
+}
+
+/* Divider with text */
+body.dark-mode .divider-text {
+  color: #a1a1aa !important;
+  background: #18181b !important;
+}
+
+body.dark-mode .divider-text::before,
+body.dark-mode .divider-text::after {
+  border-top: 1px solid #3f3f46 !important;
+}
+
+/* ============================================
+   REGLAS ULTRA MEGA AGRESIVAS
+   ELIMINAR TODOS LOS FONDOS BLANCOS Y CLAROS
+   ============================================ */
+
+/* TODOS los contenedores principales */
+body.dark-mode .dashboard-container,
+body.dark-mode .main-container,
+body.dark-mode .app-container,
+body.dark-mode .content-container,
+body.dark-mode .page-container {
+  background: #18181b !important;
+  color: #fafafa !important;
+}
+
+/* TODOS los divs, sections, articles sin clases de sidebar */
+body.dark-mode div:not(.sidebar):not(.sidebar *):not(.stat-icon):not([class*="icon"]):not([class*="badge"]),
+body.dark-mode section:not(.sidebar):not(.sidebar *),
+body.dark-mode article:not(.sidebar):not(.sidebar *),
+body.dark-mode aside:not(.sidebar):not(.sidebar *),
+body.dark-mode main:not(.sidebar):not(.sidebar *) {
+  /* Eliminar fondos blancos inline */
+  &[style*="background: white"],
+  &[style*="background:white"],
+  &[style*="background-color: white"],
+  &[style*="background-color:white"],
+  &[style*="background: #fff"],
+  &[style*="background:#fff"],
+  &[style*="background-color: #fff"],
+  &[style*="background-color:#fff"],
+  &[style*="background: #ffffff"],
+  &[style*="background:#ffffff"],
+  &[style*="background-color: #ffffff"],
+  &[style*="background-color:#ffffff"] {
+    background: #18181b !important;
+    background-color: #18181b !important;
+  }
+  
+  /* Eliminar fondos grises claros */
+  &[style*="background: #f"],
+  &[style*="background:#f"],
+  &[style*="background: #e"],
+  &[style*="background:#e"],
+  &[style*="background: rgb(248"],
+  &[style*="background: rgb(249"],
+  &[style*="background: rgb(250"],
+  &[style*="background: rgb(251"],
+  &[style*="background: rgb(252"],
+  &[style*="background: rgb(253"],
+  &[style*="background: rgb(254"],
+  &[style*="background: rgb(255"] {
+    background: #18181b !important;
+    background-color: #18181b !important;
+  }
+}
+
+/* Capturar CUALQUIER elemento con background claro */
+body.dark-mode *[style*="background: #f8f9fa"] { background: #18181b !important; }
+body.dark-mode *[style*="background:#f8f9fa"] { background: #18181b !important; }
+body.dark-mode *[style*="background-color: #f8f9fa"] { background-color: #18181b !important; }
+body.dark-mode *[style*="background-color:#f8f9fa"] { background-color: #18181b !important; }
+body.dark-mode *[style*="background: #ffffff"] { background: #18181b !important; }
+body.dark-mode *[style*="background:#ffffff"] { background: #18181b !important; }
+body.dark-mode *[style*="background-color: #ffffff"] { background-color: #18181b !important; }
+body.dark-mode *[style*="background-color:#ffffff"] { background-color: #18181b !important; }
+body.dark-mode *[style*="background: white"] { background: #18181b !important; }
+body.dark-mode *[style*="background:white"] { background: #18181b !important; }
+body.dark-mode *[style*="background-color: white"] { background-color: #18181b !important; }
+body.dark-mode *[style*="background-color:white"] { background-color: #18181b !important; }
+body.dark-mode *[style*="background: #fff"] { background: #18181b !important; }
+body.dark-mode *[style*="background:#fff"] { background: #18181b !important; }
+body.dark-mode *[style*="background-color: #fff"] { background-color: #18181b !important; }
+body.dark-mode *[style*="background-color:#fff"] { background-color: #18181b !important; }
+
+/* Todos los grises claros (#f0-#ff) */
+body.dark-mode *[style*="background: #f0"] { background: #18181b !important; }
+body.dark-mode *[style*="background: #f1"] { background: #18181b !important; }
+body.dark-mode *[style*="background: #f2"] { background: #18181b !important; }
+body.dark-mode *[style*="background: #f3"] { background: #18181b !important; }
+body.dark-mode *[style*="background: #f4"] { background: #18181b !important; }
+body.dark-mode *[style*="background: #f5"] { background: #18181b !important; }
+body.dark-mode *[style*="background: #f6"] { background: #18181b !important; }
+body.dark-mode *[style*="background: #f7"] { background: #18181b !important; }
+body.dark-mode *[style*="background: #f8"] { background: #18181b !important; }
+body.dark-mode *[style*="background: #f9"] { background: #18181b !important; }
+body.dark-mode *[style*="background: #fa"] { background: #18181b !important; }
+body.dark-mode *[style*="background: #fb"] { background: #18181b !important; }
+body.dark-mode *[style*="background: #fc"] { background: #18181b !important; }
+body.dark-mode *[style*="background: #fd"] { background: #18181b !important; }
+body.dark-mode *[style*="background: #fe"] { background: #18181b !important; }
+body.dark-mode *[style*="background: #ff"] { background: #18181b !important; }
+
+/* RGB blancos y grises claros */
+body.dark-mode *[style*="background: rgb(255, 255, 255)"] { background: #18181b !important; }
+body.dark-mode *[style*="background-color: rgb(255, 255, 255)"] { background-color: #18181b !important; }
+body.dark-mode *[style*="background: rgb(248, 249, 250)"] { background: #18181b !important; }
+body.dark-mode *[style*="background-color: rgb(248, 249, 250)"] { background-color: #18181b !important; }
+body.dark-mode *[style*="background: rgb(249, 250, 251)"] { background: #18181b !important; }
+body.dark-mode *[style*="background-color: rgb(249, 250, 251)"] { background-color: #18181b !important; }
+body.dark-mode *[style*="background: rgb(243, 244, 246)"] { background: #18181b !important; }
+body.dark-mode *[style*="background-color: rgb(243, 244, 246)"] { background-color: #18181b !important; }
+
+/* Capturar fondos e0-ef */
+body.dark-mode *[style*="background: #e0"] { background: #18181b !important; }
+body.dark-mode *[style*="background: #e1"] { background: #18181b !important; }
+body.dark-mode *[style*="background: #e2"] { background: #18181b !important; }
+body.dark-mode *[style*="background: #e3"] { background: #18181b !important; }
+body.dark-mode *[style*="background: #e4"] { background: #18181b !important; }
+body.dark-mode *[style*="background: #e5"] { background: #18181b !important; }
+body.dark-mode *[style*="background: #e6"] { background: #18181b !important; }
+body.dark-mode *[style*="background: #e7"] { background: #18181b !important; }
+body.dark-mode *[style*="background: #e8"] { background: #18181b !important; }
+body.dark-mode *[style*="background: #e9"] { background: #18181b !important; }
+body.dark-mode *[style*="background: #ea"] { background: #18181b !important; }
+body.dark-mode *[style*="background: #eb"] { background: #18181b !important; }
+body.dark-mode *[style*="background: #ec"] { background: #18181b !important; }
+body.dark-mode *[style*="background: #ed"] { background: #18181b !important; }
+body.dark-mode *[style*="background: #ee"] { background: #18181b !important; }
+body.dark-mode *[style*="background: #ef"] { background: #18181b !important; }
+
+/* Capturar fondos d0-df */
+body.dark-mode *[style*="background: #d0"] { background: #27272a !important; }
+body.dark-mode *[style*="background: #d1"] { background: #27272a !important; }
+body.dark-mode *[style*="background: #d2"] { background: #27272a !important; }
+body.dark-mode *[style*="background: #d3"] { background: #27272a !important; }
+body.dark-mode *[style*="background: #d4"] { background: #27272a !important; }
+body.dark-mode *[style*="background: #d5"] { background: #27272a !important; }
+body.dark-mode *[style*="background: #d6"] { background: #27272a !important; }
+body.dark-mode *[style*="background: #d7"] { background: #27272a !important; }
+body.dark-mode *[style*="background: #d8"] { background: #27272a !important; }
+body.dark-mode *[style*="background: #d9"] { background: #27272a !important; }
+body.dark-mode *[style*="background: #da"] { background: #27272a !important; }
+body.dark-mode *[style*="background: #db"] { background: #27272a !important; }
+body.dark-mode *[style*="background: #dc"] { background: #27272a !important; }
+body.dark-mode *[style*="background: #dd"] { background: #27272a !important; }
+body.dark-mode *[style*="background: #de"] { background: #27272a !important; }
+body.dark-mode *[style*="background: #df"] { background: #27272a !important; }
+
+/* TODAS las clases comunes con fondos claros */
+body.dark-mode .bg-white,
+body.dark-mode .background-white,
+body.dark-mode .bg-light,
+body.dark-mode .background-light,
+body.dark-mode .bg-gray-50,
+body.dark-mode .bg-gray-100 {
+  background: #18181b !important;
+  background-color: #18181b !important;
+}
+
+/* Sobrescritura de Angular Material */
+body.dark-mode .mat-mdc-card,
+body.dark-mode .mat-card,
+body.dark-mode .mat-dialog-container,
+body.dark-mode .mat-mdc-dialog-container {
+  background: #27272a !important;
+  color: #fafafa !important;
+}
+
+body.dark-mode .mat-toolbar,
+body.dark-mode .mat-mdc-toolbar {
+  background: #27272a !important;
+  color: #ffffff !important;
+}
+
+/* LINKS - Azul vibrante para buen contraste */
+body.dark-mode a:not(.sidebar a):not(.nav-item) {
+  color: #60a5fa !important;
+}
+
+body.dark-mode a:not(.sidebar a):not(.nav-item):hover {
+  color: #3b82f6 !important;
+  text-decoration: underline;
+}
+
+/* Botones - Azul vibrante que resalta */
+/* BOTONES - OVERRIDE FINAL ABSOLUTO */
+body.dark-mode .btn-primary,
+body.dark-mode button.btn-primary,
+body.dark-mode .btn.btn-primary,
+body.dark-mode button.btn.btn-primary,
+body.dark-mode .action-btn,
+body.dark-mode .btn-view,
+body.dark-mode button[class*="primary"],
+body.dark-mode .add-patient-button,
+body.dark-mode .export-button,
+body.dark-mode .registro-button {
+  background: #3b82f6 !important;
+  background-color: #3b82f6 !important;
+  border: 1px solid #3b82f6 !important;
+  color: #ffffff !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+body.dark-mode .btn-primary:hover,
+body.dark-mode button.btn-primary:hover,
+body.dark-mode .btn.btn-primary:hover,
+body.dark-mode button.btn.btn-primary:hover,
+body.dark-mode .action-btn:hover,
+body.dark-mode .btn-view:hover,
+body.dark-mode button[class*="primary"]:hover,
+body.dark-mode .add-patient-button:hover,
+body.dark-mode .export-button:hover,
+body.dark-mode .registro-button:hover {
+  background: #2563eb !important;
+  background-color: #2563eb !important;
+  border-color: #2563eb !important;
+}
+
+body.dark-mode .btn-success,
+body.dark-mode button.btn-success,
+body.dark-mode .btn.btn-success,
+body.dark-mode button.btn.btn-success,
+body.dark-mode button[class*="success"] {
+  background: #10b981 !important;
+  background-color: #10b981 !important;
+  border: 1px solid #10b981 !important;
+  color: #ffffff !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+body.dark-mode .btn-success:hover,
+body.dark-mode button.btn-success:hover,
+body.dark-mode .btn.btn-success:hover,
+body.dark-mode button.btn.btn-success:hover,
+body.dark-mode button[class*="success"]:hover {
+  background: #059669 !important;
+  background-color: #059669 !important;
+  border-color: #059669 !important;
+}
+
+body.dark-mode .btn-danger,
+body.dark-mode button.btn-danger,
+body.dark-mode .btn.btn-danger,
+body.dark-mode button.btn.btn-danger,
+body.dark-mode .btn-delete,
+body.dark-mode button[class*="danger"] {
+  background: #ef4444 !important;
+  background-color: #ef4444 !important;
+  border: 1px solid #ef4444 !important;
+  color: #ffffff !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+body.dark-mode .btn-danger:hover,
+body.dark-mode button.btn-danger:hover,
+body.dark-mode .btn.btn-danger:hover,
+body.dark-mode button.btn.btn-danger:hover,
+body.dark-mode .btn-delete:hover,
+body.dark-mode button[class*="danger"]:hover {
+  background: #dc2626 !important;
+  background-color: #dc2626 !important;
+  border-color: #dc2626 !important;
+}
+
+body.dark-mode .btn-edit,
+body.dark-mode button.btn-edit,
+body.dark-mode .btn-warning,
+body.dark-mode button[class*="edit"],
+body.dark-mode button[class*="warning"] {
+  background: #f59e0b !important;
+  background-color: #f59e0b !important;
+  border: 1px solid #f59e0b !important;
+  color: #ffffff !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+body.dark-mode .btn-edit:hover,
+body.dark-mode button.btn-edit:hover,
+body.dark-mode .btn-warning:hover,
+body.dark-mode button[class*="edit"]:hover,
+body.dark-mode button[class*="warning"]:hover {
+  background: #d97706 !important;
+  background-color: #d97706 !important;
+  border-color: #d97706 !important;
+}
+
+body.dark-mode .btn-secondary,
+body.dark-mode button.btn-secondary,
+body.dark-mode .btn-cancel,
+body.dark-mode button[class*="secondary"],
+body.dark-mode button.secondary {
+  background: #374151 !important;
+  background-color: #374151 !important;
+  border: 1px solid #4b5563 !important;
+  color: #f0f6fc !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+body.dark-mode .btn-secondary:hover,
+body.dark-mode button.btn-secondary:hover,
+body.dark-mode .btn-cancel:hover,
+body.dark-mode button[class*="secondary"]:hover,
+body.dark-mode button.secondary:hover {
+  background: #4b5563 !important;
+  background-color: #4b5563 !important;
+  border-color: #6b7280 !important;
+}
+
+/* Tables profesionales */
+body.dark-mode table:not(.sidebar table) {
+  background: #27272a !important;
+  border-color: #3f3f46 !important;
+}
+
+body.dark-mode thead:not(.sidebar thead) {
+  background: #3f3f46 !important;
+}
+
+body.dark-mode tbody tr:not(.sidebar tbody tr) {
+  border-color: #3f3f46 !important;
+}
+
+body.dark-mode tbody tr:hover:not(.sidebar tbody tr:hover) {
+  background: #3f3f46 !important;
+}
+
+body.dark-mode th:not(.sidebar th),
+body.dark-mode td:not(.sidebar td) {
+  color: #fafafa !important;
+  border-color: #3f3f46 !important;
+}
+
+/* Ajuste de contraste para texto en fondos oscuros */
+body.dark-mode {
+  /* Usar filter SOLO en elementos con colores inline muy oscuros - EXCEPTO BOTONES */
+  *[style*="color: #1f"]:not(button):not(.btn):not([class*="btn"]),
+  *[style*="color: #1e"]:not(button):not(.btn):not([class*="btn"]),
+  *[style*="color: #0"]:not(button):not(.btn):not([class*="btn"]),
+  *[style*="color: rgb(0"]:not(button):not(.btn):not([class*="btn"]),
+  *[style*="color: rgb(31"]:not(button):not(.btn):not([class*="btn"]),
+  *[style*="color: rgb(30"]:not(button):not(.btn):not([class*="btn"]) {
+    filter: brightness(3) !important;
+  }
+}
+
+/* ===== OVERRIDE SUPER AGRESIVO PARA BOTONES EN MODO OSCURO ===== */
+body.dark-mode *[class*="btn-primary"],
+body.dark-mode * button[class*="btn-primary"],
+body.dark-mode * .btn.btn-primary,
+body.dark-mode * button.btn.btn-primary,
+body.dark-mode .modal-footer .btn-primary,
+body.dark-mode app-lista-pacientes button.btn-primary,
+body.dark-mode app-nuevo-paciente button.btn-primary,
+body.dark-mode app-registro-pacientes button.btn-primary {
+  background: #3b82f6 !important;
+  background-color: #3b82f6 !important;
+  background-image: none !important;
+  border: 1px solid #3b82f6 !important;
+  border-color: #3b82f6 !important;
+  color: #ffffff !important;
+}
+
+body.dark-mode *[class*="btn-success"],
+body.dark-mode * button[class*="btn-success"],
+body.dark-mode * .btn.btn-success,
+body.dark-mode * button.btn.btn-success,
+body.dark-mode .modal-footer .btn-success,
+body.dark-mode app-registro-pacientes button.btn-success {
+  background: #10b981 !important;
+  background-color: #10b981 !important;
+  background-image: none !important;
+  border: 1px solid #10b981 !important;
+  border-color: #10b981 !important;
+  color: #ffffff !important;
+}
+
+body.dark-mode *[class*="btn-danger"],
+body.dark-mode * button[class*="btn-danger"],
+body.dark-mode * .btn.btn-danger,
+body.dark-mode * button.btn.btn-danger,
+body.dark-mode .modal-footer .btn-danger,
+body.dark-mode app-lista-pacientes button.btn-danger {
+  background: #ef4444 !important;
+  background-color: #ef4444 !important;
+  background-image: none !important;
+  border: 1px solid #ef4444 !important;
+  border-color: #ef4444 !important;
+  color: #ffffff !important;
+}
+
+body.dark-mode *[class*="btn-secondary"],
+body.dark-mode * button[class*="btn-secondary"],
+body.dark-mode * .btn.btn-secondary,
+body.dark-mode * button.btn.btn-secondary,
+body.dark-mode .modal-footer .btn-secondary {
+  background: #374151 !important;
+  background-color: #374151 !important;
+  background-image: none !important;
+  border: 1px solid #4b5563 !important;
+  border-color: #4b5563 !important;
+  color: #f0f6fc !important;
+}
+
+body.dark-mode *[class*="btn-warning"],
+body.dark-mode *[class*="btn-edit"],
+body.dark-mode * button[class*="btn-edit"],
+body.dark-mode * .btn.btn-edit,
+body.dark-mode * button.btn.btn-edit {
+  background: #f59e0b !important;
+  background-color: #f59e0b !important;
+  background-image: none !important;
+  border: 1px solid #f59e0b !important;
+  border-color: #f59e0b !important;
+  color: #ffffff !important;
+}
+
+/* ===== ELIMINAR GRADIENTES Y FORZAR COLORES SÓLIDOS EN BOTONES - MODO OSCURO ===== */
+/* REGLA UNIVERSAL: Eliminar TODOS los gradientes de TODOS los botones */
+body.dark-mode button,
+body.dark-mode .btn,
+body.dark-mode [class*="btn"],
+body.dark-mode button[class],
+body.dark-mode .btn[class] {
+  background-image: none !important;
+  filter: none !important;
+  -webkit-filter: none !important;
+}
+
+/* ===== REGLAS DE MÁXIMA PRIORIDAD PARA BOTONES DE COLOR ===== */
+/* SUCCESS - VERDE - FORZADO ABSOLUTO */
+body.dark-mode button[class*="success"],
+body.dark-mode .btn[class*="success"],
+body.dark-mode [class~="btn"][class*="success"],
+body.dark-mode button.btn-success,
+body.dark-mode .btn.btn-success,
+body.dark-mode button[class="btn btn-success"],
+body.dark-mode [class="btn btn-success"] {
+  background: #10b981 !important;
+  background-color: #10b981 !important;
+  background-image: none !important;
+  border: 1px solid #10b981 !important;
+  border-color: #10b981 !important;
+  color: #ffffff !important;
+  filter: none !important;
+}
+
+body.dark-mode button[class*="success"]:hover,
+body.dark-mode .btn[class*="success"]:hover {
+  background: #059669 !important;
+  background-color: #059669 !important;
+  border-color: #059669 !important;
+}
+
+/* DANGER - ROJO - FORZADO ABSOLUTO */
+body.dark-mode button[class*="danger"],
+body.dark-mode .btn[class*="danger"],
+body.dark-mode [class~="btn"][class*="danger"],
+body.dark-mode button.btn-danger,
+body.dark-mode .btn.btn-danger,
+body.dark-mode button[class="btn btn-danger"],
+body.dark-mode [class="btn btn-danger"],
+body.dark-mode .btn-delete,
+body.dark-mode button.btn-delete {
+  background: #ef4444 !important;
+  background-color: #ef4444 !important;
+  background-image: none !important;
+  border: 1px solid #ef4444 !important;
+  border-color: #ef4444 !important;
+  color: #ffffff !important;
+  filter: none !important;
+}
+
+body.dark-mode button[class*="danger"]:hover,
+body.dark-mode .btn[class*="danger"]:hover,
+body.dark-mode .btn-delete:hover {
+  background: #dc2626 !important;
+  background-color: #dc2626 !important;
+  border-color: #dc2626 !important;
+}
+
+/* WARNING - NARANJA - FORZADO ABSOLUTO */
+body.dark-mode button[class*="warning"],
+body.dark-mode .btn[class*="warning"],
+body.dark-mode [class~="btn"][class*="warning"],
+body.dark-mode button.btn-warning,
+body.dark-mode .btn.btn-warning,
+body.dark-mode button[class="btn btn-warning"],
+body.dark-mode [class="btn btn-warning"],
+body.dark-mode .btn-edit,
+body.dark-mode button.btn-edit,
+body.dark-mode button[class*="edit"],
+body.dark-mode .btn[class*="edit"] {
+  background: #f59e0b !important;
+  background-color: #f59e0b !important;
+  background-image: none !important;
+  border: 1px solid #f59e0b !important;
+  border-color: #f59e0b !important;
+  color: #ffffff !important;
+  filter: none !important;
+}
+
+body.dark-mode button[class*="warning"]:hover,
+body.dark-mode .btn[class*="warning"]:hover,
+body.dark-mode .btn-edit:hover {
+  background: #d97706 !important;
+  background-color: #d97706 !important;
+  border-color: #d97706 !important;
+}
+
+/* Primero eliminamos todos los gradientes de botones genéricos */

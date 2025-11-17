@@ -57,4 +57,19 @@ export class SessionService {
   eliminarSesion(sesionId: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/sesiones/${sesionId}`);
   }
+
+  // Obtener estadísticas de emociones
+  obtenerEstadisticasEmociones(psicologoId: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/estadisticas/emociones/${psicologoId}`);
+  }
+
+  // Obtener estadísticas de sesiones por mes
+  obtenerEstadisticasSesionesMensuales(psicologoId: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/estadisticas/sesiones-mensuales/${psicologoId}`);
+  }
+
+  // Obtener resumen general de estadísticas
+  obtenerResumenEstadisticas(psicologoId: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/estadisticas/resumen/${psicologoId}`);
+  }
 }

@@ -1,19 +1,22 @@
+/* ACTUALIZADO 2025 - Estilos Estandarizados */
 /* Dashboard Container */
 .dashboard-container {
   display: flex;
   min-height: 100vh;
-  background: #f8f9fa;
+  background: #f8f9fa !important;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Sidebar */
+/* Sidebar - ESTANDARIZADO */
 .sidebar {
   width: 280px;
-  background: #1e40af; /* Darker blue like in the image */
+  background: #1e40af !important;
   display: flex;
   flex-direction: column;
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
+  border-right: 1px solid rgba(255,255,255,0.1) !important;
+  color: white !important;
 }
 
 .sidebar-hidden {
@@ -48,32 +51,42 @@
 .nav-item {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 16px 24px;
-  color: rgba(255, 255, 255, 0.8);
+  gap: 15px !important;
+  padding: 14px 20px !important;
+  color: rgba(255, 255, 255, 0.9) !important;
   text-decoration: none;
   transition: all 0.3s ease;
   border-left: 4px solid transparent;
-  font-weight: 500;
-  font-size: 16px;
+  font-weight: 500 !important;
+  font-size: 14px !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+  cursor: pointer;
+}
+
+.nav-item span {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
 }
 
 .nav-item:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: white !important;
 }
 
 .nav-item.active {
-  background: rgba(255, 255, 255, 0.15);
-  color: white;
-  border-left-color: #60a5fa;
+  background: rgba(255, 255, 255, 0.15) !important;
+  color: white !important;
+  border-left-color: #60a5fa !important;
 }
 
 .nav-icon {
-  width: 20px;
-  height: 20px;
+  width: 20px !important;
+  height: 20px !important;
+  min-width: 20px !important;
   stroke: currentColor;
   fill: none;
+  flex-shrink: 0 !important;
 }
 
 /* Main Content */
@@ -172,10 +185,13 @@
 
 /* Page Title */
 .page-title {
-  padding: 24px 32px 16px;
+  padding: 40px 32px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-left: 0;
+  margin-right: 0;
+  width: 100%;
 }
 
 .page-title h1 {
@@ -210,7 +226,7 @@
 
 /* Sessions Card */
 .sessions-card {
-  margin: 0 32px 32px;
+  margin: 24px 32px 32px;
   background: white;
   border-radius: 12px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -261,11 +277,6 @@
   flex-wrap: wrap;
 }
 
-.filter-group {
-  display: flex;
-  flex-direction: column;
-  min-width: 150px;
-}
 
 .filter-group label {
   font-weight: 600;
@@ -291,22 +302,103 @@
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
+/* Filter group */
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  min-width: 150px;
+}
+
+/* Filter button group - botones en línea horizontal */
+.filter-button-group {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: flex-end;
+  min-width: auto;
+}
+
+.btn-search,
+.btn-clear {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.btn-search {
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  color: white;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+.btn-search:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+  background: linear-gradient(135deg, #2563eb 0%, #1e3a8a 100%);
+}
+
+.btn-search:active {
+  transform: translateY(0);
+}
+
+.btn-clear {
+  background: #f3f4f6;
+  color: #6b7280;
+  border: 1px solid #d1d5db;
+}
+
+.btn-clear:hover {
+  background: #e5e7eb;
+  color: #374151;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-clear:active {
+  transform: translateY(0);
+}
+
+.btn-icon {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+}
+
 /* Table */
 .table-container {
   overflow-x: auto;
+  overflow-y: visible;
+  position: relative;
 }
 
 .sessions-table {
-    width: 100%;
-  border-collapse: collapse;
-  table-layout: fixed; /* Para distribución uniforme de columnas */
+  width: 100%;
+  min-width: 1000px;
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: auto; /* Cambiar a auto para mejor distribución */
+  position: relative;
 }
 
 .sessions-table thead {
   background: #f8fafc;
 }
 
+.sessions-table tr {
+  display: table-row !important;
+}
+
 .sessions-table th {
+  display: table-cell !important;
+  vertical-align: middle !important;
   padding: 12px 12px;
   text-align: left;
   font-weight: 600;
@@ -314,50 +406,73 @@
   font-size: 14px;
   border-bottom: 1px solid #e5e7eb;
   background: #f8fafc;
-  vertical-align: middle;
   height: 48px;
 }
 
 .sessions-table td {
+  display: table-cell !important;
+  vertical-align: middle !important;
   padding: 12px 12px;
   border-bottom: 1px solid #f3f4f6;
-  vertical-align: middle;
   word-wrap: break-word;
   height: 48px;
 }
 
-/* Distribución de columnas */
+/* Excepción para la celda de acciones - debe usar flex */
+.sessions-table td.session-actions {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  height: 48px !important;
+  padding: 12px !important;
+  vertical-align: middle !important;
+  width: 120px !important;
+  min-width: 120px !important;
+  max-width: 120px !important;
+  white-space: nowrap !important;
+  overflow: visible !important;
+  background: #f9fafb !important;
+  border-bottom: 1px solid #f3f4f6 !important;
+}
+
+/* Distribución de columnas con anchos fijos */
 .sessions-table th:nth-child(1),
-.sessions-table td:nth-child(1) { width: 12%; } /* Fecha */
+.sessions-table td:nth-child(1) { width: 100px !important; } /* Fecha */
 
 .sessions-table th:nth-child(2),
-.sessions-table td:nth-child(2) { width: 12%; } /* Hora */
+.sessions-table td:nth-child(2) { width: 80px !important; } /* Hora */
 
 .sessions-table th:nth-child(3),
-.sessions-table td:nth-child(3) { width: 20%; } /* Paciente */
+.sessions-table td:nth-child(3) { width: 200px !important; } /* Paciente */
 
 .sessions-table th:nth-child(4),
-.sessions-table td:nth-child(4) { width: 8%; } /* Edad */
+.sessions-table td:nth-child(4) { width: 70px !important; } /* Edad */
 
 .sessions-table th:nth-child(5),
-.sessions-table td:nth-child(5) { width: 16%; } /* Diagnóstico */
+.sessions-table td:nth-child(5) { width: 150px !important; } /* Diagnóstico */
 
 .sessions-table th:nth-child(6),
-.sessions-table td:nth-child(6) { width: 10%; } /* Duración */
+.sessions-table td:nth-child(6) { width: 90px !important; } /* Duración */
 
 .sessions-table th:nth-child(7),
-.sessions-table td:nth-child(7) { width: 12%; } /* Emoción */
+.sessions-table td:nth-child(7) { width: 130px !important; } /* Emoción */
 
-.sessions-table th:nth-child(8),
-.sessions-table td:nth-child(8) { 
-  width: 10%; /* Acciones */
-    vertical-align: middle;
+.sessions-table th:nth-child(8) {
+  width: 120px !important;
+  min-width: 120px !important;
+  max-width: 120px !important;
+  vertical-align: middle !important;
+  white-space: nowrap !important;
+  text-align: center !important;
+  padding: 12px !important;
+  height: 48px !important;
 }
 
-.sessions-table td:nth-child(8) {
-  padding: 12px 12px;
-  vertical-align: middle;
-}
+/* Regla movida a td.session-actions para mayor especificidad */
+
+/* Regla eliminada - ahora se aplica directamente a td.session-actions */
 
 .session-row:hover {
   background: #f8fafc;
@@ -487,12 +602,12 @@
 /* Anchos específicos para cada columna */
 th:nth-child(1), td:nth-child(1) { width: 10%; } /* Fecha */
 th:nth-child(2), td:nth-child(2) { width: 8%; }  /* Hora */
-th:nth-child(3), td:nth-child(3) { width: 25%; } /* Paciente */
-th:nth-child(4), td:nth-child(4) { width: 8%; }  /* Edad */
-th:nth-child(5), td:nth-child(5) { width: 20%; } /* Diagnóstico */
-th:nth-child(6), td:nth-child(6) { width: 10%; } /* Duración */
+th:nth-child(3), td:nth-child(3) { width: 22%; } /* Paciente */
+th:nth-child(4), td:nth-child(4) { width: 7%; }  /* Edad */
+th:nth-child(5), td:nth-child(5) { width: 18%; } /* Diagnóstico */
+th:nth-child(6), td:nth-child(6) { width: 9%; } /* Duración */
 th:nth-child(7), td:nth-child(7) { width: 12%; } /* Emoción */
-th:nth-child(8), td:nth-child(8) { width: 7%; }  /* Acciones */
+th:nth-child(8), td:nth-child(8) { width: 14%; }  /* Acciones - aumentado para que quepan los botones */
 
 /* Estilos específicos para cada columna */
 .session-date {
@@ -535,49 +650,42 @@ th:nth-child(8), td:nth-child(8) { width: 7%; }  /* Acciones */
   text-align: center;
 }
 
-/* Contenedor de acciones */
-.session-actions {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  height: 100%;
-  padding: 0;
-}
+/* Regla consolidada en .sessions-table td.session-actions */
 
 .action-btn {
-  width: 30px;
-  height: 30px;
+  width: 32px !important;
+  height: 32px !important;
   border: 1px solid;
   border-radius: 6px;
   cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   transition: all 0.2s ease;
-  flex-shrink: 0;
-  background: transparent;
+  flex-shrink: 0 !important;
+  background: white;
   vertical-align: middle;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  margin: 0 !important;
 }
 
 .action-icon {
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
   stroke: currentColor;
   fill: none;
 }
 
 .action-btn.view {
-  border-color: #3b82f6;
-  color: #3b82f6;
+  border-color: #10b981;
+  color: #10b981;
 }
 
 .action-btn.view:hover {
-  background: #3b82f6;
+  background: #10b981;
   color: white;
   transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
 }
 
 .action-btn.download {
@@ -1072,4 +1180,884 @@ td:last-child {
   color: #6b7280;
   font-size: 14px;
   margin: 0;
+}
+
+/* Sessions Card */
+.sessions-card {
+  margin: 0 32px 32px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 32px;
+  background: #f8fafc;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.card-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.card-title h3 {
+  color: #1f2937;
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.title-icon {
+  width: 24px;
+  height: 24px;
+  color: #1e40af;
+  stroke: currentColor;
+  fill: none;
+}
+
+/* Search */
+.card-search {
+  position: relative;
+}
+
+.search-container {
+  position: relative;
+  width: 300px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px 16px 12px 40px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  background: #f9fafb;
+  transition: all 0.3s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  color: #6b7280;
+  stroke: currentColor;
+  fill: none;
+}
+
+/* Filters */
+.filters-section {
+  padding: 20px 32px;
+  background: #f8fafc;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  gap: 20px;
+  align-items: end;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.filter-group label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.filter-group input,
+.filter-group select {
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  background: white;
+  min-width: 120px;
+}
+
+.filter-button-group {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-search,
+.btn-clear {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-search {
+  background: #1e40af;
+  color: white;
+  border: 1px solid #1e40af;
+}
+
+.btn-search:hover {
+  background: #1e3a8a;
+}
+
+.btn-clear {
+  background: white;
+  color: #6b7280;
+  border: 1px solid #d1d5db;
+}
+
+.btn-clear:hover {
+  background: #f9fafb;
+}
+
+.btn-icon {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  fill: none;
+}
+
+/* Table */
+.table-container {
+  overflow-x: auto;
+  padding: 0;
+  margin: 0;
+}
+
+.sessions-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.sessions-table thead {
+  background: #f8fafc;
+}
+
+.sessions-table th {
+  padding: 20px 32px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 14px;
+  color: #374151;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.sessions-table td {
+  padding: 20px 32px;
+  border-bottom: 1px solid #f3f4f6;
+  vertical-align: middle;
+}
+
+/* Session Row */
+.session-row {
+  transition: background-color 0.2s ease;
+}
+
+.session-row:hover {
+  background: #f9fafb;
+}
+
+.session-patient {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.patient-icon {
+  width: 18px;
+  height: 18px;
+  color: #1e40af;
+  stroke: currentColor;
+  fill: none;
+}
+
+.patient-name-text {
+  color: #1f2937;
+  font-weight: 500;
+}
+
+.session-date,
+.session-time {
+  color: #374151;
+  font-weight: 500;
+}
+
+.session-age {
+  color: #6b7280;
+}
+
+.session-diagnosis {
+  color: #374151;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.session-duration {
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* Emotion Badge */
+.emotion-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.emotion-feliz {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.emotion-triste {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.emotion-enojado {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.emotion-sorprendido {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.emotion-neutral {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+/* Action Buttons - Definición consolidada eliminada para evitar duplicados */
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.action-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Botón Ver (Ojito) - Azul */
+.action-btn.view {
+  border-color: #1e40af;
+  color: #1e40af;
+  background: #eff6ff;
+}
+
+.action-btn.view:hover {
+  background: #dbeafe;
+  border-color: #1e3a8a;
+  color: #1e3a8a;
+  box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
+}
+
+/* Botón Descargar - Verde */
+.action-btn.download {
+  border-color: #059669;
+  color: #059669;
+  background: #ecfdf5;
+}
+
+.action-btn.download:hover {
+  background: #d1fae5;
+  border-color: #047857;
+  color: #047857;
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+}
+
+.action-icon {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+}
+
+/* Loading, Error, Empty States */
+.loading-row,
+.error-row,
+.empty-row {
+  background: #f9fafb;
+}
+
+.loading-cell,
+.error-cell,
+.empty-cell {
+  padding: 60px 32px;
+  text-align: center;
+}
+
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #e5e7eb;
+  border-top: 3px solid #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.error-message, .empty-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  color: #6b7280;
+}
+
+.error-message {
+  color: #dc2626;
+}
+
+.login-btn {
+  margin-top: 12px;
+  padding: 8px 16px;
+  background: #1e40af;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background 0.2s ease;
+}
+
+.login-btn:hover {
+  background: #1e3a8a;
+}
+
+.success-message {
+  color: #16a34a;
+}
+
+.error-icon, .empty-icon, .success-icon {
+  width: 48px;
+  height: 48px;
+  stroke: currentColor;
+  fill: none;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 32px;
+  background: #f8fafc;
+  border-top: 1px solid #e5e7eb;
+}
+
+.pagination-info {
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.pagination-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.pagination-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: white;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background: #f9fafb;
+  border-color: #9ca3af;
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination-btn.active {
+  background: #1e40af;
+  color: white;
+  border-color: #1e40af;
+}
+
+.pagination-icon {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  fill: none;
+}
+
+/* ============================================
+   DARK MODE STYLES - MODO OSCURO
+   ============================================ */
+
+.dashboard-container.dark-mode {
+  background: #0d1117 !important;
+}
+
+.dashboard-container.dark-mode .main-content,
+body.dark-mode .main-content {
+  background: #0d1117 !important;
+  color: #f0f6fc !important;
+}
+
+/* Sidebar en modo oscuro - ESTANDARIZADO */
+.dashboard-container.dark-mode .sidebar {
+  background: #1e40af !important;
+  border-right: 1px solid rgba(255,255,255,0.1) !important;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3) !important;
+}
+
+.dashboard-container.dark-mode .sidebar-header {
+  border-bottom: 1px solid rgba(255,255,255,0.1) !important;
+}
+
+.dashboard-container.dark-mode .nav-item {
+  color: #f0f6fc !important;
+  border-left: 3px solid transparent !important;
+}
+
+.dashboard-container.dark-mode .nav-item:hover {
+  background-color: rgba(240, 246, 252, 0.1) !important;
+  border-left-color: #58a6ff !important;
+}
+
+.dashboard-container.dark-mode .nav-item.active {
+  background-color: rgba(240, 246, 252, 0.15) !important;
+  border-left-color: #58a6ff !important;
+}
+
+/* Títulos en modo oscuro */
+.dashboard-container.dark-mode .page-title {
+  background: #0d1117 !important;
+}
+
+.dashboard-container.dark-mode .page-title h1,
+body.dark-mode .page-title h1,
+.dark-mode .page-title h1 {
+  color: #58a6ff !important;
+}
+
+/* Floating hamburger en modo oscuro */
+.dashboard-container.dark-mode .floating-hamburger {
+  background: #21262d !important;
+  color: #f0f6fc !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+  border: 1px solid #30363d !important;
+}
+
+.dashboard-container.dark-mode .floating-hamburger:hover {
+  background: #30363d !important;
+  transform: translateY(-2px) scale(1.05) !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5) !important;
+}
+
+.dashboard-container.dark-mode .floating-hamburger::before {
+  background: radial-gradient(circle, rgba(88, 166, 255, 0.35) 0%, transparent 60%) !important;
+  opacity: 0.5 !important;
+}
+
+.dashboard-container.dark-mode .sessions-card {
+  background: #161b22 !important;
+  border: 1px solid #30363d !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3) !important;
+}
+
+.dashboard-container.dark-mode .card-header {
+  background: #161b22 !important;
+  border-bottom: 1px solid #30363d !important;
+}
+
+.dashboard-container.dark-mode .card-title h3 {
+  color: #58a6ff !important;
+}
+
+.dashboard-container.dark-mode .search-input {
+  background: #0d1117 !important;
+  border: 1px solid #30363d !important;
+  color: #ffffff !important;
+}
+
+.dashboard-container.dark-mode .search-input:focus {
+  background: #0d1117 !important;
+  border-color: #58a6ff !important;
+}
+
+.dashboard-container.dark-mode .filters-section {
+  background: #161b22 !important;
+  border-bottom: 1px solid #30363d !important;
+}
+
+.dashboard-container.dark-mode .filter-group label {
+  color: #ffffff !important;
+}
+
+.dashboard-container.dark-mode .filter-group input,
+.dashboard-container.dark-mode .filter-group select {
+  background: #0d1117 !important;
+  border: 1px solid #30363d !important;
+  color: #ffffff !important;
+}
+
+.dashboard-container.dark-mode .sessions-table {
+  background: #161b22 !important;
+}
+
+.dashboard-container.dark-mode .sessions-table thead th {
+  background: #0d1117 !important;
+  color: #ffffff !important;
+  border-bottom: 2px solid #30363d !important;
+}
+
+.dashboard-container.dark-mode .sessions-table td {
+  background: #161b22 !important;
+  border-bottom: 1px solid #30363d !important;
+}
+
+.dashboard-container.dark-mode .session-row:hover {
+  background: #30363d !important;
+}
+
+.dashboard-container.dark-mode .patient-name-text {
+  color: #ffffff !important;
+}
+
+.dashboard-container.dark-mode .session-date,
+.dashboard-container.dark-mode .session-time,
+.dashboard-container.dark-mode .session-diagnosis {
+  color: #ffffff !important;
+}
+
+.dashboard-container.dark-mode .session-age,
+.dashboard-container.dark-mode .session-duration {
+  color: #cccccc !important;
+}
+
+/* Botones de acción en modo oscuro */
+.dashboard-container.dark-mode .action-btn {
+  background: #0d1117 !important;
+  border-color: #30363d !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
+}
+
+.dashboard-container.dark-mode .action-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Botón Ver (Ojito) en modo oscuro - Azul */
+.dashboard-container.dark-mode .action-btn.view {
+  background: #1e3a8a !important;
+  border-color: #1e40af !important;
+  color: #60a5fa !important;
+}
+
+.dashboard-container.dark-mode .action-btn.view:hover {
+  background: #1e40af !important;
+  border-color: #2563eb !important;
+  color: #93c5fd !important;
+  box-shadow: 0 4px 12px rgba(96, 165, 250, 0.3) !important;
+}
+
+/* Botón Descargar en modo oscuro - Verde */
+.dashboard-container.dark-mode .action-btn.download {
+  background: #047857 !important;
+  border-color: #059669 !important;
+  color: #34d399 !important;
+}
+
+.dashboard-container.dark-mode .action-btn.download:hover {
+  background: #059669 !important;
+  border-color: #10b981 !important;
+  color: #6ee7b7 !important;
+  box-shadow: 0 4px 12px rgba(52, 211, 153, 0.3) !important;
+}
+
+.dashboard-container.dark-mode .pagination {
+  background: #161b22 !important;
+  border-top: 1px solid #30363d !important;
+}
+
+.dashboard-container.dark-mode .pagination-info {
+  color: #cccccc !important;
+}
+
+.dashboard-container.dark-mode .pagination-btn {
+  background: #0d1117 !important;
+  border-color: #30363d !important;
+  color: #ffffff !important;
+}
+
+.dashboard-container.dark-mode .pagination-btn:hover:not(:disabled) {
+  background: #30363d !important;
+}
+
+.dashboard-container.dark-mode .pagination-btn.active {
+  background: #58a6ff !important;
+  border-color: #58a6ff !important;
+}
+
+.dashboard-container.dark-mode .login-btn {
+  background: #58a6ff !important;
+  color: #ffffff !important;
+}
+
+.dashboard-container.dark-mode .login-btn:hover {
+  background: #4493f8 !important;
+}
+
+.dashboard-container.dark-mode .title-icon {
+  color: #58a6ff !important;
+}
+
+.dashboard-container.dark-mode .search-icon {
+  color: #cccccc !important;
+}
+
+.dashboard-container.dark-mode .btn-search {
+  background: #58a6ff !important;
+  border-color: #58a6ff !important;
+  color: #ffffff !important;
+}
+
+.dashboard-container.dark-mode .btn-search:hover {
+  background: #4493f8 !important;
+}
+
+.dashboard-container.dark-mode .btn-clear {
+  background: #0d1117 !important;
+  border-color: #30363d !important;
+  color: #ffffff !important;
+}
+
+.dashboard-container.dark-mode .btn-clear:hover {
+  background: #30363d !important;
+}
+
+.dashboard-container.dark-mode .table-container {
+  background: #161b22 !important;
+}
+
+.dashboard-container.dark-mode .loading-row,
+.dashboard-container.dark-mode .error-row,
+.dashboard-container.dark-mode .empty-row {
+  background: #161b22 !important;
+}
+
+.dashboard-container.dark-mode .loading-cell,
+.dashboard-container.dark-mode .error-cell,
+.dashboard-container.dark-mode .empty-cell {
+  background: #161b22 !important;
+  color: #ffffff !important;
+}
+
+.dashboard-container.dark-mode .spinner {
+  border-color: #30363d !important;
+  border-top-color: #58a6ff !important;
+}
+
+.dashboard-container.dark-mode .error-message {
+  color: #ff6b6b !important;
+}
+
+.dashboard-container.dark-mode .empty-message {
+  color: #cccccc !important;
+}
+
+/* Asegurar que los botones estén lado a lado en modo oscuro también */
+.dashboard-container.dark-mode td.session-actions {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  width: 100px !important;
+  min-width: 100px !important;
+  padding: 20px 12px !important;
+  vertical-align: middle !important;
+}
+
+/* ============================================
+   BOTONES - LOS MISMOS COLORES EN MODO NORMAL Y OSCURO
+   APLICAMOS LA MISMA LÓGICA EXACTA PARA DARK MODE
+   ============================================ */
+
+/* ACTION BUTTONS VIEW - VERDE EN DARK MODE */
+body.dark-mode .action-btn.view,
+.dashboard-container.dark-mode .action-btn.view,
+:host-context(body.dark-mode) .action-btn.view {
+  border-color: #10b981 !important;
+  color: #10b981 !important;
+  background: transparent !important;
+}
+
+body.dark-mode .action-btn.view:hover,
+.dashboard-container.dark-mode .action-btn.view:hover,
+:host-context(body.dark-mode) .action-btn.view:hover {
+  background: #10b981 !important;
+  color: white !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3) !important;
+}
+
+body.dark-mode .action-btn.view svg,
+.dashboard-container.dark-mode .action-btn.view svg {
+  stroke: currentColor !important;
+}
+
+/* ACTION BUTTONS DOWNLOAD - VERDE EN DARK MODE */
+body.dark-mode .action-btn.download,
+.dashboard-container.dark-mode .action-btn.download,
+:host-context(body.dark-mode) .action-btn.download {
+  border-color: #10b981 !important;
+  color: #10b981 !important;
+  background: transparent !important;
+}
+
+body.dark-mode .action-btn.download:hover,
+.dashboard-container.dark-mode .action-btn.download:hover,
+:host-context(body.dark-mode) .action-btn.download:hover {
+  background: #10b981 !important;
+  color: white !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3) !important;
+}
+
+body.dark-mode .action-btn.download svg,
+.dashboard-container.dark-mode .action-btn.download svg {
+  stroke: currentColor !important;
 } 
+
+
+/* ============================================
+   OVERRIDE ULTRA ESPECÍFICO - COLORES DEFINITIVOS
+   MÁXIMA PRIORIDAD - 16 NOV 2025
+   ============================================ */
+
+/* VERDE para botones de VER */
+.action-btn.view,
+button.action-btn.view,
+td button.action-btn.view {
+  background: transparent !important;
+  background-color: transparent !important;
+  border-color: #10b981 !important;
+  color: #10b981 !important;
+}
+
+.action-btn.view:hover,
+button.action-btn.view:hover,
+td button.action-btn.view:hover {
+  background: #10b981 !important;
+  background-color: #10b981 !important;
+  border-color: #10b981 !important;
+  color: #ffffff !important;
+}
+
+/* VERDE para botones de DESCARGAR */
+.action-btn.download,
+button.action-btn.download,
+td button.action-btn.download {
+  background: transparent !important;
+  background-color: transparent !important;
+  border-color: #10b981 !important;
+  color: #10b981 !important;
+}
+
+.action-btn.download:hover,
+button.action-btn.download:hover,
+td button.action-btn.download:hover {
+  background: #10b981 !important;
+  background-color: #10b981 !important;
+  border-color: #10b981 !important;
+  color: #ffffff !important;
+}
+
+/* MODO OSCURO - LOS MISMOS COLORES */
+body.dark-mode .action-btn.view,
+.dashboard-container.dark-mode .action-btn.view {
+  background: transparent !important;
+  border-color: #10b981 !important;
+  color: #10b981 !important;
+}
+
+body.dark-mode .action-btn.view:hover,
+.dashboard-container.dark-mode .action-btn.view:hover {
+  background: #10b981 !important;
+  color: #ffffff !important;
+}
+
+body.dark-mode .action-btn.download,
+.dashboard-container.dark-mode .action-btn.download {
+  background: transparent !important;
+  border-color: #10b981 !important;
+  color: #10b981 !important;
+}
+
+body.dark-mode .action-btn.download:hover,
+.dashboard-container.dark-mode .action-btn.download:hover {
+  background: #10b981 !important;
+  color: #ffffff !important;
+}

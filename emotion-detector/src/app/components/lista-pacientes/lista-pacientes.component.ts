@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PatientService, PacienteResponse } from '../../services/patient.service';
-import { Psicologo } from '../../services/auth.service';
+import { AuthService, Psicologo } from '../../services/auth.service';
+import { ThemeService } from '../../services/theme.service';
 
 // Usar la interfaz del servicio
 export interface Patient extends PacienteResponse {
@@ -17,12 +18,14 @@ export interface Patient extends PacienteResponse {
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './lista-pacientes.component.html',
-  styleUrls: ['./lista-pacientes.component.css']
+  styleUrls: ['./lista-pacientes.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class ListaPacientesComponent implements OnInit {
   // Datos del psicólogo logueado
   psicologo: Psicologo | null = null;
   sidebarVisible: boolean = true;
+  isDarkMode = false;
 
   // Propiedades para los filtros
   filterNombre: string = '';
@@ -53,15 +56,33 @@ export class ListaPacientesComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private patientService: PatientService
+    private patientService: PatientService,
+    private authService: AuthService,
+    private themeService: ThemeService
   ) { }
 
   ngOnInit(): void {
-    // Cargar datos del psicólogo desde localStorage
-    const psicologoData = localStorage.getItem('psicologo');
+    // Configurar tema oscuro
+    this.isDarkMode = this.themeService.isDarkMode();
+    this.themeService.darkMode$.subscribe(isDark => {
+      this.isDarkMode = isDark;
+    });
     
-    if (psicologoData) {
-      this.psicologo = JSON.parse(psicologoData);
+    // Verificar autenticación usando AuthService
+    if (!this.authService.isAuthenticated()) {
+      this.errorMessage = 'No estás autenticado. Redirigiendo al login...';
+      console.error('Usuario no autenticado');
+      setTimeout(() => {
+        this.router.navigate(['/inicio-sesion']);
+      }, 2000);
+      return;
+    }
+
+    // Obtener datos del psicólogo desde AuthService
+    this.psicologo = this.authService.getPsicologo();
+    
+    if (this.psicologo) {
+      console.log('👤 Psicólogo autenticado:', this.psicologo);
       this.loadPatients();
       
       // Debug: Verificar datos en localStorage
@@ -73,7 +94,7 @@ export class ListaPacientesComponent implements OnInit {
       }, 100);
     } else {
       this.errorMessage = 'No se encontró información del psicólogo';
-      console.error('No hay datos del psicólogo en localStorage');
+      console.error('No hay datos del psicólogo disponibles');
     }
   }
 
@@ -85,8 +106,24 @@ export class ListaPacientesComponent implements OnInit {
       return;
     }
 
+    // Verificar que existe el token de autenticación usando AuthService
+    const token = this.authService.getToken();
+    if (!token) {
+      this.errorMessage = 'No se encontró token de autenticación. Por favor, inicia sesión nuevamente.';
+      console.error('No hay token de autenticación');
+      // Redirigir al login después de un momento
+      setTimeout(() => {
+        this.authService.logout();
+      }, 2000);
+      return;
+    }
+
     this.isLoading = true;
     this.errorMessage = '';
+    
+    console.log('🔑 Token encontrado, cargando pacientes...');
+    console.log('📋 Token:', token.substring(0, 20) + '...');
+    console.log('👤 Psicólogo ID:', this.psicologo.id);
 
     this.patientService.obtenerPacientes(this.psicologo.id).subscribe({
       next: (response) => {
@@ -107,7 +144,25 @@ export class ListaPacientesComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al cargar pacientes:', error);
-        this.errorMessage = 'Error al cargar la lista de pacientes: ' + (error.message || 'Error desconocido');
+        
+        // Manejo de errores más específico
+        if (error.status === 401) {
+          this.errorMessage = 'Sesión expirada. Redirigiendo al login...';
+          console.error('Token inválido o expirado');
+          // Cerrar sesión automáticamente
+          setTimeout(() => {
+            this.authService.logout();
+          }, 2000);
+        } else if (error.status === 403) {
+          this.errorMessage = 'No tienes permisos para acceder a esta información.';
+        } else if (error.status === 404) {
+          this.errorMessage = 'No se encontraron pacientes registrados.';
+        } else if (error.status === 0) {
+          this.errorMessage = 'Error de conexión. Verifica que el servidor esté funcionando.';
+        } else {
+          this.errorMessage = 'Error al cargar la lista de pacientes: ' + (error.error?.error || error.message || 'Error desconocido');
+        }
+        
         this.isLoading = false;
       }
     });
@@ -241,15 +296,19 @@ export class ListaPacientesComponent implements OnInit {
 
 
   goToSettings(): void {
-    alert('Vista de configuración en desarrollo');
+    this.router.navigate(['/configuracion']);
   }
 
   goToReports(): void {
-    alert('Vista de reportes en desarrollo');
+    this.router.navigate(['/informes-estadisticas']);
   }
 
   goToResources(): void {
-    alert('Vista de recursos en desarrollo');
+    this.router.navigate(['/recursos']);
+  }
+
+  goToLogin(): void {
+    this.router.navigate(['/inicio-sesion']);
   }
 
   // Método para aplicar los filtros y actualizar la tabla

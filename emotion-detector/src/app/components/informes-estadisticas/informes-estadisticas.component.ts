@@ -3,6 +3,12 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { SessionService } from '../../services/session.service';
+import { AuthService } from '../../services/auth.service';
+import { ThemeService } from '../../services/theme.service';
+import { ReportService, ReportData } from '../../services/report.service';
+import { ReportModalComponent } from '../report-modal/report-modal.component';
+import { HttpClientModule } from '@angular/common/http';
 
 interface EmotionData {
   label: string;
@@ -41,7 +47,9 @@ interface Activity {
   imports: [
     CommonModule,
     RouterModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule,
+    ReportModalComponent
   ],
   templateUrl: './informes-estadisticas.component.html',
   styleUrls: ['./informes-estadisticas.component.css']
@@ -50,25 +58,22 @@ export class InformesEstadisticasComponent implements OnInit {
   sidebarVisible = true;
   selectedPeriod = 'month';
   chartType = 'bar';
+  isLoading = true;
+  isDarkMode = false;
 
-  emotionData: EmotionData[] = [
-    { label: 'Felicidad', value: 45, color: '#10b981' },
-    { label: 'Tristeza', value: 25, color: '#3b82f6' },
-    { label: 'Sorpresa', value: 15, color: '#f59e0b' },
-    { label: 'Enojo', value: 10, color: '#ef4444' },
-    { label: 'Miedo', value: 5, color: '#8b5cf6' }
-  ];
+  // Modal de reportes
+  isModalVisible = false;
+  modalReportData: ReportData | null = null;
+  modalReportType = '';
 
-  sessionData: SessionData[] = [
-    { month: 'Ene', sessions: 12 },
-    { month: 'Feb', sessions: 15 },
-    { month: 'Mar', sessions: 8 },
-    { month: 'Abr', sessions: 20 },
-    { month: 'May', sessions: 18 },
-    { month: 'Jun', sessions: 14 },
-    { month: 'Jul', sessions: 22 },
-    { month: 'Ago', sessions: 16 }
-  ];
+  // Estadísticas generales
+  totalSessions = 0;
+  totalPatients = 0;
+  averageConfidence = 0;
+  predominantEmotion = '-';
+
+  emotionData: EmotionData[] = [];
+  sessionData: SessionData[] = [];
 
   availableReports: Report[] = [
     {
@@ -138,10 +143,132 @@ export class InformesEstadisticasComponent implements OnInit {
     }
   ];
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private sessionService: SessionService,
+    private authService: AuthService,
+    private themeService: ThemeService,
+    private reportService: ReportService
+  ) {}
 
   ngOnInit(): void {
     console.log('InformesEstadisticasComponent inicializado');
+    
+    // Inicializar con el valor actual del tema
+    this.isDarkMode = this.themeService.isDarkMode();
+    
+    // Suscribirse a los cambios del tema
+    this.themeService.darkMode$.subscribe(isDark => {
+      this.isDarkMode = isDark;
+    });
+    
+    this.loadStatistics();
+  }
+
+  loadStatistics(): void {
+    const psicologo = this.authService.getPsicologo();
+    if (!psicologo || !psicologo.id) {
+      console.error('No se encontró información del psicólogo');
+      this.isLoading = false;
+      return;
+    }
+
+    this.isLoading = true;
+
+    // Cargar resumen de estadísticas
+    console.log('Cargando estadísticas para psicólogo ID:', psicologo.id);
+    this.sessionService.obtenerResumenEstadisticas(psicologo.id).subscribe({
+      next: (resumen) => {
+        console.log('Resumen de estadísticas recibido:', resumen);
+        console.log('Total pacientes del backend:', resumen.total_pacientes);
+        this.totalSessions = resumen.total_sesiones || 0;
+        this.totalPatients = resumen.total_pacientes || 0;
+        this.averageConfidence = resumen.confianza_promedio || 0;
+        this.predominantEmotion = resumen.emocion_predominante || '-';
+        console.log('Total pacientes asignado:', this.totalPatients);
+      },
+      error: (error) => {
+        console.error('Error al cargar resumen de estadísticas:', error);
+        console.error('Detalles del error:', error.error);
+        this.totalSessions = 0;
+        this.totalPatients = 0;
+        this.averageConfidence = 0;
+        this.predominantEmotion = '-';
+      }
+    });
+
+    // Cargar estadísticas de emociones
+    this.sessionService.obtenerEstadisticasEmociones(psicologo.id).subscribe({
+      next: (emociones) => {
+        console.log('Estadísticas de emociones:', emociones);
+        this.emotionData = this.processEmotionData(emociones);
+      },
+      error: (error) => {
+        console.error('Error al cargar estadísticas de emociones:', error);
+        // Mantener datos vacíos si hay error
+        this.emotionData = [];
+      }
+    });
+
+    // Cargar estadísticas de sesiones mensuales
+    this.sessionService.obtenerEstadisticasSesionesMensuales(psicologo.id).subscribe({
+      next: (sesiones) => {
+        console.log('Estadísticas de sesiones mensuales:', sesiones);
+        this.sessionData = this.processSessionData(sesiones);
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error al cargar estadísticas de sesiones:', error);
+        // Mantener datos vacíos si hay error
+        this.sessionData = [];
+        this.isLoading = false;
+      }
+    });
+  }
+
+  processEmotionData(data: any[]): EmotionData[] {
+    const emotionColors: { [key: string]: string } = {
+      'happy': '#10b981',
+      'sad': '#3b82f6',
+      'surprise': '#f59e0b',
+      'angry': '#ef4444',
+      'fear': '#8b5cf6',
+      'disgust': '#ec4899',
+      'neutral': '#6b7280'
+    };
+
+    const emotionLabels: { [key: string]: string } = {
+      'happy': 'Felicidad',
+      'sad': 'Tristeza',
+      'surprise': 'Sorpresa',
+      'angry': 'Enojo',
+      'fear': 'Miedo',
+      'disgust': 'Disgusto',
+      'neutral': 'Neutral'
+    };
+
+    return data.map(item => ({
+      label: emotionLabels[item.emotion] || item.emotion,
+      value: Math.round(item.percentage || 0),
+      color: emotionColors[item.emotion] || '#6b7280'
+    }));
+  }
+
+  processSessionData(data: any[]): SessionData[] {
+    const monthNames = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+    
+    return data.map(item => ({
+      month: monthNames[item.month - 1] || item.month,
+      sessions: item.count || 0
+    }));
+  }
+
+  getFirstName(): string {
+    const psicologo = this.authService.getPsicologo();
+    if (psicologo?.nombre_completo) {
+      return psicologo.nombre_completo.split(' ')[0];
+    }
+    return 'Psicólogo';
   }
 
   toggleSidebar(): void {
@@ -177,9 +304,34 @@ export class InformesEstadisticasComponent implements OnInit {
   }
 
   exportReport(): void {
-    console.log('Exportando reporte...');
-    // Aquí implementarías la lógica para exportar el reporte
-    alert('Funcionalidad de exportación en desarrollo');
+    console.log('Exportando reporte general...');
+    
+    // Obtener datos actuales para el reporte
+    const reportData: ReportData = {
+      title: 'Reporte General de Análisis Emocional',
+      dateRange: 'Último mes',
+      totalSessions: this.totalSessions,
+      totalPatients: this.totalPatients,
+      averageConfidence: this.averageConfidence,
+      predominantEmotion: this.predominantEmotion,
+      emotionData: this.emotionData.map(emotion => ({
+        ...emotion,
+        count: Math.round(emotion.value * this.totalSessions / 100)
+      })),
+      sessionData: this.sessionData.map(session => ({
+        ...session,
+        date: new Date().toISOString().split('T')[0] // Agregar fecha actual como ejemplo
+      }))
+    };
+
+    // Mostrar opciones de exportación
+    const format = confirm('¿Desea exportar en formato PDF? (Cancelar para Excel)');
+    
+    if (format) {
+      this.reportService.generatePDFReport(reportData, 'monthly');
+    } else {
+      this.reportService.generateExcelReport(reportData, 'monthly');
+    }
   }
 
   toggleChartType(): void {
@@ -195,26 +347,267 @@ export class InformesEstadisticasComponent implements OnInit {
   }
 
   generateReport(): void {
-    console.log('Generando nuevo reporte...');
-    // Aquí implementarías la lógica para generar un reporte
-    alert('Generando reporte personalizado...');
+    console.log('Generando nuevo reporte personalizado...');
+    
+    // Mostrar opciones de tipo de reporte
+    const reportTypes = [
+      { key: 'monthly', name: 'Reporte Mensual' },
+      { key: 'patient', name: 'Análisis por Paciente' },
+      { key: 'trends', name: 'Tendencias Emocionales' },
+      { key: 'efficiency', name: 'Eficiencia Terapéutica' }
+    ];
+    
+    let selection = prompt(
+      'Seleccione el tipo de reporte:\n' +
+      '1. Reporte Mensual\n' +
+      '2. Análisis por Paciente\n' +
+      '3. Tendencias Emocionales\n' +
+      '4. Eficiencia Terapéutica\n\n' +
+      'Ingrese el número (1-4):'
+    );
+    
+    if (selection && ['1', '2', '3', '4'].includes(selection)) {
+      const reportType = reportTypes[parseInt(selection) - 1].key;
+      
+      // Obtener datos del servicio
+      this.reportService.getReportData(reportType).subscribe(reportData => {
+        const format = confirm('¿Desea generar en formato PDF? (Cancelar para Excel)');
+        
+        if (format) {
+          this.reportService.generatePDFReport(reportData, reportType);
+        } else {
+          this.reportService.generateExcelReport(reportData, reportType);
+        }
+      });
+    }
   }
 
   viewReport(report: Report): void {
     console.log('Viendo reporte:', report.title);
-    // Aquí implementarías la lógica para ver el reporte
-    alert(`Abriendo reporte: ${report.title}`);
+    
+    // Mostrar reporte en modal con datos reales
+    this.reportService.getReportData(report.type).subscribe({
+      next: (reportData) => {
+        // Si no hay datos reales, usar los datos actuales del dashboard
+        if (reportData.totalSessions === 0 && reportData.totalPatients === 0) {
+          this.createReportFromCurrentDataAsync(report.type).then(fallbackData => {
+            this.modalReportData = fallbackData;
+            this.modalReportType = report.type;
+            this.isModalVisible = true;
+          });
+        } else {
+          this.modalReportData = reportData;
+          this.modalReportType = report.type;
+          this.isModalVisible = true;
+        }
+      },
+      error: (error) => {
+        console.error('Error obteniendo datos del reporte:', error);
+        // Usar datos actuales como fallback
+        this.createReportFromCurrentDataAsync(report.type).then(fallbackData => {
+          this.modalReportData = fallbackData;
+          this.modalReportType = report.type;
+          this.isModalVisible = true;
+        });
+      }
+    });
+  }
+
+  private createReportFromCurrentData(reportType: string): ReportData {
+    const baseData: ReportData = {
+      title: this.getReportTitleByType(reportType),
+      dateRange: 'Datos actuales del dashboard',
+      totalSessions: this.totalSessions,
+      totalPatients: this.totalPatients,
+      averageConfidence: this.averageConfidence,
+      predominantEmotion: this.predominantEmotion,
+      emotionData: this.emotionData.map(emotion => ({
+        ...emotion,
+        count: Math.round(emotion.value * this.totalSessions / 100)
+      })),
+      sessionData: this.sessionData.map(session => ({
+        ...session,
+        date: new Date().toISOString().split('T')[0]
+      }))
+    };
+
+    // Agregar datos específicos según el tipo
+    if (reportType === 'patient') {
+      // Para el método síncrono, dejar vacío - usar el método asíncrono para datos reales
+      baseData.patientData = [];
+    }
+
+    if (reportType === 'trends') {
+      // Generar tendencias basadas en los datos de emociones actuales
+      baseData.trendsData = this.generateSampleTrends();
+    }
+
+    return baseData;
+  }
+
+  private async createReportFromCurrentDataAsync(reportType: string): Promise<ReportData> {
+    const baseData: ReportData = {
+      title: this.getReportTitleByType(reportType),
+      dateRange: 'Datos actuales del dashboard',
+      totalSessions: this.totalSessions,
+      totalPatients: this.totalPatients,
+      averageConfidence: this.averageConfidence,
+      predominantEmotion: this.predominantEmotion,
+      emotionData: this.emotionData.map(emotion => ({
+        ...emotion,
+        count: Math.round(emotion.value * this.totalSessions / 100)
+      })),
+      sessionData: this.sessionData.map(session => ({
+        ...session,
+        date: new Date().toISOString().split('T')[0]
+      }))
+    };
+
+    // Agregar datos específicos según el tipo
+    if (reportType === 'patient') {
+      try {
+        baseData.patientData = await this.getRealPatients();
+      } catch (error) {
+        console.error('Error obteniendo pacientes reales:', error);
+        baseData.patientData = [];
+      }
+    }
+
+    if (reportType === 'trends') {
+      baseData.trendsData = this.generateSampleTrends();
+    }
+
+    return baseData;
+  }
+
+  private getReportTitleByType(reportType: string): string {
+    const titles: { [key: string]: string } = {
+      'monthly': 'Reporte Mensual de Análisis Emocional',
+      'patient': 'Análisis Detallado por Paciente',
+      'trends': 'Análisis de Tendencias Emocionales',
+      'efficiency': 'Reporte de Eficiencia Terapéutica'
+    };
+    return titles[reportType] || 'Reporte de Análisis Emocional';
+  }
+
+  private getRealPatients(): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      const psicologo = this.authService.getPsicologo();
+      if (!psicologo || !psicologo.id) {
+        resolve([]);
+        return;
+      }
+
+      this.sessionService.obtenerSesiones(psicologo.id).subscribe({
+        next: (sesiones) => {
+          if (sesiones && Array.isArray(sesiones)) {
+            const pacientesMap = new Map();
+            
+            sesiones.forEach((sesion: any) => {
+              const pacienteId = sesion.paciente_id;
+              const pacienteNombre = sesion.paciente_nombre || `Paciente ${pacienteId}`;
+              
+              if (!pacientesMap.has(pacienteId)) {
+                pacientesMap.set(pacienteId, {
+                  id: pacienteId.toString(),
+                  name: pacienteNombre,
+                  totalSessions: 0,
+                  lastSession: sesion.fecha_sesion,
+                  predominantEmotion: this.translateEmotion(sesion.emocion_predominante || 'neutral'),
+                  progress: 0,
+                  confidenceSum: 0
+                });
+              }
+              
+              const paciente = pacientesMap.get(pacienteId);
+              paciente.totalSessions++;
+              paciente.confidenceSum += parseFloat(sesion.confianza_promedio) || 0;
+              
+              // Actualizar última sesión si es más reciente
+              if (new Date(sesion.fecha_sesion) > new Date(paciente.lastSession)) {
+                paciente.lastSession = sesion.fecha_sesion;
+                paciente.predominantEmotion = this.translateEmotion(sesion.emocion_predominante || 'neutral');
+              }
+            });
+            
+            // Calcular progreso basado en confianza promedio
+            const pacientesReales = Array.from(pacientesMap.values()).map((patient: any) => ({
+              ...patient,
+              progress: Math.min(Math.max((patient.confidenceSum / patient.totalSessions) * 1.2, 0), 100)
+            }));
+            
+            console.log('Pacientes reales encontrados:', pacientesReales);
+            resolve(pacientesReales);
+          } else {
+            resolve([]);
+          }
+        },
+        error: (error) => {
+          console.error('Error obteniendo pacientes reales:', error);
+          reject(error);
+        }
+      });
+    });
+  }
+
+  private translateEmotion(emotion: string): string {
+    const translations: { [key: string]: string } = {
+      'happy': 'Felicidad',
+      'sad': 'Tristeza',
+      'angry': 'Enojo',
+      'fear': 'Miedo',
+      'surprise': 'Sorpresa',
+      'disgust': 'Disgusto',
+      'neutral': 'Neutral'
+    };
+    return translations[emotion?.toLowerCase()] || emotion || 'Neutral';
+  }
+
+  private generateSampleTrends(): any[] {
+    return this.emotionData.slice(0, 4).map(emotion => ({
+      period: 'Último mes',
+      emotion: emotion.label,
+      trend: Math.random() > 0.5 ? 'up' : (Math.random() > 0.5 ? 'down' : 'stable') as 'up' | 'down' | 'stable',
+      percentage: Math.floor(Math.random() * 20) - 10 // -10 a +10
+    }));
   }
 
   downloadReport(report: Report): void {
     console.log('Descargando reporte:', report.title);
-    // Aquí implementarías la lógica para descargar el reporte
-    alert(`Descargando reporte: ${report.title}`);
+    
+    // Descargar directamente en PDF
+    this.reportService.getReportData(report.type).subscribe({
+      next: async (reportData) => {
+        // Si no hay datos reales, usar los datos actuales del dashboard
+        if (reportData.totalSessions === 0 && reportData.totalPatients === 0) {
+          reportData = await this.createReportFromCurrentDataAsync(report.type);
+        }
+        this.reportService.generatePDFReport(reportData, report.type);
+      },
+      error: async (error) => {
+        console.error('Error obteniendo datos del reporte:', error);
+        // Usar datos actuales como fallback
+        const fallbackData = await this.createReportFromCurrentDataAsync(report.type);
+        this.reportService.generatePDFReport(fallbackData, report.type);
+      }
+    });
   }
 
   viewAllActivity(): void {
     console.log('Viendo toda la actividad...');
     // Aquí implementarías la lógica para ver toda la actividad
     alert('Mostrando historial completo de actividad');
+  }
+
+  // Métodos para el modal
+  closeModal(): void {
+    this.isModalVisible = false;
+    this.modalReportData = null;
+    this.modalReportType = '';
+  }
+
+  onModalDownload(event: { data: ReportData, type: string }): void {
+    this.reportService.generatePDFReport(event.data, event.type);
+    this.closeModal();
   }
 }

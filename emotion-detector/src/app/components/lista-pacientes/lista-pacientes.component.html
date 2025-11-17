@@ -1,5 +1,5 @@
 <!-- Dashboard Container -->
-<div class="dashboard-container">
+<div class="dashboard-container" [class.dark-mode]="isDarkMode">
   <!-- Sidebar -->
   <div class="sidebar" [class.sidebar-hidden]="!sidebarVisible">
     <div class="sidebar-header">
@@ -25,14 +25,14 @@
         </svg>
         <span>Agregar Paciente</span>
       </a>
-      <a (click)="goToSesiones()" class="nav-item">
+      <a (click)="goToPacientes()" class="nav-item active">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
           <circle cx="9" cy="7" r="4"/>
           <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
           <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
         </svg>
-        <span>Pacientes</span>
+        <span>Lista de Pacientes</span>
       </a>
       <a (click)="goToSesiones()" class="nav-item">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -76,31 +76,6 @@
         <line x1="3" y1="18" x2="21" y2="18"/>
       </svg>
     </button>
-    <!-- Header -->
-    <div class="content-header">
-      <div class="welcome-text">
-        <h2>Bienvenido {{ getFirstName() }}</h2>
-      </div>
-      <div class="header-search">
-        <div class="search-container">
-          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="11" cy="11" r="8"/>
-            <path d="M21 21l-4.35-4.35"/>
-          </svg>
-          <input type="text" placeholder="Buscar..." class="search-input">
-        </div>
-      </div>
-      <div class="user-profile">
-        <span class="user-name">{{ getFirstName() }}</span>
-        <div class="user-avatar">
-          <svg class="avatar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-            <circle cx="12" cy="7" r="4"/>
-          </svg>
-        </div>
-      </div>
-    </div>
-    
     <!-- Page Title -->
     <div class="page-title">
       <h1>Lista de Pacientes</h1>
@@ -184,6 +159,11 @@
                     <line x1="9" y1="9" x2="15" y2="15"/>
                   </svg>
                   {{ errorMessage }}
+                  <button *ngIf="errorMessage.includes('autenticación') || errorMessage.includes('autorizado')" 
+                          class="login-btn" 
+                          (click)="goToLogin()">
+                    Ir al Login
+                  </button>
                 </div>
               </td>
             </tr>

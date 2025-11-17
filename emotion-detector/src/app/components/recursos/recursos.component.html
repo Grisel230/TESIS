@@ -1,4 +1,4 @@
-<div class="dashboard-container">
+<div class="dashboard-container" [class.dark-mode]="isDarkMode">
   <!-- Sidebar -->
   <div class="sidebar" [class.sidebar-hidden]="!sidebarVisible">
     <div class="sidebar-header">
@@ -76,40 +76,29 @@
       </svg>
     </button>
     
-    <!-- Header -->
-    <div class="content-header">
-      <div class="welcome-text">
-        <h2>Recursos y Herramientas</h2>
-      </div>
-      <div class="header-actions">
-        <button class="btn-add-resource" (click)="addResource()">
-          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="12" y1="5" x2="12" y2="19"/>
-            <line x1="5" y1="12" x2="19" y2="12"/>
-          </svg>
-          Agregar Recurso
+    <!-- Page Title -->
+    <div class="page-title">
+      <h1>Recursos y Herramientas</h1>
+      <div class="title-actions">
+        <button class="back-button" (click)="goToDashboard()">
+          <i class="back-icon">←</i>
+          Volver al Dashboard
         </button>
       </div>
     </div>
     
-    <!-- Page Title -->
-    <div class="page-title">
-      <h1>Biblioteca de recursos para el análisis emocional</h1>
-      <p>Herramientas, guías y materiales para mejorar tus sesiones</p>
-    </div>
-    
     <!-- Resource Categories -->
-    <div class="resource-categories">
-      <div class="category-card" *ngFor="let category of resourceCategories" (click)="selectCategory(category)">
-        <div class="category-icon" [style.background-color]="category.color">
+    <div class="stats-overview">
+      <div class="stat-card" *ngFor="let category of resourceCategories" (click)="selectCategory(category)">
+        <div class="stat-icon" [ngClass]="getIconClass(category.color)">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path [attr.d]="category.icon"></path>
           </svg>
         </div>
-        <div class="category-content">
-          <h3>{{ category.name }}</h3>
-          <p>{{ category.description }}</p>
-          <span class="resource-count">{{ category.count }} recursos</span>
+        <div class="stat-content">
+          <h3>{{ category.count }}</h3>
+          <p>{{ category.name }}</p>
+          <span class="stat-change">{{ category.description }}</span>
         </div>
       </div>
     </div>
@@ -133,14 +122,14 @@
               {{ getCategoryName(resource.categoryId) }}
             </div>
             <div class="resource-actions">
-              <button class="action-btn" (click)="downloadResource(resource)">
+              <button class="action-btn" (click)="downloadResource(resource)" title="Descargar">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                   <polyline points="7,10 12,15 17,10"/>
                   <line x1="12" y1="15" x2="12" y2="3"/>
                 </svg>
               </button>
-              <button class="action-btn" (click)="shareResource(resource)">
+              <button class="action-btn" (click)="shareResource(resource)" title="Compartir">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <circle cx="18" cy="5" r="3"/>
                   <circle cx="6" cy="12" r="3"/>
@@ -167,6 +156,10 @@
             </div>
             <button class="btn-view" (click)="viewResource(resource)">Ver recurso</button>
           </div>
+        </div>
+        
+        <div *ngIf="filteredResources.length === 0" class="no-resources">
+          <p>No se encontraron recursos</p>
         </div>
       </div>
     </div>

@@ -1,0 +1,257 @@
+/* ============================================
+   FIX DEFINITIVO - BOTONES MODO OSCURO
+   MÁXIMA PRIORIDAD - SOBRESCRIBE TODO
+   ============================================ */
+
+/* NUEVO PACIENTE - BOTÓN VOLVER (VERDE) */
+body.dark-mode .back-button,
+body.dark-mode button.back-button,
+body.dark-mode .btn-primary.back-button,
+.dark-mode .back-button,
+.dark-mode button.back-button {
+  background: #10b981 !important;
+  background-color: #10b981 !important;
+  background-image: none !important;
+  border: 1px solid #10b981 !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2) !important;
+}
+
+body.dark-mode .back-button:hover,
+body.dark-mode button.back-button:hover,
+.dark-mode .back-button:hover,
+.dark-mode button.back-button:hover {
+  background: #059669 !important;
+  background-color: #059669 !important;
+  background-image: none !important;
+  border-color: #059669 !important;
+  color: #ffffff !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4) !important;
+}
+
+body.dark-mode .back-icon,
+body.dark-mode .back-button .back-icon,
+.dark-mode .back-icon,
+.dark-mode .back-button .back-icon {
+  stroke: #ffffff !important;
+  fill: none !important;
+  color: #ffffff !important;
+}
+
+/* BTN-PRIMARY (VERDE) */
+body.dark-mode .btn-primary,
+body.dark-mode button.btn-primary,
+body.dark-mode .btn.btn-primary,
+.dark-mode .btn-primary,
+.dark-mode button.btn-primary,
+.dark-mode .btn.btn-primary {
+  background: #10b981 !important;
+  background-color: #10b981 !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  border: 1px solid #10b981 !important;
+  box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2) !important;
+}
+
+body.dark-mode .btn-primary:hover:not(:disabled),
+body.dark-mode button.btn-primary:hover:not(:disabled),
+.dark-mode .btn-primary:hover:not(:disabled),
+.dark-mode button.btn-primary:hover:not(:disabled) {
+  background: #059669 !important;
+  background-color: #059669 !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  border-color: #059669 !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4) !important;
+}
+
+/* BTN-SECONDARY (ROJO) */
+body.dark-mode .btn-secondary,
+body.dark-mode button.btn-secondary,
+body.dark-mode .btn.btn-secondary,
+.dark-mode .btn-secondary,
+.dark-mode button.btn-secondary,
+.dark-mode .btn.btn-secondary {
+  background: #dc2626 !important;
+  background-color: #dc2626 !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  border: 1px solid #dc2626 !important;
+}
+
+body.dark-mode .btn-secondary:hover:not(:disabled),
+body.dark-mode button.btn-secondary:hover:not(:disabled),
+.dark-mode .btn-secondary:hover:not(:disabled),
+.dark-mode button.btn-secondary:hover:not(:disabled) {
+  background: #b91c1c !important;
+  background-color: #b91c1c !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  border-color: #b91c1c !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4) !important;
+}
+
+/* BTN-SUCCESS (VERDE) */
+body.dark-mode .btn-success,
+body.dark-mode button.btn-success,
+body.dark-mode .btn.btn-success,
+.dark-mode .btn-success,
+.dark-mode button.btn-success,
+.dark-mode .btn.btn-success {
+  background: #10b981 !important;
+  background-color: #10b981 !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  border: 1px solid #10b981 !important;
+  box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2) !important;
+  text-shadow: none !important;
+  font-weight: 600 !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+body.dark-mode .btn-success::before,
+body.dark-mode .btn-success::after,
+.dark-mode .btn-success::before,
+.dark-mode .btn-success::after {
+  display: none !important;
+}
+
+body.dark-mode .btn-success span,
+.dark-mode .btn-success span {
+  color: #ffffff !important;
+  background: transparent !important;
+  text-shadow: none !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+body.dark-mode .btn-success svg,
+body.dark-mode .btn-success svg *,
+.dark-mode .btn-success svg,
+.dark-mode .btn-success svg * {
+  stroke: #ffffff !important;
+  fill: none !important;
+  color: #ffffff !important;
+}
+
+body.dark-mode .btn-success:hover:not(:disabled),
+body.dark-mode button.btn-success:hover:not(:disabled),
+.dark-mode .btn-success:hover:not(:disabled),
+.dark-mode button.btn-success:hover:not(:disabled) {
+  background: #059669 !important;
+  background-color: #059669 !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  border-color: #059669 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.35) !important;
+  text-shadow: none !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* ACTION BUTTONS - VIEW (VERDE) */
+body.dark-mode .action-btn.view,
+body.dark-mode button.action-btn.view,
+.dark-mode .action-btn.view,
+.dark-mode button.action-btn.view {
+  border-color: #10b981 !important;
+  color: #10b981 !important;
+  background: transparent !important;
+}
+
+body.dark-mode .action-btn.view:hover,
+body.dark-mode button.action-btn.view:hover,
+.dark-mode .action-btn.view:hover,
+.dark-mode button.action-btn.view:hover {
+  background: #10b981 !important;
+  color: white !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3) !important;
+}
+
+body.dark-mode .action-btn.view svg,
+.dark-mode .action-btn.view svg {
+  stroke: currentColor !important;
+}
+
+/* ACTION BUTTONS - EDIT (NARANJA) */
+body.dark-mode .action-btn.edit,
+body.dark-mode button.action-btn.edit,
+.dark-mode .action-btn.edit,
+.dark-mode button.action-btn.edit {
+  border-color: #f59e0b !important;
+  color: #f59e0b !important;
+  background: transparent !important;
+}
+
+body.dark-mode .action-btn.edit:hover,
+body.dark-mode button.action-btn.edit:hover,
+.dark-mode .action-btn.edit:hover,
+.dark-mode button.action-btn.edit:hover {
+  background: #f59e0b !important;
+  color: white !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 8px rgba(245, 158, 11, 0.3) !important;
+}
+
+/* ACTION BUTTONS - DELETE (ROJO) */
+body.dark-mode .action-btn.delete,
+body.dark-mode button.action-btn.delete,
+.dark-mode .action-btn.delete,
+.dark-mode button.action-btn.delete {
+  border-color: #ef4444 !important;
+  color: #ef4444 !important;
+  background: transparent !important;
+}
+
+body.dark-mode .action-btn.delete:hover,
+body.dark-mode button.action-btn.delete:hover,
+.dark-mode .action-btn.delete:hover,
+.dark-mode button.action-btn.delete:hover {
+  background: #ef4444 !important;
+  color: white !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 8px rgba(239, 68, 68, 0.3) !important;
+}
+
+/* ACTION BUTTONS - ADD SESSION (VERDE) */
+body.dark-mode .action-btn.add-session,
+body.dark-mode button.action-btn.add-session,
+.dark-mode .action-btn.add-session,
+.dark-mode button.action-btn.add-session {
+  border-color: #10b981 !important;
+  color: #10b981 !important;
+  background: transparent !important;
+}
+
+body.dark-mode .action-btn.add-session:hover,
+body.dark-mode button.action-btn.add-session:hover,
+.dark-mode .action-btn.add-session:hover,
+.dark-mode button.action-btn.add-session:hover {
+  background: #10b981 !important;
+  color: white !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3) !important;
+}
+
+/* ACTION BUTTONS - DOWNLOAD (VERDE) */
+body.dark-mode .action-btn.download,
+body.dark-mode button.action-btn.download,
+.dark-mode .action-btn.download,
+.dark-mode button.action-btn.download {
+  border-color: #10b981 !important;
+  color: #10b981 !important;
+  background: transparent !important;
+}
+
+body.dark-mode .action-btn.download:hover,
+body.dark-mode button.action-btn.download:hover,
+.dark-mode .action-btn.download:hover,
+.dark-mode button.action-btn.download:hover {
+  background: #10b981 !important;
+  color: white !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3) !important;
+}

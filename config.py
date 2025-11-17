@@ -44,3 +44,9 @@ class Config:
     # Configuración de la aplicación
     FLASK_ENV = os.environ.get('FLASK_ENV', 'development')
     FLASK_DEBUG = os.environ.get('FLASK_DEBUG', 'True').lower() == 'true'
+    
+    # Configuración de Email (Gmail)
+    EMAIL_SENDER = os.environ.get('EMAIL_SENDER')  # Tu email de Gmail
+    EMAIL_PASSWORD = os.environ.get('EMAIL_PASSWORD')  # Contraseña de aplicación de Gmail
+    SMTP_SERVER = os.environ.get('SMTP_SERVER', 'smtp.gmail.com')
+    SMTP_PORT = int(os.environ.get('SMTP_PORT', 587))

@@ -92,6 +92,30 @@ class Sesion(db.Model):
             'confianza_promedio': self.confianza_promedio
         }
 
+class PasswordResetToken(db.Model):
+    __tablename__ = 'password_reset_tokens'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    psicologo_id = db.Column(db.Integer, db.ForeignKey('psicologos.id'), nullable=False)
+    token = db.Column(db.String(100), unique=True, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    expires_at = db.Column(db.DateTime, nullable=False)
+    used = db.Column(db.Boolean, default=False)
+    
+    def is_valid(self):
+        """Verifica si el token es válido (no usado y no expirado)"""
+        return not self.used and datetime.utcnow() < self.expires_at
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'psicologo_id': self.psicologo_id,
+            'token': self.token,
+            'created_at': self.created_at.isoformat(),
+            'expires_at': self.expires_at.isoformat(),
+            'used': self.used
+        }
+
 class EmocionDetectada(db.Model):
     __tablename__ = 'emociones_detectadas'
     

@@ -5,7 +5,7 @@ Script para inicializar la base de datos
 """
 import sys
 from app import app, db
-from models import Psicologo, Paciente, Sesion, EmocionDetectada
+from models import Psicologo, Paciente, Sesion, EmocionDetectada, PasswordResetToken
 
 def init_database():
     with app.app_context():

@@ -7,6 +7,7 @@ import { finalize } from 'rxjs/operators';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService, Psicologo } from '../../services/auth.service';
 import { SessionService } from '../../services/session.service';
+import { ThemeService } from '../../services/theme.service';
 
 @Component({
   selector: 'app-registro-pacientes',
@@ -44,12 +45,13 @@ export class RegistroPacientesComponent implements AfterViewInit, OnDestroy {
   currentDate = new Date();
 
   nombreCompletoPaciente: string = '';
-  edadPaciente: number | null = null;
+  edadPaciente: string = '';
   diagnosticoPreliminar: string = '';
   generoPaciente: string = '';
   pacienteId: number | null = null; // ID del paciente para asociar sesiones
   notasSesion: string = '';
   sesionId: number | null = null; // ID de la sesión actual para guardar emociones
+  isDarkMode: boolean = false;
 
   sessionDuration: string = '00:00';
   predominantEmotion: string = '-';
@@ -61,7 +63,8 @@ export class RegistroPacientesComponent implements AfterViewInit, OnDestroy {
     private emotionService: EmotionService, 
     private router: Router,
     private authService: AuthService,
-    private sessionService: SessionService
+    private sessionService: SessionService,
+    private themeService: ThemeService
   ) { }
 
   ngAfterViewInit() {
@@ -69,6 +72,13 @@ export class RegistroPacientesComponent implements AfterViewInit, OnDestroy {
     // Usar setTimeout para asegurar que se ejecute después de la inicialización completa
     setTimeout(() => {
       this.loadPacienteData();
+      
+      // Suscribirse a los cambios de tema después de la inicialización
+      this.themeService.darkMode$.subscribe((isDark: boolean) => {
+        setTimeout(() => {
+          this.isDarkMode = isDark;
+        }, 0);
+      });
     }, 100);
   }
 
@@ -98,9 +108,36 @@ export class RegistroPacientesComponent implements AfterViewInit, OnDestroy {
         console.log('✅ Datos del paciente parseados:', paciente);
         
         // Rellenar los campos del formulario con los datos del paciente
-        this.nombreCompletoPaciente = paciente.nombre_completo || '';
-        this.edadPaciente = paciente.edad || null;
-        this.generoPaciente = paciente.genero || '';
+        this.nombreCompletoPaciente = paciente.nombre_completo || 'No especificado';
+        
+        // Formatear la edad para mostrar de forma legible
+        if (paciente.edad && paciente.edad > 0) {
+          this.edadPaciente = `${paciente.edad} años`;
+        } else {
+          this.edadPaciente = 'No especificada';
+        }
+        
+        // Normalizar el género para mostrar en formato legible
+        let genero = paciente.genero || '';
+        if (genero) {
+          const generoLower = genero.toLowerCase();
+          // Mapear posibles variaciones y mostrar en formato legible
+          if (generoLower === 'masculino' || generoLower === 'm' || generoLower === 'male') {
+            this.generoPaciente = 'Masculino';
+          } else if (generoLower === 'femenino' || generoLower === 'f' || generoLower === 'female') {
+            this.generoPaciente = 'Femenino';
+          } else if (generoLower === 'otro' || generoLower === 'other') {
+            this.generoPaciente = 'Otro';
+          } else if (generoLower === 'prefiero-no-decir' || generoLower === 'no especifica') {
+            this.generoPaciente = 'Prefiero no decir';
+          } else {
+            // Capitalizar la primera letra para otros valores
+            this.generoPaciente = genero.charAt(0).toUpperCase() + genero.slice(1).toLowerCase();
+          }
+        } else {
+          this.generoPaciente = 'No especificado';
+        }
+        
         this.pacienteId = paciente.id || null; // Cargar el ID del paciente
         
         // Si hay diagnóstico previo, cargarlo también
@@ -112,7 +149,8 @@ export class RegistroPacientesComponent implements AfterViewInit, OnDestroy {
         console.log('  - ID:', this.pacienteId);
         console.log('  - Nombre:', this.nombreCompletoPaciente);
         console.log('  - Edad:', this.edadPaciente);
-        console.log('  - Género:', this.generoPaciente);
+        console.log('  - Género original:', paciente.genero);
+        console.log('  - Género normalizado:', this.generoPaciente);
         console.log('  - Diagnóstico:', this.diagnosticoPreliminar);
         
         // Limpiar los datos del localStorage después de cargarlos
@@ -167,15 +205,15 @@ export class RegistroPacientesComponent implements AfterViewInit, OnDestroy {
   }
 
   goToReports(): void {
-    this.router.navigate(['/dashboard']);
+    this.router.navigate(['/informes-estadisticas']);
   }
 
   goToResources(): void {
-    this.router.navigate(['/dashboard']);
+    this.router.navigate(['/recursos']);
   }
 
   goToSettings(): void {
-    this.router.navigate(['/dashboard']);
+    this.router.navigate(['/configuracion']);
   }
 
   goToHistorial(): void {
@@ -672,7 +710,7 @@ export class RegistroPacientesComponent implements AfterViewInit, OnDestroy {
 
   private limpiarFormulario() {
     this.nombreCompletoPaciente = '';
-    this.edadPaciente = null;
+    this.edadPaciente = '';
     this.generoPaciente = '';
     this.diagnosticoPreliminar = '';
     this.notasSesion = '';

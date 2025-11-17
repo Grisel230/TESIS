@@ -71,4 +71,17 @@ export class EmotionService {
   getPsicologo(id: number): Observable<{psicologo: Psicologo}> {
     return this.http.get<{psicologo: Psicologo}>(`${this.apiUrl}/psicologo/${id}`);
   }
+
+  // Métodos de recuperación de contraseña
+  forgotPassword(email: string): Observable<{message: string}> {
+    return this.http.post<{message: string}>(`${this.apiUrl}/forgot-password`, { email });
+  }
+
+  verifyResetToken(token: string): Observable<{valid: boolean, error?: string}> {
+    return this.http.get<{valid: boolean, error?: string}>(`${this.apiUrl}/verify-reset-token/${token}`);
+  }
+
+  resetPassword(token: string, password: string): Observable<{message: string}> {
+    return this.http.post<{message: string}>(`${this.apiUrl}/reset-password`, { token, password });
+  }
 } 

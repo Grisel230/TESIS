@@ -34,12 +34,16 @@ except ImportError as e:
     import time
     import base64
 
-from models import db, Psicologo, Paciente, Sesion, EmocionDetectada
+from models import db, Psicologo, Paciente, Sesion, EmocionDetectada, PasswordResetToken
 from config import Config
 from auth_utils import generate_token, token_required, get_current_psicologo
+from email_service import email_service
 
 app = Flask(__name__)
-CORS(app, origins=Config.CORS_ORIGINS, supports_credentials=True)
+# Configuración simplificada de CORS para permitir todo durante desarrollo
+CORS(app, origins="*", supports_credentials=True, 
+     allow_headers=["Content-Type", "Authorization"],
+     methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"])
 
 # Configuración de la base de datos
 app.config['SQLALCHEMY_DATABASE_URI'] = Config.SQLALCHEMY_DATABASE_URI
@@ -49,6 +53,13 @@ app.config['JWT_SECRET_KEY'] = Config.JWT_SECRET_KEY
 
 # Inicializar la base de datos
 db.init_app(app)
+
+# Configurar servicio de email
+if Config.EMAIL_SENDER and Config.EMAIL_PASSWORD:
+    email_service.configure(Config.EMAIL_SENDER, Config.EMAIL_PASSWORD)
+    logger.info("✅ Servicio de email configurado correctamente")
+else:
+    logger.warning("⚠️  Servicio de email NO configurado. Define EMAIL_SENDER y EMAIL_PASSWORD en .env")
 
 # Configurar rate limiting
 limiter = Limiter(
@@ -237,6 +248,16 @@ def register_psicologo():
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
 
+# Endpoint de prueba para verificar CORS
+@app.route('/api/test-cors', methods=['GET', 'POST', 'OPTIONS'])
+def test_cors():
+    """Endpoint de prueba para verificar CORS"""
+    logger.info(f"test-cors - Method: {request.method}")
+    if request.method == 'OPTIONS':
+        logger.info("Respondiendo a OPTIONS request")
+        return '', 200
+    return jsonify({'message': 'CORS funciona correctamente', 'method': request.method}), 200
+
 # Endpoint para login de psicólogos
 @app.route('/api/login', methods=['POST'])
 @limiter.limit("10 per minute")  # Máximo 10 intentos de login por minuto
@@ -279,6 +300,155 @@ def login_psicologo():
         logger.error(f"Error en login: {str(e)}")
         return jsonify({'error': 'Error interno del servidor'}), 500
 
+# ============================================
+# ENDPOINTS DE RECUPERACIÓN DE CONTRASEÑA
+# ============================================
+
+import secrets
+from datetime import timedelta
+
+# Endpoint para solicitar recuperación de contraseña
+@app.route('/api/forgot-password', methods=['POST', 'OPTIONS'])
+@limiter.exempt  # Deshabilitar rate limiting temporalmente para debugging
+def forgot_password():
+    """Envía un email con link para recuperar contraseña"""
+    # Manejar preflight OPTIONS request
+    if request.method == 'OPTIONS':
+        return '', 200
+    
+    try:
+        data = request.json
+        email = data.get('email')
+        
+        if not email:
+            return jsonify({'error': 'Email es requerido'}), 400
+        
+        logger.info(f"Solicitud de recuperación de contraseña para: {email}")
+        
+        # Buscar psicólogo por email
+        psicologo = Psicologo.query.filter_by(email=email).first()
+        
+        if not psicologo:
+            # Por seguridad, no revelar si el email existe o no
+            return jsonify({
+                'message': 'Si el email existe, recibirás un enlace de recuperación'
+            }), 200
+        
+        # Generar token único
+        token = secrets.token_urlsafe(32)
+        
+        # Crear registro de token (válido por 1 hora)
+        reset_token = PasswordResetToken(
+            psicologo_id=psicologo.id,
+            token=token,
+            expires_at=datetime.utcnow() + timedelta(hours=1)
+        )
+        
+        db.session.add(reset_token)
+        db.session.commit()
+        
+        # Crear link de recuperación (ajusta el dominio según tu frontend)
+        reset_link = f"http://localhost:4200/reset-password?token={token}"
+        
+        # Enviar email
+        email_sent = email_service.send_password_reset_email(
+            recipient_email=psicologo.email,
+            reset_link=reset_link,
+            recipient_name=psicologo.nombre_completo
+        )
+        
+        if email_sent:
+            logger.info(f"Email de recuperación enviado a: {email}")
+            return jsonify({
+                'message': 'Se ha enviado un enlace de recuperación a tu correo electrónico'
+            }), 200
+        else:
+            logger.error(f"Error al enviar email a: {email}")
+            return jsonify({
+                'error': 'Error al enviar el correo. Intenta nuevamente más tarde.'
+            }), 500
+            
+    except Exception as e:
+        logger.error(f"Error en forgot-password: {str(e)}")
+        db.session.rollback()
+        return jsonify({'error': 'Error interno del servidor'}), 500
+
+# Endpoint para verificar token de recuperación
+@app.route('/api/verify-reset-token/<token>', methods=['GET', 'OPTIONS'])
+def verify_reset_token(token):
+    """Verifica si el token de recuperación es válido"""
+    if request.method == 'OPTIONS':
+        return '', 200
+    
+    try:
+        reset_token = PasswordResetToken.query.filter_by(token=token).first()
+        
+        if not reset_token:
+            return jsonify({'valid': False, 'error': 'Token inválido'}), 404
+        
+        if not reset_token.is_valid():
+            return jsonify({
+                'valid': False, 
+                'error': 'Token expirado o ya utilizado'
+            }), 400
+        
+        return jsonify({'valid': True}), 200
+        
+    except Exception as e:
+        logger.error(f"Error verificando token: {str(e)}")
+        return jsonify({'error': 'Error interno del servidor'}), 500
+
+# Endpoint para restablecer contraseña
+@app.route('/api/reset-password', methods=['POST', 'OPTIONS'])
+@limiter.limit("5 per hour", methods=['POST'])  # Máximo 5 intentos por hora solo para POST
+def reset_password():
+    """Restablece la contraseña usando el token"""
+    if request.method == 'OPTIONS':
+        return '', 200
+    
+    try:
+        data = request.json
+        token = data.get('token')
+        new_password = data.get('password')
+        
+        if not token or not new_password:
+            return jsonify({'error': 'Token y nueva contraseña son requeridos'}), 400
+        
+        if len(new_password) < 6:
+            return jsonify({'error': 'La contraseña debe tener al menos 6 caracteres'}), 400
+        
+        # Buscar token
+        reset_token = PasswordResetToken.query.filter_by(token=token).first()
+        
+        if not reset_token:
+            return jsonify({'error': 'Token inválido'}), 404
+        
+        if not reset_token.is_valid():
+            return jsonify({'error': 'Token expirado o ya utilizado'}), 400
+        
+        # Buscar psicólogo
+        psicologo = Psicologo.query.get(reset_token.psicologo_id)
+        
+        if not psicologo:
+            return jsonify({'error': 'Usuario no encontrado'}), 404
+        
+        # Actualizar contraseña
+        psicologo.set_password(new_password)
+        
+        # Marcar token como usado
+        reset_token.used = True
+        
+        db.session.commit()
+        
+        logger.info(f"Contraseña restablecida para: {psicologo.email}")
+        
+        return jsonify({'message': 'Contraseña restablecida exitosamente'}), 200
+        
+    except Exception as e:
+        logger.error(f"Error en reset-password: {str(e)}")
+        db.session.rollback()
+        return jsonify({'error': 'Error interno del servidor'}), 500
+
 # Endpoint para obtener psicólogo por ID
 @app.route('/api/psicologo/<int:psicologo_id>', methods=['GET'])
 def get_psicologo(psicologo_id):
@@ -286,6 +456,86 @@ def get_psicologo(psicologo_id):
         psicologo = Psicologo.query.get_or_404(psicologo_id)
         return jsonify({'psicologo': psicologo.to_dict()}), 200
     except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/psicologo/<int:psicologo_id>', methods=['PUT'])
+@token_required
+def actualizar_psicologo(psicologo_id):
+    """Actualizar datos del psicólogo"""
+    try:
+        psicologo = get_current_psicologo()
+        
+        # Verificar que el psicólogo solo pueda actualizar sus propios datos
+        if psicologo.id != psicologo_id:
+            return jsonify({'error': 'No autorizado para actualizar estos datos'}), 403
+        
+        data = request.get_json()
+        logger.info(f"Actualizando psicólogo {psicologo_id} con datos: {data}")
+        
+        # Actualizar campos permitidos
+        if 'nombre_completo' in data:
+            psicologo.nombre_completo = data['nombre_completo']
+        if 'email' in data:
+            # Verificar que el email no esté en uso por otro psicólogo
+            email_existente = Psicologo.query.filter(
+                Psicologo.email == data['email'],
+                Psicologo.id != psicologo_id
+            ).first()
+            if email_existente:
+                return jsonify({'error': 'El email ya está en uso'}), 400
+            psicologo.email = data['email']
+        if 'telefono' in data:
+            psicologo.telefono = data['telefono']
+        if 'especializacion' in data:
+            psicologo.especializacion = data['especializacion']
+        
+        db.session.commit()
+        logger.info(f"Psicólogo {psicologo_id} actualizado exitosamente")
+        
+        return jsonify({
+            'message': 'Psicólogo actualizado exitosamente',
+            'psicologo': psicologo.to_dict()
+        }), 200
+        
+    except Exception as e:
+        db.session.rollback()
+        logger.error(f"Error al actualizar psicólogo: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/psicologo/<int:psicologo_id>/change-password', methods=['PUT'])
+@token_required
+def cambiar_password_psicologo(psicologo_id):
+    """Cambiar contraseña del psicólogo"""
+    try:
+        psicologo = get_current_psicologo()
+        
+        # Verificar que el psicólogo solo pueda cambiar su propia contraseña
+        if psicologo.id != psicologo_id:
+            return jsonify({'error': 'No autorizado'}), 403
+        
+        data = request.get_json()
+        
+        if not data.get('current_password') or not data.get('new_password'):
+            return jsonify({'error': 'Se requiere la contraseña actual y la nueva'}), 400
+        
+        # Verificar la contraseña actual
+        if not psicologo.check_password(data['current_password']):
+            return jsonify({'error': 'La contraseña actual es incorrecta'}), 401
+        
+        # Validar nueva contraseña
+        if len(data['new_password']) < 6:
+            return jsonify({'error': 'La nueva contraseña debe tener al menos 6 caracteres'}), 400
+        
+        # Cambiar la contraseña
+        psicologo.set_password(data['new_password'])
+        db.session.commit()
+        
+        logger.info(f"Contraseña actualizada para psicólogo {psicologo_id}")
+        return jsonify({'message': 'Contraseña actualizada exitosamente'}), 200
+        
+    except Exception as e:
+        db.session.rollback()
+        logger.error(f"Error al cambiar contraseña: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
 # Endpoint para crear un nuevo paciente
@@ -933,8 +1183,148 @@ def finalizar_sesion(sesion_id):
         logger.error(f"Error finalizando sesion: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
+# ==================== ENDPOINTS DE ESTADÍSTICAS ====================
+
+@app.route('/api/estadisticas/resumen/<int:psicologo_id>', methods=['GET'])
+@token_required
+def obtener_resumen_estadisticas(psicologo_id):
+    """Obtener resumen general de estadísticas"""
+    try:
+        psicologo = get_current_psicologo()
+        if psicologo.id != psicologo_id:
+            return jsonify({'error': 'No autorizado'}), 403
+        
+        # Total de sesiones
+        total_sesiones = Sesion.query.filter_by(psicologo_id=psicologo_id).count()
+        logger.info(f"Total sesiones para psicólogo {psicologo_id}: {total_sesiones}")
+        
+        # Total de pacientes
+        total_pacientes = Paciente.query.filter_by(psicologo_id=psicologo_id).count()
+        logger.info(f"Total pacientes para psicólogo {psicologo_id}: {total_pacientes}")
+        
+        # Confianza promedio
+        sesiones = Sesion.query.filter_by(psicologo_id=psicologo_id).all()
+        if sesiones:
+            confianza_promedio = sum(s.confianza_promedio for s in sesiones if s.confianza_promedio) / len(sesiones)
+        else:
+            confianza_promedio = 0
+        
+        # Emoción predominante
+        emociones = {}
+        for sesion in sesiones:
+            if sesion.emocion_predominante:
+                emocion = sesion.emocion_predominante
+                emociones[emocion] = emociones.get(emocion, 0) + 1
+        
+        emocion_predominante = max(emociones, key=emociones.get) if emociones else 'N/A'
+        
+        # Mapeo de emociones en inglés a español
+        emotion_map = {
+            'happy': 'Felicidad',
+            'sad': 'Tristeza',
+            'angry': 'Enojo',
+            'surprise': 'Sorpresa',
+            'fear': 'Miedo',
+            'disgust': 'Disgusto',
+            'neutral': 'Neutral'
+        }
+        emocion_predominante = emotion_map.get(emocion_predominante, emocion_predominante)
+        
+        return jsonify({
+            'total_sesiones': total_sesiones,
+            'total_pacientes': total_pacientes,
+            'confianza_promedio': round(confianza_promedio, 2),
+            'emocion_predominante': emocion_predominante
+        }), 200
+        
+    except Exception as e:
+        logger.error(f"Error obteniendo resumen de estadísticas: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/estadisticas/emociones/<int:psicologo_id>', methods=['GET'])
+@token_required
+def obtener_estadisticas_emociones(psicologo_id):
+    """Obtener distribución de emociones"""
+    try:
+        psicologo = get_current_psicologo()
+        if psicologo.id != psicologo_id:
+            return jsonify({'error': 'No autorizado'}), 403
+        
+        # Obtener todas las emociones detectadas
+        sesiones = Sesion.query.filter_by(psicologo_id=psicologo_id).all()
+        sesion_ids = [s.id for s in sesiones]
+        
+        emociones_detectadas = EmocionDetectada.query.filter(
+            EmocionDetectada.sesion_id.in_(sesion_ids)
+        ).all()
+        
+        # Contar emociones
+        emotion_counts = {}
+        total = 0
+        
+        for emocion in emociones_detectadas:
+            emotion = emocion.emotion
+            emotion_counts[emotion] = emotion_counts.get(emotion, 0) + 1
+            total += 1
+        
+        # Calcular porcentajes
+        result = []
+        for emotion, count in emotion_counts.items():
+            percentage = (count / total * 100) if total > 0 else 0
+            result.append({
+                'emotion': emotion,
+                'count': count,
+                'percentage': round(percentage, 2)
+            })
+        
+        # Ordenar por porcentaje descendente
+        result.sort(key=lambda x: x['percentage'], reverse=True)
+        
+        return jsonify(result), 200
+        
+    except Exception as e:
+        logger.error(f"Error obteniendo estadísticas de emociones: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/estadisticas/sesiones-mensuales/<int:psicologo_id>', methods=['GET'])
+@token_required
+def obtener_estadisticas_sesiones_mensuales(psicologo_id):
+    """Obtener número de sesiones por mes"""
+    try:
+        psicologo = get_current_psicologo()
+        if psicologo.id != psicologo_id:
+            return jsonify({'error': 'No autorizado'}), 403
+        
+        # Obtener sesiones del último año
+        from sqlalchemy import func, extract
+        
+        sesiones_por_mes = db.session.query(
+            extract('month', Sesion.fecha_sesion).label('month'),
+            func.count(Sesion.id).label('count')
+        ).filter(
+            Sesion.psicologo_id == psicologo_id
+        ).group_by(
+            extract('month', Sesion.fecha_sesion)
+        ).all()
+        
+        result = []
+        for mes, count in sesiones_por_mes:
+            result.append({
+                'month': int(mes),
+                'count': count
+            })
+        
+        # Ordenar por mes
+        result.sort(key=lambda x: x['month'])
+        
+        return jsonify(result), 200
+        
+    except Exception as e:
+        logger.error(f"Error obteniendo estadísticas de sesiones mensuales: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
         print("Base de datos inicializada")
-    app.run(debug=False, port=5000, use_reloader=False) 
+    app.run(debug=False, port=5000, use_reloader=False)

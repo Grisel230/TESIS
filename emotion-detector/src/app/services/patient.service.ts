@@ -39,8 +39,10 @@ export class PatientService {
 
   // Crear un nuevo paciente
   crearPaciente(paciente: Paciente, psicologoId: number): Observable<any> {
+    const token = localStorage.getItem('token');
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
     });
 
     // No enviar psicologo_id en el cuerpo, el backend lo obtiene del token JWT
@@ -51,18 +53,34 @@ export class PatientService {
   obtenerPacientes(psicologoId: number): Observable<any> {
     console.log('Solicitando pacientes para psicólogo ID:', psicologoId);
     console.log('URL completa:', `${this.apiUrl}/pacientes/psicologo/${psicologoId}`);
-    return this.http.get(`${this.apiUrl}/pacientes/psicologo/${psicologoId}`);
+    
+    // Obtener el token del localStorage
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+    
+    return this.http.get(`${this.apiUrl}/pacientes/psicologo/${psicologoId}`, { headers });
   }
 
   // Obtener un paciente específico por ID
   obtenerPaciente(pacienteId: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/pacientes/${pacienteId}`);
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+    
+    return this.http.get(`${this.apiUrl}/pacientes/${pacienteId}`, { headers });
   }
 
   // Actualizar un paciente
   actualizarPaciente(pacienteId: number, paciente: Paciente): Observable<any> {
+    const token = localStorage.getItem('token');
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
     });
 
     return this.http.put(`${this.apiUrl}/pacientes/${pacienteId}`, paciente, { headers });
@@ -70,7 +88,13 @@ export class PatientService {
 
   // Eliminar un paciente
   eliminarPaciente(pacienteId: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/pacientes/${pacienteId}`);
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+    
+    return this.http.delete(`${this.apiUrl}/pacientes/${pacienteId}`, { headers });
   }
 
   // Método de utilidad para manejo de errores
