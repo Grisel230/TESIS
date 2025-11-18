@@ -92,21 +92,6 @@ PROTOTIPO/
 └── 📄 README.md                # Este archivo
 ```
 
-## 🔧 Configuración Detallada
-
-### Variables de Entorno (.env)
-```env
-# Base de datos
-DATABASE_URL=postgresql://postgres:tu_password@localhost:5432/emociones
-
-# Seguridad
-SECRET_KEY=tu-clave-secreta-muy-segura
-JWT_SECRET_KEY=tu-jwt-secret-key
-
-# CORS
-CORS_ORIGINS=http://localhost:4200,http://127.0.0.1:4200
-```
-
 ### Dependencias Python
 - Flask 3.1.2
 - TensorFlow 2.16.1
@@ -148,22 +133,6 @@ CORS_ORIGINS=http://localhost:4200,http://127.0.0.1:4200
 ### IA
 - `POST /predict` - Detectar emociones en imagen
 
-## 🐛 Solución de Problemas
-
-### Error: "Modelos de IA no disponibles"
-- Verifica que `modelFEC.h5` existe en la raíz
-- Verifica que los archivos en `face_detector/` están presentes
-- Revisa los logs del servidor
-
-### Error: "No se puede conectar con el servidor"
-- Verifica que PostgreSQL esté ejecutándose
-- Revisa la configuración de `DATABASE_URL`
-- Verifica que el puerto 5000 esté libre
-
-### Error: "Token inválido o expirado"
-- Haz logout y vuelve a hacer login
-- Verifica que el token se esté enviando correctamente
-
 ## 📊 Monitoreo
 
 El sistema incluye logging detallado para:
@@ -180,14 +149,6 @@ El sistema incluye logging detallado para:
 4. Push a la rama (`git push origin feature/AmazingFeature`)
 5. Abre un Pull Request
 
-## 📝 Licencia
-
-Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para detalles.
-
-## 🆘 Soporte
-
-Si encuentras algún problema:
-1. Revisa la sección de solución de problemas
 2. Ejecuta `python check_setup.py` para verificar la configuración
 3. Revisa los logs del servidor
 4. Abre un issue en GitHub
