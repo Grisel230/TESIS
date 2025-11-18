@@ -33,7 +33,7 @@ export interface Session {
 export class HistorialSesionesComponent implements OnInit {
   // Datos del psicólogo logueado
   psicologo: Psicologo | null = null;
-  sidebarVisible: boolean = true; // Control de visibilidad del sidebar
+  sidebarVisible: boolean = true;
   isDarkMode: boolean = false; // Control del modo oscuro
 
   // Propiedades para los filtros

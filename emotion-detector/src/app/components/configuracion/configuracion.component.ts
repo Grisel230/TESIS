@@ -52,6 +52,7 @@ export class ConfiguracionComponent implements OnInit {
   modalType: 'success' | 'error' | 'warning' = 'success';
   modalTitle = '';
   modalMessage = '';
+  psicologo: any = null;
 
   userProfile: UserProfile = {
     fullName: 'Grisel Laurean Valenzuela',
@@ -88,6 +89,7 @@ export class ConfiguracionComponent implements OnInit {
 
   ngOnInit(): void {
     console.log('ConfiguracionComponent inicializado');
+    this.psicologo = this.authService.getPsicologo();
     this.cargarDatosUsuario();
     this.cargarPreferencias();
     
@@ -95,6 +97,11 @@ export class ConfiguracionComponent implements OnInit {
     this.themeService.darkMode$.subscribe(isDark => {
       this.systemSettings.darkMode = isDark;
     });
+    
+    // Configurar temporizador de inactividad si está habilitado
+    if (this.securitySettings.sessionTimeout > 0) {
+      this.setupInactivityTimer();
+    }
   }
 
   cargarDatosUsuario(): void {
@@ -110,6 +117,24 @@ export class ConfiguracionComponent implements OnInit {
   cargarPreferencias(): void {
     // Sincronizar con el servicio de tema global
     this.systemSettings.darkMode = this.themeService.isDarkMode();
+    
+    // Cargar notificaciones por email
+    const emailNotifications = localStorage.getItem('emailNotifications');
+    if (emailNotifications !== null) {
+      this.systemSettings.emailNotifications = emailNotifications === 'true';
+    }
+    
+    // Cargar configuración de auto login
+    const autoLogin = localStorage.getItem('autoLogin');
+    if (autoLogin !== null) {
+      this.securitySettings.autoLogin = autoLogin === 'true';
+    }
+    
+    // Cargar tiempo de inactividad
+    const sessionTimeout = localStorage.getItem('sessionTimeout');
+    if (sessionTimeout !== null) {
+      this.securitySettings.sessionTimeout = parseInt(sessionTimeout, 10);
+    }
   }
 
   toggleDarkMode(): void {
@@ -147,6 +172,10 @@ export class ConfiguracionComponent implements OnInit {
 
   goToSettings(): void {
     this.router.navigate(['/configuracion']);
+  }
+
+  logout(): void {
+    this.authService.logout();
   }
 
   saveSettings(): void {
@@ -400,5 +429,77 @@ export class ConfiguracionComponent implements OnInit {
 
   closeModal(): void {
     this.showModal = false;
+  }
+
+  saveAutoLogin(): void {
+    // Guardar preferencia de auto login en localStorage
+    localStorage.setItem('autoLogin', this.securitySettings.autoLogin.toString());
+    console.log('Auto login configurado:', this.securitySettings.autoLogin);
+    this.showModalMessage('success', 'Configuración Guardada', 
+      this.securitySettings.autoLogin 
+        ? 'El inicio de sesión automático ha sido activado' 
+        : 'El inicio de sesión automático ha sido desactivado');
+  }
+
+  saveSessionTimeout(): void {
+    // Guardar tiempo de inactividad en localStorage
+    localStorage.setItem('sessionTimeout', this.securitySettings.sessionTimeout.toString());
+    console.log('Tiempo de inactividad configurado:', this.securitySettings.sessionTimeout);
+    
+    // Reiniciar el temporizador de inactividad si existe
+    this.setupInactivityTimer();
+    
+    this.showModalMessage('success', 'Configuración Guardada', 
+      `El tiempo de inactividad ha sido configurado a ${this.securitySettings.sessionTimeout} minutos`);
+  }
+
+  private inactivityTimer: any;
+  private lastActivity: number = Date.now();
+
+  private setupInactivityTimer(): void {
+    // Limpiar timer existente
+    if (this.inactivityTimer) {
+      clearInterval(this.inactivityTimer);
+    }
+
+    // Configurar nuevo timer
+    const timeoutMinutes = this.securitySettings.sessionTimeout;
+    const timeoutMs = timeoutMinutes * 60 * 1000; // Convertir a milisegundos
+
+    // Resetear actividad
+    this.lastActivity = Date.now();
+
+    // Eventos para detectar actividad
+    const resetActivity = () => {
+      this.lastActivity = Date.now();
+    };
+
+    // Agregar listeners
+    ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click'].forEach(event => {
+      document.addEventListener(event, resetActivity, true);
+    });
+
+    // Verificar inactividad cada minuto
+    this.inactivityTimer = setInterval(() => {
+      const now = Date.now();
+      const inactiveTime = now - this.lastActivity;
+
+      if (inactiveTime >= timeoutMs) {
+        console.log('Sesión cerrada por inactividad');
+        alert(`⏰ Tu sesión ha expirado por inactividad después de ${timeoutMinutes} minutos`);
+        this.authService.logout();
+      }
+    }, 60000); // Verificar cada minuto
+  }
+
+  toggleEmailNotifications(): void {
+    // Guardar configuración de notificaciones
+    localStorage.setItem('emailNotifications', this.systemSettings.emailNotifications.toString());
+    console.log('Notificaciones por email:', this.systemSettings.emailNotifications);
+    
+    this.showModalMessage('success', 'Configuración Guardada', 
+      this.systemSettings.emailNotifications 
+        ? 'Las notificaciones por email han sido activadas' 
+        : 'Las notificaciones por email han sido desactivadas');
   }
 }

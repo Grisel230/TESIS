@@ -5,6 +5,7 @@
     <div class="sidebar-header">
       <button class="menu-toggle" (click)="toggleSidebar()">
         <i class="menu-icon">☰</i>
+        <span class="menu-text">Menú</span>
       </button>
     </div>
     
@@ -67,7 +68,7 @@
   </div>
   
   <!-- Main Content -->
-  <div class="main-content">
+  <div class="main-content" [class.sidebar-collapsed]="!sidebarVisible">
     <!-- Floating Hamburger Button (only visible when sidebar is hidden) -->
     <button *ngIf="!sidebarVisible" class="floating-hamburger" (click)="toggleSidebar()" title="Mostrar menú">
       <svg class="hamburger-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

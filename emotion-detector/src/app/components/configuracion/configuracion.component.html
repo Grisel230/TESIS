@@ -4,6 +4,7 @@
     <div class="sidebar-header">
       <button class="menu-toggle" (click)="toggleSidebar()">
         <i class="menu-icon">☰</i>
+        <span class="menu-text">Menú</span>
       </button>
     </div>
     
@@ -63,10 +64,34 @@
         <span>Configuración</span>
       </a>
     </nav>
+
+    <!-- User Profile Section -->
+    <div class="sidebar-footer">
+      <div class="user-profile">
+        <div class="user-avatar">
+          <svg class="avatar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        </div>
+        <div class="user-info">
+          <span class="user-name">{{ psicologo?.nombre_completo || 'Psicólogo' }}</span>
+          <span class="user-role">Psicólogo</span>
+        </div>
+      </div>
+      <a (click)="logout()" class="nav-item logout-item">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+          <polyline points="16 17 21 12 16 7"></polyline>
+          <line x1="21" y1="12" x2="9" y2="12"></line>
+        </svg>
+        <span>Cerrar Sesión</span>
+      </a>
+    </div>
   </div>
   
   <!-- Main Content -->
-  <div class="main-content">
+  <div class="main-content" [class.sidebar-collapsed]="!sidebarVisible">
     <!-- Floating Hamburger Button -->
     <button *ngIf="!sidebarVisible" class="floating-hamburger" (click)="toggleSidebar()" title="Mostrar menú">
       <svg class="hamburger-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -112,14 +137,7 @@
             
             <div class="form-group">
               <label for="specialization">Especialización</label>
-              <select id="specialization" [(ngModel)]="userProfile.specialization" class="form-select">
-                <option value="psicologia-clinica">Psicología Clínica</option>
-                <option value="psicologia-educativa">Psicología Educativa</option>
-                <option value="psicologia-organizacional">Psicología Organizacional</option>
-                <option value="psicologia-social">Psicología Social</option>
-                <option value="neuropsicologia">Neuropsicología</option>
-                <option value="terapia-familiar">Terapia Familiar</option>
-              </select>
+              <input type="text" id="specialization" [(ngModel)]="userProfile.specialization" class="form-input" readonly style="background-color: #f3f4f6; cursor: not-allowed;">
             </div>
           </div>
           
@@ -150,7 +168,7 @@
               <p>Recibir notificaciones sobre nuevas sesiones y recordatorios</p>
             </div>
             <label class="toggle-switch">
-              <input type="checkbox" [(ngModel)]="systemSettings.emailNotifications">
+              <input type="checkbox" [(ngModel)]="systemSettings.emailNotifications" (change)="toggleEmailNotifications()">
               <span class="toggle-slider"></span>
             </label>
           </div>
@@ -165,31 +183,6 @@
               <span class="toggle-slider"></span>
             </label>
           </div>
-          
-          <div class="setting-item">
-            <div class="setting-info">
-              <h4>Duración de Sesión por Defecto</h4>
-              <p>Tiempo predeterminado para las sesiones (minutos)</p>
-            </div>
-            <div class="setting-control">
-              <input type="number" [(ngModel)]="systemSettings.defaultSessionDuration" class="form-input-small" min="15" max="180">
-              <span class="setting-unit">minutos</span>
-            </div>
-          </div>
-          
-          <div class="setting-item">
-            <div class="setting-info">
-              <h4>Idioma</h4>
-              <p>Idioma de la interfaz</p>
-            </div>
-            <div class="setting-control">
-              <select [(ngModel)]="systemSettings.language" class="form-select-small">
-                <option value="es">Español</option>
-                <option value="en">English</option>
-                <option value="fr">Français</option>
-              </select>
-            </div>
-          </div>
         </div>
       </div>
       
@@ -203,22 +196,11 @@
         <div class="settings-content">
           <div class="setting-item">
             <div class="setting-info">
-              <h4>Autenticación de Dos Factores</h4>
-              <p>Agregar una capa extra de seguridad a tu cuenta</p>
-            </div>
-            <label class="toggle-switch">
-              <input type="checkbox" [(ngModel)]="securitySettings.twoFactorAuth">
-              <span class="toggle-slider"></span>
-            </label>
-          </div>
-          
-          <div class="setting-item">
-            <div class="setting-info">
               <h4>Inicio de Sesión Automático</h4>
               <p>Recordar sesión en este dispositivo</p>
             </div>
             <label class="toggle-switch">
-              <input type="checkbox" [(ngModel)]="securitySettings.autoLogin">
+              <input type="checkbox" [(ngModel)]="securitySettings.autoLogin" (change)="saveAutoLogin()">
               <span class="toggle-slider"></span>
             </label>
           </div>
@@ -229,7 +211,7 @@
               <p>Minutos antes de cerrar sesión automáticamente</p>
             </div>
             <div class="setting-control">
-              <input type="number" [(ngModel)]="securitySettings.sessionTimeout" class="form-input-small" min="5" max="120">
+              <input type="number" [(ngModel)]="securitySettings.sessionTimeout" (change)="saveSessionTimeout()" class="form-input-small" min="5" max="120">
               <span class="setting-unit">minutos</span>
             </div>
           </div>
@@ -264,36 +246,6 @@
           <button class="btn-change-password" (click)="changePassword()">
             Cambiar Contraseña
           </button>
-        </div>
-      </div>
-      
-      <!-- Data Management -->
-      <div class="settings-section">
-        <div class="section-header">
-          <h3>Gestión de Datos</h3>
-          <p>Exportar, importar y gestionar tus datos</p>
-        </div>
-        
-        <div class="settings-content">
-          <div class="data-actions">
-            <button class="btn-export" (click)="exportData()">
-              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                <polyline points="7,10 12,15 17,10"/>
-                <line x1="12" y1="15" x2="12" y2="3"/>
-              </svg>
-              Exportar Datos
-            </button>
-            
-            <button class="btn-import" (click)="importData()">
-              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                <polyline points="17,10 12,5 7,10"/>
-                <line x1="12" y1="5" x2="12" y2="17"/>
-              </svg>
-              Importar Datos
-            </button>
-          </div>
         </div>
       </div>
       

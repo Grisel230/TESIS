@@ -303,6 +303,10 @@ export class ListaPacientesComponent implements OnInit {
     this.router.navigate(['/informes-estadisticas']);
   }
 
+  logout(): void {
+    this.authService.logout();
+  }
+
   goToResources(): void {
     this.router.navigate(['/recursos']);
   }

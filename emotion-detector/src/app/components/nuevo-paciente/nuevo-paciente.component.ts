@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { PatientService, Paciente } from '../../services/patient.service';
-import { Psicologo } from '../../services/auth.service';
+import { AuthService, Psicologo } from '../../services/auth.service';
 import { ThemeService } from '../../services/theme.service';
 
 // Usar la interfaz del servicio
@@ -52,7 +52,8 @@ export class NuevoPacienteComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private patientService: PatientService,
-    private themeService: ThemeService
+    private themeService: ThemeService,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
@@ -190,6 +191,10 @@ export class NuevoPacienteComponent implements OnInit {
 
   goToReports(): void {
     this.router.navigate(['/informes-estadisticas']);
+  }
+
+  logout(): void {
+    this.authService.logout();
   }
 
   goToResources(): void {

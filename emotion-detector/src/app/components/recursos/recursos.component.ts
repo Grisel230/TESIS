@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { ThemeService } from '../../services/theme.service';
+import { PdfGeneratorService } from '../../services/pdf-generator.service';
 
 interface ResourceCategory {
   id: string;
@@ -42,6 +43,7 @@ export class RecursosComponent implements OnInit {
   selectedCategory = 'all';
   searchQuery = '';
   isDarkMode = false;
+  psicologo: any = null;
 
   resourceCategories: ResourceCategory[] = [
     {
@@ -76,40 +78,30 @@ export class RecursosComponent implements OnInit {
       title: 'Guía de Uso del Sistema',
       description: 'Manual completo para el uso del sistema de análisis emocional',
       categoryId: 'guides',
-      size: '2.5 MB',
-      date: '15 Dic 2024',
+      size: '125 KB',
+      date: '17 Nov 2025',
       tags: ['manual', 'inicio', 'básico'],
-      url: '/resources/guia-uso.pdf'
+      url: '/resources/guia-uso.txt'
     },
     {
       id: '2',
       title: 'Plantilla de Evaluación',
       description: 'Formulario estándar para evaluaciones emocionales',
       categoryId: 'templates',
-      size: '150 KB',
-      date: '12 Dic 2024',
+      size: '45 KB',
+      date: '17 Nov 2025',
       tags: ['formulario', 'evaluación', 'estándar'],
-      url: '/resources/plantilla-evaluacion.pdf'
+      url: '/resources/plantilla-evaluacion.txt'
     },
     {
       id: '3',
       title: 'Tutorial: Primeros Pasos',
-      description: 'Video tutorial para comenzar a usar el sistema',
+      description: 'Guía completa paso a paso para comenzar a usar el sistema',
       categoryId: 'videos',
-      size: '45 MB',
-      date: '10 Dic 2024',
-      tags: ['tutorial', 'video', 'inicio'],
-      url: '/resources/tutorial-primeros-pasos.mp4'
-    },
-    {
-      id: '4',
-      title: 'Protocolo de Análisis',
-      description: 'Documento técnico con el protocolo de análisis emocional',
-      categoryId: 'documents',
-      size: '1.8 MB',
-      date: '8 Dic 2024',
-      tags: ['protocolo', 'técnico', 'análisis'],
-      url: '/resources/protocolo-analisis.pdf'
+      size: '85 KB',
+      date: '17 Nov 2025',
+      tags: ['tutorial', 'guía', 'inicio'],
+      url: '/resources/tutorial-primeros-pasos.txt'
     }
   ];
 
@@ -118,7 +110,8 @@ export class RecursosComponent implements OnInit {
   constructor(
     private router: Router,
     private authService: AuthService,
-    private themeService: ThemeService
+    private themeService: ThemeService,
+    private pdfGenerator: PdfGeneratorService
   ) {}
 
   ngOnInit(): void {
@@ -132,6 +125,13 @@ export class RecursosComponent implements OnInit {
       this.isDarkMode = isDark;
       console.log('Modo oscuro cambiado en recursos:', isDark);
     });
+
+    // Cargar datos del psicólogo
+    this.psicologo = this.authService.getPsicologo();
+  }
+
+  logout(): void {
+    this.authService.logout();
   }
 
   toggleSidebar(): void {
@@ -213,26 +213,59 @@ export class RecursosComponent implements OnInit {
     console.log('Funcionalidad de agregar recurso próximamente disponible');
   }
 
-  downloadResource(resource: Resource): void {
-    console.log('Descargando recurso:', resource.title);
-    if (resource.url) {
-      window.open(resource.url, '_blank');
-    } else {
-      alert('Este recurso no tiene URL disponible');
+  async downloadResource(resource: Resource, event?: Event): Promise<void> {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
     }
+    
+    console.log('Descargando recurso:', resource.title);
+    await this.generatePDF(resource);
   }
 
-  shareResource(resource: Resource): void {
+  shareResource(resource: Resource, event?: Event): void {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    
     console.log('Compartiendo recurso:', resource.title);
     alert(`Compartiendo: ${resource.title}`);
   }
 
-  viewResource(resource: Resource): void {
+  async viewResource(resource: Resource, event?: Event): Promise<void> {
+    // Prevenir comportamiento por defecto y propagación del evento
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    
     console.log('Viendo recurso:', resource.title);
-    if (resource.url) {
-      window.open(resource.url, '_blank');
-    } else {
-      alert('Este recurso no tiene URL disponible');
+    // Generar y descargar el PDF
+    await this.generatePDF(resource);
+  }
+
+  private async generatePDF(resource: Resource): Promise<void> {
+    try {
+      switch (resource.id) {
+        case '1':
+          await this.pdfGenerator.generateGuiaUso();
+          break;
+        case '2':
+          await this.pdfGenerator.generatePlantillaEvaluacion();
+          break;
+        case '3':
+          await this.pdfGenerator.generateTutorialPrimerosPasos();
+          break;
+        case '4':
+          await this.pdfGenerator.generateProtocoloAnalisis();
+          break;
+        default:
+          alert('Recurso no disponible');
+      }
+    } catch (error) {
+      console.error('Error generando PDF:', error);
+      alert('Error al generar el PDF. Por favor, intente nuevamente.');
     }
   }
 

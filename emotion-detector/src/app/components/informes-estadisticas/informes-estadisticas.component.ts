@@ -60,6 +60,7 @@ export class InformesEstadisticasComponent implements OnInit {
   chartType = 'bar';
   isLoading = true;
   isDarkMode = false;
+  psicologo: any = null;
 
   // Modal de reportes
   isModalVisible = false;
@@ -99,14 +100,6 @@ export class InformesEstadisticasComponent implements OnInit {
       icon: 'M3 3v18h18M18.7 8l-5.1 5.2-2.8-2.7L7 14.3',
       color: '#f59e0b',
       type: 'trends'
-    },
-    {
-      id: '4',
-      title: 'Eficiencia Terapéutica',
-      description: 'Métricas de efectividad del tratamiento',
-      icon: 'M9 12l2 2 4-4M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z',
-      color: '#8b5cf6',
-      type: 'efficiency'
     }
   ];
 
@@ -162,7 +155,14 @@ export class InformesEstadisticasComponent implements OnInit {
       this.isDarkMode = isDark;
     });
     
+    // Cargar datos del psicólogo
+    this.psicologo = this.authService.getPsicologo();
+    
     this.loadStatistics();
+  }
+
+  logout(): void {
+    this.authService.logout();
   }
 
   loadStatistics(): void {

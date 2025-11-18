@@ -1,4 +1,4 @@
-import { Component, OnInit, PLATFORM_ID, Inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, PLATFORM_ID, Inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -17,7 +17,7 @@ import { EmotionService } from '../../services/emotion.service';
   templateUrl: './reset-password.component.html',
   styleUrls: ['./reset-password.component.css']
 })
-export class ResetPasswordComponent implements OnInit {
+export class ResetPasswordComponent implements OnInit, OnDestroy {
   token: string = '';
   password: string = '';
   confirmPassword: string = '';
@@ -28,6 +28,7 @@ export class ResetPasswordComponent implements OnInit {
   showConfirmPassword: boolean = false;
   isValidatingToken: boolean = true;
   tokenValid: boolean = false;
+  private previousDarkMode: boolean = false;
 
   constructor(
     private router: Router,
@@ -37,6 +38,14 @@ export class ResetPasswordComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // FORZAR MODO CLARO - Eliminar clase dark-mode del body
+    if (isPlatformBrowser(this.platformId)) {
+      // Guardar el estado actual del modo oscuro
+      this.previousDarkMode = document.body.classList.contains('dark-mode');
+      // Forzar modo claro
+      document.body.classList.remove('dark-mode');
+    }
+
     // Obtener token de la URL
     this.route.queryParams.subscribe(params => {
       this.token = params['token'];
@@ -50,6 +59,13 @@ export class ResetPasswordComponent implements OnInit {
       // Verificar si el token es válido
       this.verifyToken();
     });
+  }
+
+  ngOnDestroy(): void {
+    // Restaurar el modo oscuro si estaba activado antes
+    if (isPlatformBrowser(this.platformId) && this.previousDarkMode) {
+      document.body.classList.add('dark-mode');
+    }
   }
 
   verifyToken(): void {
