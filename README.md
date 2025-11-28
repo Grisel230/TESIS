@@ -62,7 +62,7 @@ npm install
 
 ## 📄 Créditos
 
-Desarrollado por Grisel Laurean y colaboradores.
+Desarrollado por Grisel Laurean y Britney Sanchez.
 
 ## 📚 Documentación y Enlaces
 - [Documentación oficial Angular](https://angular.io/)
