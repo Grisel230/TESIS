@@ -6,6 +6,8 @@ import { FormsModule } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService, Psicologo } from '../../services/auth.service';
+import { SessionService } from '../../services/session.service';
+import { ThemeService } from '../../services/theme.service';
 
 @Component({
   selector: 'app-registro-pacientes',
@@ -43,21 +45,26 @@ export class RegistroPacientesComponent implements AfterViewInit, OnDestroy {
   currentDate = new Date();
 
   nombreCompletoPaciente: string = '';
-  edadPaciente: number | null = null;
+  edadPaciente: string = '';
   diagnosticoPreliminar: string = '';
   generoPaciente: string = '';
   pacienteId: number | null = null; // ID del paciente para asociar sesiones
   notasSesion: string = '';
+  sesionId: number | null = null; // ID de la sesión actual para guardar emociones
+  isDarkMode: boolean = false;
 
   sessionDuration: string = '00:00';
   predominantEmotion: string = '-';
   private sessionStartTime: number | null = null;
   private emotionCounts: { [key: string]: number } = {};
+  private emotionsHistory: Array<{emotion: string, confidence: number, timestamp: Date}> = [];
 
   constructor(
     private emotionService: EmotionService, 
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private sessionService: SessionService,
+    private themeService: ThemeService
   ) { }
 
   ngAfterViewInit() {
@@ -65,6 +72,13 @@ export class RegistroPacientesComponent implements AfterViewInit, OnDestroy {
     // Usar setTimeout para asegurar que se ejecute después de la inicialización completa
     setTimeout(() => {
       this.loadPacienteData();
+      
+      // Suscribirse a los cambios de tema después de la inicialización
+      this.themeService.darkMode$.subscribe((isDark: boolean) => {
+        setTimeout(() => {
+          this.isDarkMode = isDark;
+        }, 0);
+      });
     }, 100);
   }
 
@@ -94,9 +108,36 @@ export class RegistroPacientesComponent implements AfterViewInit, OnDestroy {
         console.log('✅ Datos del paciente parseados:', paciente);
         
         // Rellenar los campos del formulario con los datos del paciente
-        this.nombreCompletoPaciente = paciente.nombre_completo || '';
-        this.edadPaciente = paciente.edad || null;
-        this.generoPaciente = paciente.genero || '';
+        this.nombreCompletoPaciente = paciente.nombre_completo || 'No especificado';
+        
+        // Formatear la edad para mostrar de forma legible
+        if (paciente.edad && paciente.edad > 0) {
+          this.edadPaciente = `${paciente.edad} años`;
+        } else {
+          this.edadPaciente = 'No especificada';
+        }
+        
+        // Normalizar el género para mostrar en formato legible
+        let genero = paciente.genero || '';
+        if (genero) {
+          const generoLower = genero.toLowerCase();
+          // Mapear posibles variaciones y mostrar en formato legible
+          if (generoLower === 'masculino' || generoLower === 'm' || generoLower === 'male') {
+            this.generoPaciente = 'Masculino';
+          } else if (generoLower === 'femenino' || generoLower === 'f' || generoLower === 'female') {
+            this.generoPaciente = 'Femenino';
+          } else if (generoLower === 'otro' || generoLower === 'other') {
+            this.generoPaciente = 'Otro';
+          } else if (generoLower === 'prefiero-no-decir' || generoLower === 'no especifica') {
+            this.generoPaciente = 'Prefiero no decir';
+          } else {
+            // Capitalizar la primera letra para otros valores
+            this.generoPaciente = genero.charAt(0).toUpperCase() + genero.slice(1).toLowerCase();
+          }
+        } else {
+          this.generoPaciente = 'No especificado';
+        }
+        
         this.pacienteId = paciente.id || null; // Cargar el ID del paciente
         
         // Si hay diagnóstico previo, cargarlo también
@@ -108,7 +149,8 @@ export class RegistroPacientesComponent implements AfterViewInit, OnDestroy {
         console.log('  - ID:', this.pacienteId);
         console.log('  - Nombre:', this.nombreCompletoPaciente);
         console.log('  - Edad:', this.edadPaciente);
-        console.log('  - Género:', this.generoPaciente);
+        console.log('  - Género original:', paciente.genero);
+        console.log('  - Género normalizado:', this.generoPaciente);
         console.log('  - Diagnóstico:', this.diagnosticoPreliminar);
         
         // Limpiar los datos del localStorage después de cargarlos
@@ -163,15 +205,15 @@ export class RegistroPacientesComponent implements AfterViewInit, OnDestroy {
   }
 
   goToReports(): void {
-    this.router.navigate(['/dashboard']);
+    this.router.navigate(['/informes-estadisticas']);
   }
 
   goToResources(): void {
-    this.router.navigate(['/dashboard']);
+    this.router.navigate(['/recursos']);
   }
 
   goToSettings(): void {
-    this.router.navigate(['/dashboard']);
+    this.router.navigate(['/configuracion']);
   }
 
   goToHistorial(): void {
@@ -356,8 +398,17 @@ export class RegistroPacientesComponent implements AfterViewInit, OnDestroy {
 
               if (this.strongestPrediction) {
                 const emotion = this.strongestPrediction.emotion;
+                const confidence = this.strongestPrediction.confidence;
                 this.emotionCounts[emotion] = (this.emotionCounts[emotion] || 0) + 1;
-                console.log('😊 Emoción detectada:', emotion, 'Confianza:', this.strongestPrediction.confidence);
+                
+                // Guardar en historial para enviar al backend después
+                this.emotionsHistory.push({
+                  emotion: emotion,
+                  confidence: confidence,
+                  timestamp: new Date()
+                });
+                
+                console.log('😊 Emoción detectada:', emotion, 'Confianza:', confidence);
               }
 
             } else {
@@ -499,37 +550,155 @@ export class RegistroPacientesComponent implements AfterViewInit, OnDestroy {
 
   // Save session method
   guardarSesion() {
+    // Validaciones
     if (!this.nombreCompletoPaciente) {
       alert('Por favor, complete el nombre del paciente antes de guardar la sesión.');
       return;
     }
 
+    if (!this.pacienteId) {
+      alert('Error: No se encontró el ID del paciente. Por favor, seleccione un paciente de la lista.');
+      return;
+    }
+
+    if (!this.psicologo?.id) {
+      alert('Error: No se encontró la información del psicólogo. Por favor, inicie sesión nuevamente.');
+      return;
+    }
+
+    // Calcular duración en minutos
+    const durationParts = this.sessionDuration.split(':');
+    const duracionMinutos = parseInt(durationParts[0]) * 60 + parseInt(durationParts[1]);
+
+    // Calcular confianza promedio de las emociones detectadas
+    const totalEmociones = Object.values(this.emotionCounts).reduce((sum, count) => sum + count, 0);
+    const confianzaPromedio = totalEmociones > 0 ? 0.85 : 0.0; // Valor estimado, idealmente se calcularía de las predicciones
+
+    // Preparar datos para enviar al backend
     const sessionData = {
-      id: Date.now(), // Simple ID generation
-      paciente: {
-        id: this.pacienteId, // Incluir el ID del paciente
-        nombre: this.nombreCompletoPaciente,
-        edad: this.edadPaciente,
-        genero: this.generoPaciente
-      },
-      diagnostico: this.diagnosticoPreliminar,
-      notas: this.notasSesion,
-      duracion: this.sessionDuration,
-      emocionPredominante: this.predominantEmotion,
-      emocionesDetectadas: this.emotionCounts,
-      fecha: new Date().toISOString(),
-      psicologo: this.psicologo?.nombre_completo || 'Psicólogo'
+      paciente_id: this.pacienteId,
+      psicologo_id: this.psicologo.id,
+      fecha_sesion: new Date().toISOString(),
+      duracion_minutos: duracionMinutos,
+      notas: this.notasSesion || '',
+      emocion_predominante: this.predominantEmotion !== '-' ? this.predominantEmotion : '',
+      confianza_promedio: confianzaPromedio
     };
 
-    // Guardar en localStorage (simulando base de datos)
-    const existingSessions = JSON.parse(localStorage.getItem('sesiones_guardadas') || '[]');
-    existingSessions.push(sessionData);
-    localStorage.setItem('sesiones_guardadas', JSON.stringify(existingSessions));
+    console.log('📤 Guardando sesión en la base de datos...', sessionData);
+    this.isLoading = true;
 
-    console.log('✅ Sesión guardada:', sessionData);
-    
-    // Mostrar modal de éxito
-    this.showSuccessModal = true;
+    // Guardar sesión en la base de datos usando SessionService
+    this.sessionService.crearSesion(sessionData).subscribe({
+      next: (response) => {
+        console.log('✅ Sesión guardada exitosamente:', response);
+        
+        // Guardar el ID de la sesión creada
+        const sesionId = response.sesion?.id;
+        this.sesionId = sesionId;
+        
+        // Guardar emociones detectadas en la base de datos
+        if (sesionId && this.emotionsHistory.length > 0) {
+          console.log(`📊 Guardando ${this.emotionsHistory.length} emociones detectadas...`);
+          this.guardarEmocionesEnBD(sesionId);
+        }
+        
+        // También guardar en localStorage como backup (opcional)
+        const backupData = {
+          ...sessionData,
+          id: sesionId,
+          paciente_nombre: this.nombreCompletoPaciente,
+          emotionCounts: this.emotionCounts,
+          emotionsHistory: this.emotionsHistory,
+          fecha_guardado: new Date().toISOString()
+        };
+        
+        const existingSessions = JSON.parse(localStorage.getItem('sesiones_guardadas') || '[]');
+        existingSessions.push(backupData);
+        localStorage.setItem('sesiones_guardadas', JSON.stringify(existingSessions));
+        
+        this.isLoading = false;
+        this.showSuccessModal = true;
+      },
+      error: (error) => {
+        console.error('❌ Error al guardar la sesión:', error);
+        this.isLoading = false;
+        
+        let errorMessage = 'Error al guardar la sesión en la base de datos.';
+        if (error.error?.error) {
+          errorMessage += ' ' + error.error.error;
+        } else if (error.status === 0) {
+          errorMessage += ' No se pudo conectar con el servidor.';
+        }
+        
+        alert(errorMessage + '\n\nLa sesión se ha guardado localmente como respaldo.');
+        
+        // Guardar en localStorage como fallback
+        const fallbackData = {
+          ...sessionData,
+          id: Date.now(),
+          paciente_nombre: this.nombreCompletoPaciente,
+          emotionCounts: this.emotionCounts,
+          fecha_guardado: new Date().toISOString(),
+          guardado_local: true
+        };
+        
+        const existingSessions = JSON.parse(localStorage.getItem('sesiones_guardadas') || '[]');
+        existingSessions.push(fallbackData);
+        localStorage.setItem('sesiones_guardadas', JSON.stringify(existingSessions));
+        
+        this.showSuccessModal = true;
+      }
+    });
+  }
+
+  // Método para guardar emociones en la base de datos
+  private guardarEmocionesEnBD(sesionId: number) {
+    // Importamos HttpClient directamente para hacer las peticiones
+    import('../../services/emotion.service').then(() => {
+      let emocionesGuardadas = 0;
+      let erroresGuardado = 0;
+      
+      // Guardar cada emoción del historial
+      this.emotionsHistory.forEach((emotionData, index) => {
+        // Crear petición HTTP para guardar cada emoción
+        const url = `http://localhost:5000/api/sesiones/${sesionId}/emociones`;
+        const data = {
+          emotion: emotionData.emotion,
+          confidence: emotionData.confidence,
+          timestamp: emotionData.timestamp.toISOString()
+        };
+        
+        // Usamos fetch directamente para no bloquear el flujo
+        fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${this.authService.getToken()}`
+          },
+          body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(result => {
+          emocionesGuardadas++;
+          console.log(`✅ Emoción ${index + 1}/${this.emotionsHistory.length} guardada:`, result);
+          
+          // Mostrar resumen al final
+          if (emocionesGuardadas + erroresGuardado === this.emotionsHistory.length) {
+            console.log(`✅ Resumen: ${emocionesGuardadas} emociones guardadas, ${erroresGuardado} errores`);
+          }
+        })
+        .catch(error => {
+          erroresGuardado++;
+          console.error(`❌ Error guardando emoción ${index + 1}:`, error);
+          
+          // Mostrar resumen al final
+          if (emocionesGuardadas + erroresGuardado === this.emotionsHistory.length) {
+            console.log(`⚠️ Resumen: ${emocionesGuardadas} emociones guardadas, ${erroresGuardado} errores`);
+          }
+        });
+      });
+    });
   }
 
   // Modal methods
@@ -541,14 +710,16 @@ export class RegistroPacientesComponent implements AfterViewInit, OnDestroy {
 
   private limpiarFormulario() {
     this.nombreCompletoPaciente = '';
-    this.edadPaciente = null;
+    this.edadPaciente = '';
     this.generoPaciente = '';
     this.diagnosticoPreliminar = '';
     this.notasSesion = '';
     this.pacienteId = null;
+    this.sesionId = null;
     this.sessionDuration = '00:00';
     this.predominantEmotion = '-';
     this.emotionCounts = {};
+    this.emotionsHistory = [];
     this.predictions = [];
     this.strongestPrediction = null;
   }

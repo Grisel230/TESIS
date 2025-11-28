@@ -1,0 +1,177 @@
+# docker-compose.yml para producción
+version: '3.8'
+
+services:
+  # Base de datos PostgreSQL
+  postgres:
+    image: postgres:15
+    container_name: emotion-detection-postgres
+    environment:
+      POSTGRES_DB: emotion_detection_prod
+      POSTGRES_USER: emotion_app
+      POSTGRES_PASSWORD: secure_password_123
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - emotion-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U emotion_app -d emotion_detection_prod"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Redis para caché
+  redis:
+    image: redis:7-alpine
+    container_name: emotion-detection-redis
+    command: redis-server --appendonly yes --requirepass redis_password_123
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - emotion-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Aplicación Flask
+  app:
+    build: .
+    container_name: emotion-detection-app
+    environment:
+      - FLASK_ENV=production
+      - FLASK_DEBUG=False
+      - DATABASE_URL=postgresql://emotion_app:secure_password_123@postgres:5432/emotion_detection_prod
+      - REDIS_URL=redis://:redis_password_123@redis:6379/0
+      - SECRET_KEY=your_super_secret_key_for_production_change_this
+      - JWT_SECRET_KEY=your_jwt_secret_key_for_production_change_this
+    volumes:
+      - ./logs:/app/logs
+      - ./uploads:/app/uploads
+      - ./modelFEC.h5:/app/modelFEC.h5
+      - ./face_detector:/app/face_detector
+    ports:
+      - "5000:5000"
+    networks:
+      - emotion-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Nginx como proxy reverso
+  nginx:
+    image: nginx:alpine
+    container_name: emotion-detection-nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./ssl:/etc/nginx/ssl
+      - ./logs/nginx:/var/log/nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - emotion-network
+    depends_on:
+      - app
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Worker para tareas en segundo plano
+  worker:
+    build: .
+    container_name: emotion-detection-worker
+    command: python worker.py
+    environment:
+      - WORKER_ENV=production
+      - DATABASE_URL=postgresql://emotion_app:secure_password_123@postgres:5432/emotion_detection_prod
+      - REDIS_URL=redis://:redis_password_123@redis:6379/0
+    volumes:
+      - ./logs:/app/logs
+      - ./uploads:/app/uploads
+    networks:
+      - emotion-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # Scheduler para tareas programadas
+  scheduler:
+    build: .
+    container_name: emotion-detection-scheduler
+    command: python scheduler.py
+    environment:
+      - SCHEDULER_ENV=production
+      - DATABASE_URL=postgresql://emotion_app:secure_password_123@postgres:5432/emotion_detection_prod
+      - REDIS_URL=redis://:redis_password_123@redis:6379/0
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - emotion-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # Monitoreo con Prometheus
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: emotion-detection-prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      - emotion-network
+    restart: unless-stopped
+
+  # Visualización con Grafana
+  grafana:
+    image: grafana/grafana:latest
+    container_name: emotion-detection-grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin_password_123
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./grafana/datasources:/etc/grafana/provisioning/datasources
+    ports:
+      - "3000:3000"
+    networks:
+      - emotion-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:
+  prometheus_data:
+  grafana_data:
+
+networks:
+  emotion-network:
+    driver: bridge

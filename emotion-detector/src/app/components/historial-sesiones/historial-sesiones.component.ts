@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { SessionService, Sesion } from '../../services/session.service';
 import { Psicologo } from '../../services/auth.service';
+import { ThemeService } from '../../services/theme.service';
 
 // Definir una interfaz para la estructura de datos de la sesión
 export interface Session {
@@ -26,12 +27,14 @@ export interface Session {
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './historial-sesiones.component.html',
-  styleUrls: ['./historial-sesiones.component.css']
+  styleUrls: ['./historial-sesiones.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class HistorialSesionesComponent implements OnInit {
   // Datos del psicólogo logueado
   psicologo: Psicologo | null = null;
-  sidebarVisible: boolean = true; // Control de visibilidad del sidebar
+  sidebarVisible: boolean = true;
+  isDarkMode: boolean = false; // Control del modo oscuro
 
   // Propiedades para los filtros
   filterFechaDesde: string = '';
@@ -58,10 +61,16 @@ export class HistorialSesionesComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private sessionService: SessionService
+    private sessionService: SessionService,
+    private themeService: ThemeService
   ) { }
 
   ngOnInit(): void {
+    // Suscribirse a los cambios de tema
+    this.themeService.darkMode$.subscribe((isDark: boolean) => {
+      this.isDarkMode = isDark;
+    });
+
     // Cargar datos del psicólogo desde localStorage
     const psicologoData = localStorage.getItem('psicologo');
     if (psicologoData) {
@@ -178,8 +187,13 @@ export class HistorialSesionesComponent implements OnInit {
     this.router.navigate(['/dashboard']);
   }
 
-  // Método para navegar a pacientes
+  // Método para navegar a la lista de pacientes
   goToPacientes() {
+    this.router.navigate(['/pacientes']);
+  }
+
+  // Método para navegar a agregar nuevo paciente
+  goToNuevoPaciente() {
     this.router.navigate(['/nuevo-paciente']);
   }
 
@@ -195,15 +209,15 @@ export class HistorialSesionesComponent implements OnInit {
 
 
   goToSettings(): void {
-    alert('Vista de configuración en desarrollo');
+    this.router.navigate(['/configuracion']);
   }
 
   goToReports(): void {
-    alert('Vista de reportes en desarrollo');
+    this.router.navigate(['/informes-estadisticas']);
   }
 
   goToResources(): void {
-    alert('Vista de recursos en desarrollo');
+    this.router.navigate(['/recursos']);
   }
 
   // Método para obtener el índice final de la paginación
@@ -215,7 +229,6 @@ export class HistorialSesionesComponent implements OnInit {
   applyFilters(): void {
     let tempSessions = this.allSessions;
 
-    // Aplicar filtros (lógica existente)
     // Filtrar por nombre del paciente (búsqueda parcial, insensible a mayúsculas/minúsculas)
     if (this.filterPaciente) {
       tempSessions = tempSessions.filter(session =>
@@ -230,12 +243,31 @@ export class HistorialSesionesComponent implements OnInit {
       );
     }
 
-    // TODO: Implementar filtrado por rango de fechas (requiere parsear y comparar fechas)
-    // if (this.filterFechaDesde && this.filterFechaHasta) {
-    //   tempSessions = tempSessions.filter(session => {
-    //     // Lógica para comparar fechas
-    //   });
-    // }
+    // Filtrar por rango de fechas
+    if (this.filterFechaDesde || this.filterFechaHasta) {
+      tempSessions = tempSessions.filter(session => {
+        // Parsear la fecha de la sesión (formato: "dd/mm/yyyy" o similar)
+        const sessionDate = this.parseDateString(session.fecha);
+        
+        if (!sessionDate) return true; // Si no se puede parsear, incluir la sesión
+
+        // Comparar con fecha desde
+        if (this.filterFechaDesde) {
+          const fechaDesde = new Date(this.filterFechaDesde);
+          fechaDesde.setHours(0, 0, 0, 0);
+          if (sessionDate < fechaDesde) return false;
+        }
+
+        // Comparar con fecha hasta
+        if (this.filterFechaHasta) {
+          const fechaHasta = new Date(this.filterFechaHasta);
+          fechaHasta.setHours(23, 59, 59, 999);
+          if (sessionDate > fechaHasta) return false;
+        }
+
+        return true;
+      });
+    }
 
     // Después de aplicar filtros, configurar la paginación
     this.totalItems = tempSessions.length;
@@ -257,8 +289,37 @@ export class HistorialSesionesComponent implements OnInit {
 
     // Actualizar las sesiones mostradas (aplicando paginación)
     this.filteredSessions = tempSessions.slice(startIndex, endIndex);
+  }
 
-    // TODO: Implementar paginación si es necesario - Esto ya está implementado aquí.
+  // Método auxiliar para parsear fechas en formato español
+  private parseDateString(dateStr: string): Date | null {
+    try {
+      // Intentar parsear formato "dd/mm/yyyy" o "d/m/yyyy"
+      const parts = dateStr.split('/');
+      if (parts.length === 3) {
+        const day = parseInt(parts[0], 10);
+        const month = parseInt(parts[1], 10) - 1; // Los meses en JS van de 0-11
+        const year = parseInt(parts[2], 10);
+        return new Date(year, month, day);
+      }
+      
+      // Si no funciona, intentar parsear directamente
+      const date = new Date(dateStr);
+      return isNaN(date.getTime()) ? null : date;
+    } catch (error) {
+      console.error('Error al parsear fecha:', dateStr, error);
+      return null;
+    }
+  }
+
+  // Método para limpiar todos los filtros
+  clearFilters(): void {
+    this.filterFechaDesde = '';
+    this.filterFechaHasta = '';
+    this.filterPaciente = '';
+    this.filterEmocion = 'Todas las emociones';
+    this.currentPage = 1;
+    this.applyFilters();
   }
 
   // Métodos para cambiar de página
@@ -324,6 +385,10 @@ export class HistorialSesionesComponent implements OnInit {
     window.URL.revokeObjectURL(url); // Limpiar el objeto URL
     
     alert(`Reporte de sesión ${session.id} descargado (ejemplo).`);
+  }
+
+  goToLogin(): void {
+    this.router.navigate(['/inicio-sesion']);
   }
 
 } 

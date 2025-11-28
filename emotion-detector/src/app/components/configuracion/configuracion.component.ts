@@ -1,8 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
+import { ThemeService } from '../../services/theme.service';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 interface UserProfile {
   fullName: string;
@@ -13,7 +17,6 @@ interface UserProfile {
 
 interface SystemSettings {
   emailNotifications: boolean;
-  autoBackup: boolean;
   darkMode: boolean;
   defaultSessionDuration: number;
   language: string;
@@ -40,10 +43,16 @@ interface PasswordChange {
     FormsModule
   ],
   templateUrl: './configuracion.component.html',
-  styleUrls: ['./configuracion.component.css']
+  styleUrls: ['./configuracion.component.css', './force-styles.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class ConfiguracionComponent implements OnInit {
   sidebarVisible = true;
+  showModal = false;
+  modalType: 'success' | 'error' | 'warning' = 'success';
+  modalTitle = '';
+  modalMessage = '';
+  psicologo: any = null;
 
   userProfile: UserProfile = {
     fullName: 'Grisel Laurean Valenzuela',
@@ -54,7 +63,6 @@ export class ConfiguracionComponent implements OnInit {
 
   systemSettings: SystemSettings = {
     emailNotifications: true,
-    autoBackup: true,
     darkMode: false,
     defaultSessionDuration: 60,
     language: 'es'
@@ -72,10 +80,66 @@ export class ConfiguracionComponent implements OnInit {
     confirmPassword: ''
   };
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private themeService: ThemeService,
+    private http: HttpClient
+  ) {}
 
   ngOnInit(): void {
     console.log('ConfiguracionComponent inicializado');
+    this.psicologo = this.authService.getPsicologo();
+    this.cargarDatosUsuario();
+    this.cargarPreferencias();
+    
+    // Suscribirse a los cambios del tema
+    this.themeService.darkMode$.subscribe(isDark => {
+      this.systemSettings.darkMode = isDark;
+    });
+    
+    // Configurar temporizador de inactividad si está habilitado
+    if (this.securitySettings.sessionTimeout > 0) {
+      this.setupInactivityTimer();
+    }
+  }
+
+  cargarDatosUsuario(): void {
+    const psicologo = this.authService.getPsicologo();
+    if (psicologo) {
+      this.userProfile.fullName = psicologo.nombre_completo;
+      this.userProfile.email = psicologo.email;
+      this.userProfile.phone = psicologo.telefono;
+      this.userProfile.specialization = psicologo.especializacion;
+    }
+  }
+
+  cargarPreferencias(): void {
+    // Sincronizar con el servicio de tema global
+    this.systemSettings.darkMode = this.themeService.isDarkMode();
+    
+    // Cargar notificaciones por email
+    const emailNotifications = localStorage.getItem('emailNotifications');
+    if (emailNotifications !== null) {
+      this.systemSettings.emailNotifications = emailNotifications === 'true';
+    }
+    
+    // Cargar configuración de auto login
+    const autoLogin = localStorage.getItem('autoLogin');
+    if (autoLogin !== null) {
+      this.securitySettings.autoLogin = autoLogin === 'true';
+    }
+    
+    // Cargar tiempo de inactividad
+    const sessionTimeout = localStorage.getItem('sessionTimeout');
+    if (sessionTimeout !== null) {
+      this.securitySettings.sessionTimeout = parseInt(sessionTimeout, 10);
+    }
+  }
+
+  toggleDarkMode(): void {
+    // Actualizar el tema globalmente usando el servicio
+    this.themeService.setDarkMode(this.systemSettings.darkMode);
   }
 
   toggleSidebar(): void {
@@ -110,56 +174,332 @@ export class ConfiguracionComponent implements OnInit {
     this.router.navigate(['/configuracion']);
   }
 
+  logout(): void {
+    this.authService.logout();
+  }
+
   saveSettings(): void {
     console.log('Guardando configuración...');
-    console.log('Perfil:', this.userProfile);
-    console.log('Sistema:', this.systemSettings);
-    console.log('Seguridad:', this.securitySettings);
     
-    // Aquí implementarías la lógica para guardar la configuración
-    alert('Configuración guardada exitosamente');
+    // Validaciones
+    if (!this.userProfile.fullName || this.userProfile.fullName.trim() === '') {
+      alert('❌ El nombre completo es requerido');
+      return;
+    }
+    
+    if (!this.userProfile.email || this.userProfile.email.trim() === '') {
+      alert('❌ El correo electrónico es requerido');
+      return;
+    }
+    
+    // Validar formato de email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(this.userProfile.email)) {
+      alert('❌ El formato del correo electrónico no es válido');
+      return;
+    }
+    
+    if (!this.userProfile.phone || this.userProfile.phone.trim() === '') {
+      alert('❌ El teléfono es requerido');
+      return;
+    }
+    
+    const psicologo = this.authService.getPsicologo();
+    
+    if (!psicologo) {
+      alert('❌ Error: No se pudo identificar al usuario');
+      return;
+    }
+
+    const datosActualizados = {
+      nombre_completo: this.userProfile.fullName.trim(),
+      email: this.userProfile.email.trim(),
+      telefono: this.userProfile.phone.trim(),
+      especializacion: this.userProfile.specialization
+    };
+
+    const apiUrl = `${environment.apiUrl}/psicologo/${psicologo.id}`;
+    const token = localStorage.getItem('token');
+
+    this.http.put(apiUrl, datosActualizados, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    }).subscribe({
+      next: (response) => {
+        console.log('Configuración guardada:', response);
+        
+        // Actualizar los datos del psicólogo en el AuthService y localStorage
+        const psicologoActualizado = { ...psicologo, ...datosActualizados };
+        this.authService.updatePsicologo(psicologoActualizado);
+        
+        // Recargar los datos del usuario para reflejar los cambios en el formulario
+        this.cargarDatosUsuario();
+        
+        this.showModalMessage('success', 'Configuración Guardada', 'Los cambios se han guardado exitosamente y se han aplicado a tu perfil.');
+      },
+      error: (error) => {
+        console.error('Error al guardar configuración:', error);
+        const mensaje = error.error?.error || 'Error al guardar la configuración. Por favor, intenta de nuevo.';
+        this.showModalMessage('error', 'Error al Guardar', mensaje);
+      }
+    });
   }
 
   changePassword(): void {
+    // Validaciones
+    if (!this.passwordChange.currentPassword || this.passwordChange.currentPassword.trim() === '') {
+      alert('❌ La contraseña actual es requerida');
+      return;
+    }
+    
+    if (!this.passwordChange.newPassword || this.passwordChange.newPassword.trim() === '') {
+      alert('❌ La nueva contraseña es requerida');
+      return;
+    }
+    
     if (this.passwordChange.newPassword !== this.passwordChange.confirmPassword) {
-      alert('Las contraseñas no coinciden');
+      alert('❌ Las contraseñas no coinciden');
       return;
     }
     
     if (this.passwordChange.newPassword.length < 6) {
-      alert('La contraseña debe tener al menos 6 caracteres');
+      alert('❌ La contraseña debe tener al menos 6 caracteres');
+      return;
+    }
+
+    const psicologo = this.authService.getPsicologo();
+    if (!psicologo) {
+      alert('❌ Error: No se pudo identificar al usuario');
       return;
     }
     
-    console.log('Cambiando contraseña...');
-    // Aquí implementarías la lógica para cambiar la contraseña
-    alert('Contraseña cambiada exitosamente');
-    
-    // Limpiar formulario
-    this.passwordChange = {
-      currentPassword: '',
-      newPassword: '',
-      confirmPassword: ''
+    const datosPassword = {
+      current_password: this.passwordChange.currentPassword,
+      new_password: this.passwordChange.newPassword
     };
+
+    const apiUrl = `${environment.apiUrl}/psicologo/${psicologo.id}/change-password`;
+    const token = localStorage.getItem('token');
+
+    this.http.put(apiUrl, datosPassword, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    }).subscribe({
+      next: (response) => {
+        console.log('Contraseña cambiada:', response);
+        this.showModalMessage('success', 'Contraseña Actualizada', 'Tu contraseña ha sido cambiada exitosamente.');
+        
+        // Limpiar el formulario
+        this.passwordChange = {
+          currentPassword: '',
+          newPassword: '',
+          confirmPassword: ''
+        };
+      },
+      error: (error) => {
+        console.error('Error al cambiar contraseña:', error);
+        const mensaje = error.error?.error || 'Error al cambiar la contraseña';
+        this.showModalMessage('error', 'Error al Cambiar Contraseña', mensaje);
+      }
+    });
   }
 
   exportData(): void {
     console.log('Exportando datos...');
-    // Aquí implementarías la lógica para exportar datos
-    alert('Funcionalidad de exportación en desarrollo');
+    const psicologo = this.authService.getPsicologo();
+    
+    if (!psicologo) {
+      alert('❌ Error: No se pudo identificar al usuario');
+      return;
+    }
+    
+    // Crear objeto con los datos del psicólogo
+    const dataToExport = {
+      psicologo: {
+        nombre_completo: psicologo.nombre_completo,
+        email: psicologo.email,
+        telefono: psicologo.telefono,
+        especializacion: psicologo.especializacion,
+        cedula_profesional: psicologo.cedula_profesional
+      },
+      configuracion: {
+        systemSettings: this.systemSettings,
+        securitySettings: this.securitySettings
+      },
+      fecha_exportacion: new Date().toISOString(),
+      version: '1.0'
+    };
+    
+    // Convertir a JSON
+    const dataStr = JSON.stringify(dataToExport, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    
+    // Crear enlace de descarga
+    const url = window.URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `datos_psicologo_${psicologo.id}_${new Date().getTime()}.json`;
+    link.click();
+    
+    // Limpiar
+    window.URL.revokeObjectURL(url);
+    
+    this.showModalMessage('success', 'Datos Exportados', 'Tus datos han sido exportados exitosamente. El archivo se ha descargado.');
   }
 
   importData(): void {
     console.log('Importando datos...');
-    // Aquí implementarías la lógica para importar datos
-    alert('Funcionalidad de importación en desarrollo');
+    
+    // Crear input file temporal
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    
+    input.onchange = (event: any) => {
+      const file = event.target.files[0];
+      if (!file) return;
+      
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        try {
+          const data = JSON.parse(e.target.result);
+          console.log('Datos importados:', data);
+          
+          // Validar estructura
+          if (!data.psicologo) {
+            this.showModalMessage('error', 'Archivo Inválido', 'La estructura del archivo no es correcta. Asegúrate de importar un archivo exportado desde esta aplicación.');
+            return;
+          }
+          
+          // Actualizar configuraciones si existen
+          if (data.configuracion) {
+            if (data.configuracion.systemSettings) {
+              this.systemSettings = { ...this.systemSettings, ...data.configuracion.systemSettings };
+            }
+            if (data.configuracion.securitySettings) {
+              this.securitySettings = { ...this.securitySettings, ...data.configuracion.securitySettings };
+            }
+          }
+          
+          this.showModalMessage('success', 'Datos Importados', 'Los datos han sido importados exitosamente. Las configuraciones han sido actualizadas.');
+        } catch (error) {
+          console.error('Error al importar:', error);
+          this.showModalMessage('error', 'Error al Importar', 'Error al leer el archivo. Asegúrate de que sea un archivo JSON válido.');
+        }
+      };
+      
+      reader.readAsText(file);
+    };
+    
+    input.click();
   }
 
   deleteAccount(): void {
-    if (confirm('¿Estás seguro de que quieres eliminar tu cuenta? Esta acción no se puede deshacer.')) {
-      console.log('Eliminando cuenta...');
-      // Aquí implementarías la lógica para eliminar la cuenta
-      alert('Funcionalidad de eliminación en desarrollo');
+    const confirmacion1 = confirm('⚠️ ¿Estás seguro de que quieres eliminar tu cuenta?\n\nEsta acción eliminará:\n- Tu perfil de psicólogo\n- Todos tus pacientes\n- Todas las sesiones registradas\n- Todos los datos asociados\n\nEsta acción NO se puede deshacer.');
+    
+    if (!confirmacion1) return;
+    
+    const confirmacion2 = prompt('Para confirmar, escribe "ELIMINAR" (en mayúsculas):');
+    
+    if (confirmacion2 !== 'ELIMINAR') {
+      alert('❌ Eliminación cancelada');
+      return;
     }
+    
+    const psicologo = this.authService.getPsicologo();
+    if (!psicologo) {
+      alert('❌ Error: No se pudo identificar al usuario');
+      return;
+    }
+    
+    console.log('Eliminando cuenta...');
+    this.showModalMessage('warning', 'Funcionalidad Deshabilitada', 'La eliminación de cuenta está deshabilitada por seguridad. Para eliminar tu cuenta, contacta al administrador del sistema.');
+  }
+
+  showModalMessage(type: 'success' | 'error' | 'warning', title: string, message: string): void {
+    this.modalType = type;
+    this.modalTitle = title;
+    this.modalMessage = message;
+    this.showModal = true;
+  }
+
+  closeModal(): void {
+    this.showModal = false;
+  }
+
+  saveAutoLogin(): void {
+    // Guardar preferencia de auto login en localStorage
+    localStorage.setItem('autoLogin', this.securitySettings.autoLogin.toString());
+    console.log('Auto login configurado:', this.securitySettings.autoLogin);
+    this.showModalMessage('success', 'Configuración Guardada', 
+      this.securitySettings.autoLogin 
+        ? 'El inicio de sesión automático ha sido activado' 
+        : 'El inicio de sesión automático ha sido desactivado');
+  }
+
+  saveSessionTimeout(): void {
+    // Guardar tiempo de inactividad en localStorage
+    localStorage.setItem('sessionTimeout', this.securitySettings.sessionTimeout.toString());
+    console.log('Tiempo de inactividad configurado:', this.securitySettings.sessionTimeout);
+    
+    // Reiniciar el temporizador de inactividad si existe
+    this.setupInactivityTimer();
+    
+    this.showModalMessage('success', 'Configuración Guardada', 
+      `El tiempo de inactividad ha sido configurado a ${this.securitySettings.sessionTimeout} minutos`);
+  }
+
+  private inactivityTimer: any;
+  private lastActivity: number = Date.now();
+
+  private setupInactivityTimer(): void {
+    // Limpiar timer existente
+    if (this.inactivityTimer) {
+      clearInterval(this.inactivityTimer);
+    }
+
+    // Configurar nuevo timer
+    const timeoutMinutes = this.securitySettings.sessionTimeout;
+    const timeoutMs = timeoutMinutes * 60 * 1000; // Convertir a milisegundos
+
+    // Resetear actividad
+    this.lastActivity = Date.now();
+
+    // Eventos para detectar actividad
+    const resetActivity = () => {
+      this.lastActivity = Date.now();
+    };
+
+    // Agregar listeners
+    ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click'].forEach(event => {
+      document.addEventListener(event, resetActivity, true);
+    });
+
+    // Verificar inactividad cada minuto
+    this.inactivityTimer = setInterval(() => {
+      const now = Date.now();
+      const inactiveTime = now - this.lastActivity;
+
+      if (inactiveTime >= timeoutMs) {
+        console.log('Sesión cerrada por inactividad');
+        alert(`⏰ Tu sesión ha expirado por inactividad después de ${timeoutMinutes} minutos`);
+        this.authService.logout();
+      }
+    }, 60000); // Verificar cada minuto
+  }
+
+  toggleEmailNotifications(): void {
+    // Guardar configuración de notificaciones
+    localStorage.setItem('emailNotifications', this.systemSettings.emailNotifications.toString());
+    console.log('Notificaciones por email:', this.systemSettings.emailNotifications);
+    
+    this.showModalMessage('success', 'Configuración Guardada', 
+      this.systemSettings.emailNotifications 
+        ? 'Las notificaciones por email han sido activadas' 
+        : 'Las notificaciones por email han sido desactivadas');
   }
 }

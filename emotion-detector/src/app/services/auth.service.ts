@@ -108,4 +108,11 @@ export class AuthService {
     const psicologo = this.getPsicologo();
     return psicologo ? psicologo.id : null;
   }
+
+  updatePsicologo(psicologoActualizado: Psicologo): void {
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('psicologo', JSON.stringify(psicologoActualizado));
+    }
+    this.psicologoSubject.next(psicologoActualizado);
+  }
 }

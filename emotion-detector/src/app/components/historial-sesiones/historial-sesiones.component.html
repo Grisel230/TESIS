@@ -1,10 +1,11 @@
 <!-- Dashboard Container -->
-<div class="dashboard-container">
+<div class="dashboard-container" [class.dark-mode]="isDarkMode">
   <!-- Sidebar -->
   <div class="sidebar" [class.sidebar-hidden]="!sidebarVisible">
     <div class="sidebar-header">
       <button class="menu-toggle" (click)="toggleSidebar()">
         <i class="menu-icon">☰</i>
+        <span class="menu-text">Menú</span>
       </button>
     </div>
     
@@ -16,7 +17,7 @@
         </svg>
         <span>Inicio</span>
       </a>
-      <a (click)="goToPacientes()" class="nav-item">
+      <a (click)="goToNuevoPaciente()" class="nav-item">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
           <circle cx="8.5" cy="7" r="4"/>
@@ -32,7 +33,7 @@
           <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
           <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
         </svg>
-        <span>Pacientes</span>
+        <span>Lista de Pacientes</span>
       </a>
       <a (click)="goToSesiones()" class="nav-item active">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -64,10 +65,34 @@
         <span>Configuración</span>
       </a>
     </nav>
+
+    <!-- User Profile Section -->
+    <div class="sidebar-footer">
+      <div class="user-profile">
+        <div class="user-avatar">
+          <svg class="avatar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        </div>
+        <div class="user-info">
+          <span class="user-name">{{ psicologo?.nombre_completo || 'Psicólogo' }}</span>
+          <span class="user-role">Psicólogo</span>
+        </div>
+      </div>
+      <a (click)="logout()" class="nav-item logout-item">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+          <polyline points="16 17 21 12 16 7"></polyline>
+          <line x1="21" y1="12" x2="9" y2="12"></line>
+        </svg>
+        <span>Cerrar Sesión</span>
+      </a>
+    </div>
   </div>
   
   <!-- Main Content -->
-  <div class="main-content">
+  <div class="main-content" [class.sidebar-collapsed]="!sidebarVisible">
     <!-- Floating Hamburger Button (only visible when sidebar is hidden) -->
     <button *ngIf="!sidebarVisible" class="floating-hamburger" (click)="toggleSidebar()" title="Mostrar menú">
       <svg class="hamburger-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -76,31 +101,6 @@
         <line x1="3" y1="18" x2="21" y2="18"/>
       </svg>
     </button>
-    <!-- Header -->
-    <div class="content-header">
-      <div class="welcome-text">
-        <h2>Bienvenido {{ getFirstName() }}</h2>
-      </div>
-      <div class="header-search">
-        <div class="search-container">
-          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="11" cy="11" r="8"/>
-            <path d="M21 21l-4.35-4.35"/>
-          </svg>
-          <input type="text" placeholder="Buscar..." class="search-input">
-        </div>
-      </div>
-      <div class="user-profile">
-        <span class="user-name">{{ getFirstName() }}</span>
-        <div class="user-avatar">
-          <svg class="avatar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-            <circle cx="12" cy="7" r="4"/>
-          </svg>
-        </div>
-      </div>
-    </div>
-    
     <!-- Page Title -->
     <div class="page-title">
       <h1>Historial de Sesiones</h1>
@@ -147,45 +147,27 @@
             <option *ngFor="let emotion of emotions" [value]="emotion">{{ emotion | titlecase }}</option>
           </select>
         </div>
+        <div class="filter-button-group">
+          <button class="btn-search" (click)="applyFilters()" title="Buscar sesiones">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="M21 21l-4.35-4.35"/>
+            </svg>
+            Buscar
+          </button>
+          <button class="btn-clear" (click)="clearFilters()" title="Limpiar filtros">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+            Limpiar
+          </button>
+        </div>
       </div>
       
       <!-- Sessions Table -->
       <div class="table-container">
-        <!-- Loading State -->
-        <div *ngIf="isLoading" class="loading-container">
-          <div class="loading-spinner"></div>
-          <p>Cargando sesiones...</p>
-        </div>
-
-        <!-- Error State -->
-        <div *ngIf="errorMessage && !isLoading" class="error-container">
-          <div class="error-message">
-            <svg class="error-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10"/>
-              <line x1="12" y1="8" x2="12" y2="12"/>
-              <line x1="12" y1="16" x2="12.01" y2="16"/>
-            </svg>
-            <p>{{ errorMessage }}</p>
-            <button (click)="loadSessions()" class="retry-button">Reintentar</button>
-          </div>
-        </div>
-
-        <!-- Empty State -->
-        <div *ngIf="!isLoading && !errorMessage && filteredSessions.length === 0" class="empty-container">
-          <div class="empty-message">
-            <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10"/>
-              <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
-              <line x1="9" y1="9" x2="9.01" y2="9"/>
-              <line x1="15" y1="9" x2="15.01" y2="9"/>
-            </svg>
-            <p>No se encontraron sesiones</p>
-            <small>Las sesiones aparecerán aquí una vez que se realicen</small>
-          </div>
-        </div>
-
-        <!-- Sessions Table -->
-        <table *ngIf="!isLoading && !errorMessage && filteredSessions.length > 0" class="sessions-table">
+        <table class="sessions-table">
           <thead>
             <tr>
               <th>Fecha</th>
@@ -199,6 +181,49 @@
             </tr>
           </thead>
           <tbody>
+            <!-- Indicador de carga -->
+            <tr *ngIf="isLoading" class="loading-row">
+              <td colspan="8" class="loading-cell">
+                <div class="loading-spinner">
+                  <div class="spinner"></div>
+                  <span>Cargando sesiones...</span>
+                </div>
+              </td>
+            </tr>
+            
+            <!-- Mensaje de error -->
+            <tr *ngIf="errorMessage && !isLoading" class="error-row">
+              <td colspan="8" class="error-cell">
+                <div class="error-message">
+                  <svg class="error-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="15" y1="9" x2="9" y2="15"/>
+                    <line x1="9" y1="9" x2="15" y2="15"/>
+                  </svg>
+                  {{ errorMessage }}
+                  <button *ngIf="errorMessage.includes('autenticación') || errorMessage.includes('autorizado')" 
+                          class="login-btn" 
+                          (click)="goToLogin()">
+                    Ir al Login
+                  </button>
+                </div>
+              </td>
+            </tr>
+            
+            <!-- Mensaje cuando no hay sesiones -->
+            <tr *ngIf="!isLoading && !errorMessage && filteredSessions.length === 0" class="empty-row">
+              <td colspan="8" class="empty-cell">
+                <div class="empty-message">
+                  <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polyline points="12,6 12,12 16,14"/>
+                  </svg>
+                  <span>No hay sesiones registradas</span>
+                </div>
+              </td>
+            </tr>
+            
+            <!-- Lista de sesiones -->
             <tr *ngFor="let session of filteredSessions" class="session-row">
               <td class="session-date">{{ session.fecha }}</td>
               <td class="session-time">{{ session.hora }}</td>
@@ -207,7 +232,7 @@
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
                   <circle cx="12" cy="7" r="4"/>
                 </svg>
-                {{ session.paciente }}
+                <span class="patient-name-text">{{ session.paciente }}</span>
               </td>
               <td class="session-age">{{ session.edad }} años</td>
               <td class="session-diagnosis">{{ session.diagnostico }}</td>
@@ -261,7 +286,7 @@
   
   <!-- Floating Action Buttons -->
   <div class="floating-buttons">
-    <button class="fab secondary" (click)="goToPacientes()">
+    <button class="fab secondary" (click)="goToNuevoPaciente()">
       <svg class="fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
         <circle cx="8.5" cy="7" r="4"/>

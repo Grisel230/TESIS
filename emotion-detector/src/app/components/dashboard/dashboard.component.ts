@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { AuthService, Psicologo } from '../../services/auth.service';
 import { DashboardService } from '../../services/dashboard.service';
+import { PatientService, PacienteResponse } from '../../services/patient.service';
+import { ThemeService } from '../../services/theme.service';
 
 // Interface Psicologo ahora se importa desde AuthService
 
@@ -47,6 +49,7 @@ export class DashboardComponent implements OnInit {
   userAvatar: string | null = null;
   sidebarVisible: boolean = true;
   isLoading: boolean = true;
+  isDarkMode: boolean = false;
   
   // Stats - ahora se cargan desde la API
   totalPacientes: number = 0;
@@ -99,18 +102,74 @@ export class DashboardComponent implements OnInit {
   constructor(
     private router: Router,
     private authService: AuthService,
-    private dashboardService: DashboardService
+    private dashboardService: DashboardService,
+    private patientService: PatientService,
+    private themeService: ThemeService
   ) {}
 
   ngOnInit(): void {
     console.log('DashboardComponent inicializado');
     console.log('URL actual en dashboard:', window.location.href);
+    
+    // Inicializar modo oscuro
+    this.isDarkMode = this.themeService.isDarkMode();
+    this.themeService.darkMode$.subscribe(isDark => {
+      this.isDarkMode = isDark;
+    });
+    
     this.loadUserData();
     this.loadDashboardData();
+    this.loadPatients();
   }
 
   private loadUserData(): void {
     this.psicologo = this.authService.getPsicologo();
+  }
+
+  private loadPatients(): void {
+    const psicologoId = this.authService.getPsicologoId();
+    if (!psicologoId) {
+      console.error('❌ No se encontró ID del psicólogo para cargar pacientes');
+      return;
+    }
+
+    console.log('🔍 Cargando pacientes del psicólogo:', psicologoId);
+    this.patientService.obtenerPacientes(psicologoId).subscribe({
+      next: (response) => {
+        console.log('✅ Respuesta RAW de pacientes:', response);
+        console.log('📊 Cantidad de pacientes recibidos:', response?.pacientes?.length || 0);
+        
+        if (!response || !response.pacientes || !Array.isArray(response.pacientes)) {
+          console.error('❌ La respuesta no tiene el formato esperado:', response);
+          return;
+        }
+        
+        // Convertir PacienteResponse[] a Patient[]
+        this.patients = response.pacientes.map((paciente: PacienteResponse) => ({
+          id: paciente.id,
+          nombre: paciente.nombre_completo,
+          edad: paciente.edad || 0,
+          genero: paciente.genero || 'No especificado',
+          telefono: paciente.telefono,
+          email: paciente.email,
+          sesiones: 0 // Esto se puede calcular después si es necesario
+        }));
+        
+        console.log('✅ Pacientes procesados para el dashboard:', this.patients);
+        console.log('📋 Total de pacientes en el dashboard:', this.patients.length);
+      },
+      error: (error) => {
+        console.error('❌ Error al cargar pacientes:', error);
+        console.error('📄 Detalles del error:', {
+          status: error.status,
+          statusText: error.statusText,
+          message: error.message,
+          url: error.url
+        });
+        // Mantener los datos de ejemplo si hay error
+        console.log('⚠️ Usando datos de ejemplo por error en la carga');
+      }
+    });
   }
 
   private loadDashboardData(): void {
@@ -118,12 +177,14 @@ export class DashboardComponent implements OnInit {
     if (!psicologoId) {
       console.error('No se encontró ID del psicólogo');
       this.isLoading = false;
+      this.loadDefaultData();
       return;
     }
 
+    console.log('Cargando datos del dashboard para psicólogo ID:', psicologoId);
     this.dashboardService.getDashboardStats(psicologoId).subscribe({
       next: (data) => {
-        console.log('Datos del dashboard recibidos:', data);
+        console.log('✅ Datos del dashboard recibidos desde la BD:', data);
         
         // Cargar estadísticas
         this.totalPacientes = data.estadisticas.total_pacientes;
@@ -134,20 +195,33 @@ export class DashboardComponent implements OnInit {
         this.emocionesHoy = data.estadisticas.emociones_hoy;
         this.satisfaccionPromedio = data.estadisticas.satisfaccion_promedio;
         
+        console.log('📊 Estadísticas cargadas:', {
+          pacientes: this.totalPacientes,
+          sesiones: this.totalSesiones,
+          emociones: this.totalEmociones
+        });
+        
         // Cargar datos de gráficos
         this.chartData = data.chart_data;
         this.processChartData();
         
         // Cargar actividad reciente
         this.recentActivity = data.actividad_reciente;
+        console.log('📋 Actividad reciente cargada:', this.recentActivity.length, 'items');
         
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('Error al cargar datos del dashboard:', error);
+        console.error('❌ Error al cargar datos del dashboard desde la BD:', error);
+        console.error('Detalles del error:', {
+          status: error.status,
+          message: error.message,
+          error: error.error
+        });
         this.isLoading = false;
         // Cargar datos por defecto en caso de error
         this.loadDefaultData();
+        console.warn('⚠️ Usando datos por defecto debido al error');
       }
     });
   }

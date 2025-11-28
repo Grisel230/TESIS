@@ -1,0 +1,258 @@
+/* Estilos forzados para botones de configuración */
+.btn-save,
+button.btn-save,
+.settings-content .btn-save {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  background: #16a34a !important;
+  background-color: #16a34a !important;
+  color: white !important;
+  border: 1px solid #16a34a !important;
+  padding: 12px 24px !important;
+  border-radius: 8px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+}
+
+.btn-save:hover,
+button.btn-save:hover,
+.settings-content .btn-save:hover {
+  background: #15803d !important;
+  background-color: #15803d !important;
+  border-color: #15803d !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.4) !important;
+}
+
+.btn-change-password,
+button.btn-change-password,
+.settings-content .btn-change-password {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  background: #16a34a !important;
+  background-color: #16a34a !important;
+  color: white !important;
+  border: 1px solid #16a34a !important;
+  padding: 12px 24px !important;
+  border-radius: 8px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+}
+
+.btn-change-password:hover,
+button.btn-change-password:hover,
+.settings-content .btn-change-password:hover {
+  background: #15803d !important;
+  background-color: #15803d !important;
+  border-color: #15803d !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.4) !important;
+}
+
+.btn-export,
+button.btn-export,
+.settings-content .btn-export,
+.data-actions .btn-export {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  background: #16a34a !important;
+  background-color: #16a34a !important;
+  color: white !important;
+  border: 1px solid #16a34a !important;
+  padding: 12px 24px !important;
+  border-radius: 8px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+}
+
+.btn-export:hover,
+button.btn-export:hover,
+.settings-content .btn-export:hover,
+.data-actions .btn-export:hover {
+  background: #15803d !important;
+  background-color: #15803d !important;
+  border-color: #15803d !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.4) !important;
+}
+
+.btn-import,
+button.btn-import,
+.settings-content .btn-import,
+.data-actions .btn-import {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  background: #16a34a !important;
+  background-color: #16a34a !important;
+  color: white !important;
+  border: 1px solid #16a34a !important;
+  padding: 12px 24px !important;
+  border-radius: 8px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+}
+
+.btn-import:hover,
+button.btn-import:hover,
+.settings-content .btn-import:hover,
+.data-actions .btn-import:hover {
+  background: #15803d !important;
+  background-color: #15803d !important;
+  border-color: #15803d !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.4) !important;
+}
+
+.btn-danger,
+button.btn-danger,
+.settings-content .btn-danger {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  background: #dc2626 !important;
+  background-color: #dc2626 !important;
+  color: white !important;
+  border: 1px solid #dc2626 !important;
+  padding: 12px 24px !important;
+  border-radius: 8px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+}
+
+.btn-danger:hover,
+button.btn-danger:hover,
+.settings-content .btn-danger:hover {
+  background: #b91c1c !important;
+  background-color: #b91c1c !important;
+  border-color: #b91c1c !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4) !important;
+}
+
+/* Botones modales */
+.btn-modal-close,
+button.btn-modal-close {
+  background: #16a34a !important;
+  background-color: #16a34a !important;
+  color: white !important;
+  border: 1px solid #16a34a !important;
+}
+
+.btn-modal-close:hover,
+button.btn-modal-close:hover {
+  background: #15803d !important;
+  background-color: #15803d !important;
+  border-color: #15803d !important;
+}
+
+.btn-primary,
+button.btn-primary {
+  background: #16a34a !important;
+  background-color: #16a34a !important;
+  color: white !important;
+  border: 1px solid #16a34a !important;
+}
+
+.btn-primary:hover,
+button.btn-primary:hover {
+  background: #15803d !important;
+  background-color: #15803d !important;
+  border-color: #15803d !important;
+}
+
+/* Reglas específicas para modo oscuro */
+.dashboard-container.dark-mode .btn-save,
+.dashboard-container.dark-mode button.btn-save,
+/* Botones primarios - AZUL */
+.dashboard-container.dark-mode .btn-primary,
+.dashboard-container.dark-mode button.btn-primary,
+.dashboard-container.dark-mode .btn.btn-primary,
+.dashboard-container.dark-mode button.btn.btn-primary {
+  background: #3b82f6 !important;
+  background-color: #3b82f6 !important;
+  border-color: #3b82f6 !important;
+  color: #ffffff !important;
+}
+
+/* Botones de éxito/guardar - VERDE */
+.dashboard-container.dark-mode .btn-save,
+.dashboard-container.dark-mode button.btn-save,
+.dashboard-container.dark-mode .btn-change-password,
+.dashboard-container.dark-mode button.btn-change-password,
+.dashboard-container.dark-mode .btn-export,
+.dashboard-container.dark-mode button.btn-export,
+.dashboard-container.dark-mode .btn-import,
+.dashboard-container.dark-mode button.btn-import,
+.dashboard-container.dark-mode .btn-modal-close,
+.dashboard-container.dark-mode button.btn-modal-close,
+.dashboard-container.dark-mode .btn-success,
+.dashboard-container.dark-mode button.btn-success {
+  background: #10b981 !important;
+  background-color: #10b981 !important;
+  border-color: #10b981 !important;
+  color: #ffffff !important;
+}
+
+/* Hover botones primarios - AZUL */
+.dashboard-container.dark-mode .btn-primary:hover,
+.dashboard-container.dark-mode button.btn-primary:hover,
+.dashboard-container.dark-mode .btn.btn-primary:hover,
+.dashboard-container.dark-mode button.btn.btn-primary:hover {
+  background: #2563eb !important;
+  background-color: #2563eb !important;
+  border-color: #2563eb !important;
+}
+
+/* Hover botones de éxito/guardar - VERDE */
+.dashboard-container.dark-mode .btn-save:hover,
+.dashboard-container.dark-mode button.btn-save:hover,
+.dashboard-container.dark-mode .btn-change-password:hover,
+.dashboard-container.dark-mode button.btn-change-password:hover,
+.dashboard-container.dark-mode .btn-export:hover,
+.dashboard-container.dark-mode button.btn-export:hover,
+.dashboard-container.dark-mode .btn-import:hover,
+.dashboard-container.dark-mode button.btn-import:hover,
+.dashboard-container.dark-mode .btn-modal-close:hover,
+.dashboard-container.dark-mode button.btn-modal-close:hover,
+.dashboard-container.dark-mode .btn-success:hover,
+.dashboard-container.dark-mode button.btn-success:hover {
+  background: #059669 !important;
+  background-color: #059669 !important;
+  border-color: #059669 !important;
+}
+
+/* Botón de eliminar cuenta en modo oscuro - ROJO */
+.dashboard-container.dark-mode .btn-danger,
+.dashboard-container.dark-mode button.btn-danger,
+.dashboard-container.dark-mode .btn.btn-danger,
+.dashboard-container.dark-mode button.btn.btn-danger,
+.dashboard-container.dark-mode .settings-content .btn-danger {
+  background: #ef4444 !important;
+  background-color: #ef4444 !important;
+  border-color: #ef4444 !important;
+  color: #ffffff !important;
+}
+
+.dashboard-container.dark-mode .btn-danger:hover,
+.dashboard-container.dark-mode button.btn-danger:hover,
+.dashboard-container.dark-mode .btn.btn-danger:hover,
+.dashboard-container.dark-mode button.btn.btn-danger:hover,
+.dashboard-container.dark-mode .settings-content .btn-danger:hover {
+  background: #dc2626 !important;
+  background-color: #dc2626 !important;
+  border-color: #dc2626 !important;
+}

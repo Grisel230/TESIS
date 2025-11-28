@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface Sesion {
   id?: number;
@@ -29,7 +30,7 @@ export interface EmocionDetectada {
   providedIn: 'root'
 })
 export class SessionService {
-  private apiUrl = 'http://localhost:5000/api';
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
 
@@ -55,5 +56,20 @@ export class SessionService {
   // Eliminar una sesión
   eliminarSesion(sesionId: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/sesiones/${sesionId}`);
+  }
+
+  // Obtener estadísticas de emociones
+  obtenerEstadisticasEmociones(psicologoId: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/estadisticas/emociones/${psicologoId}`);
+  }
+
+  // Obtener estadísticas de sesiones por mes
+  obtenerEstadisticasSesionesMensuales(psicologoId: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/estadisticas/sesiones-mensuales/${psicologoId}`);
+  }
+
+  // Obtener resumen general de estadísticas
+  obtenerResumenEstadisticas(psicologoId: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/estadisticas/resumen/${psicologoId}`);
   }
 }

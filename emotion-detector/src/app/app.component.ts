@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { ThemeService } from './services/theme.service';
 
 @Component({
   selector: 'app-root',
@@ -17,6 +18,14 @@ import { RouterModule } from '@angular/router';
     }
   `]
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'Detector de Emociones';
+
+  constructor(private themeService: ThemeService) {}
+
+  ngOnInit(): void {
+    // El servicio ThemeService ya se encarga de aplicar el tema
+    // al inicializarse, pero lo inyectamos aquí para asegurar
+    // que se cargue al inicio de la aplicación
+  }
 }

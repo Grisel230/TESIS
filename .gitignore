@@ -52,6 +52,9 @@ emotion-detector/node_modules/
 emotion-detector/.angular/
 emotion-detector/coverage/
 
+# Node modules en raíz (si existe)
+node_modules/
+
 # Logs
 *.log
 npm-debug.log*
@@ -69,3 +72,4 @@ yarn-error.log*
 # Temporary files
 *.tmp
 *.temp
+node_modules/

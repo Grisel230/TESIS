@@ -1,158 +1,70 @@
-# 🧠 Sistema de Detección de Emociones para Psicólogos
+# 🎭 Sistema de Detección de Emociones
 
-Un sistema completo que permite a los psicólogos detectar emociones en tiempo real durante las sesiones con sus pacientes, utilizando inteligencia artificial y machine learning.
+Sistema completo de detección de emociones faciales para psicólogos, desarrollado con Flask (Python) y Angular (TypeScript).
 
-## ✨ Características
+## 📋 Descripción
 
-- **Detección de Emociones en Tiempo Real**: Utiliza TensorFlow y OpenCV para detectar 7 emociones básicas
-- **Gestión de Pacientes**: CRUD completo para administrar pacientes
-- **Sesiones de Terapia**: Registro y seguimiento de sesiones
-- **Dashboard Estadístico**: Visualización de datos y métricas
-- **Autenticación Segura**: Sistema JWT para proteger las rutas
-- **Interfaz Moderna**: Frontend en Angular con Material Design
+Este sistema permite a los psicólogos registrar pacientes, realizar sesiones de terapia con detección automática de emociones faciales, y generar informes estadísticos. Utiliza inteligencia artificial para detectar emociones en tiempo real durante las sesiones.
 
 ## 🏗️ Arquitectura
 
-- **Backend**: Flask (Python) con SQLAlchemy
-- **Frontend**: Angular 19 con TypeScript
-- **Base de Datos**: PostgreSQL
-- **IA**: TensorFlow + OpenCV para detección facial
+### Backend (Flask)
+- **Framework**: Flask con SQLAlchemy ORM
+- **Base de Datos**: PostgreSQL (producción) / SQLite (desarrollo)
 - **Autenticación**: JWT (JSON Web Tokens)
+- **IA**: TensorFlow/Keras para detección de emociones
+- **Procesamiento**: OpenCV para detección facial
 
-## 🚀 Instalación Rápida
+### Frontend (Angular)
+- **Framework**: Angular 18
+- **Lenguaje**: TypeScript
+- **Estilos**: SCSS
+- **Servicios**: HTTP Client para comunicación con API
 
-### 1. Clonar el repositorio
+## 🚀 Características Principales
+
+### 👨‍⚕️ Gestión de Psicólogos
+- Registro e inicio de sesión
+- Dashboard con estadísticas
+- Gestión de perfil
+
+### 👥 Gestión de Pacientes
+- Registro de pacientes
+- Lista de pacientes por psicólogo
+- Historial de sesiones
+
+### 🎯 Sesiones de Terapia
+- Detección de emociones en tiempo real
+- Grabación de sesiones
+- Historial de emociones detectadas
+- Generación de informes
+
+## ⚡ Instalación Rápida
+
 ```bash
-git clone <tu-repositorio>
+# Clona el repositorio
+https://github.com/Grisel230/TESIS.git
+
+# Instala dependencias backend
 cd PROTOTIPO
-```
+pip install -r requirements.txt
 
-### 2. Instalar dependencias automáticamente
-```bash
-python install_dependencies.py
-```
-
-### 3. Configurar variables de entorno
-```bash
-# Copiar archivo de ejemplo
-cp env.example .env
-
-# Editar .env con tus configuraciones
-nano .env
-```
-
-### 4. Configurar base de datos PostgreSQL
-```sql
-CREATE DATABASE emociones;
-CREATE USER postgres WITH PASSWORD 'tu_password';
-GRANT ALL PRIVILEGES ON DATABASE emociones TO postgres;
-```
-
-### 5. Verificar instalación
-```bash
-python check_setup.py
-```
-
-## 🎯 Uso
-
-### Iniciar Backend
-```bash
-python app.py
-```
-
-### Iniciar Frontend
-```bash
+# Instala dependencias frontend
 cd emotion-detector
-npm start
+npm install
 ```
 
-### Acceder a la aplicación
-- Frontend: http://localhost:4200
-- Backend API: http://localhost:5000
+## 🧑‍💻 Ejemplo de Uso
 
-## 📁 Estructura del Proyecto
+1. Inicia el backend: `python run_server.py`
+2. Inicia el frontend: `ng serve` en la carpeta `emotion-detector`
+3. Accede a la app en `http://localhost:4200`
 
-```
-PROTOTIPO/
-├── 📁 emotion-detector/          # Frontend Angular
-│   ├── src/app/
-│   │   ├── components/           # Componentes de la UI
-│   │   ├── services/            # Servicios (API, Auth)
-│   │   ├── guards/              # Guards de autenticación
-│   │   └── interceptors/        # Interceptores HTTP
-│   └── package.json
-├── 📁 face_detector/            # Modelos de detección facial
-├── 📄 app.py                    # Aplicación Flask principal
-├── 📄 models.py                 # Modelos de base de datos
-├── 📄 config.py                 # Configuración
-├── 📄 auth_utils.py             # Utilidades de autenticación JWT
-├── 📄 requirements.txt          # Dependencias Python
-├── 📄 install_dependencies.py   # Script de instalación
-├── 📄 check_setup.py           # Script de verificación
-└── 📄 README.md                # Este archivo
-```
+## 📄 Créditos
 
-### Dependencias Python
-- Flask 3.1.2
-- TensorFlow 2.16.1
-- OpenCV 4.10.0
-- SQLAlchemy 3.1.1
-- PyJWT 2.9.0
+Desarrollado por Grisel Laurean y colaboradores.
 
-### Dependencias Angular
-- Angular 19.2.0
-- Angular Material 19.2.19
-- Chart.js 4.5.0
-- RxJS 7.8.0
-
-## 🔐 Seguridad
-
-- **Autenticación JWT**: Tokens seguros con expiración
-- **Validación de Datos**: Validación en frontend y backend
-- **CORS Configurado**: Orígenes permitidos específicos
-- **Manejo de Errores**: Logging y manejo seguro de errores
-- **Variables de Entorno**: Credenciales no hardcodeadas
-
-## 🧪 API Endpoints
-
-### Autenticación
-- `POST /api/register` - Registro de psicólogos
-- `POST /api/login` - Login con JWT
-
-### Pacientes (Requiere autenticación)
-- `GET /api/pacientes/psicologo/{id}` - Listar pacientes
-- `POST /api/pacientes` - Crear paciente
-- `PUT /api/pacientes/{id}` - Actualizar paciente
-- `DELETE /api/pacientes/{id}` - Eliminar paciente
-
-### Sesiones (Requiere autenticación)
-- `GET /api/sesiones/psicologo/{id}` - Listar sesiones
-- `POST /api/sesiones` - Crear sesión
-- `GET /api/sesiones/{id}` - Detalle de sesión
-
-### IA
-- `POST /predict` - Detectar emociones en imagen
-
-## 📊 Monitoreo
-
-El sistema incluye logging detallado para:
-- Intentos de login
-- Errores de autenticación
-- Procesamiento de imágenes
-- Errores de base de datos
-
-## 🤝 Contribución
-
-1. Fork el proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
-
-2. Ejecuta `python check_setup.py` para verificar la configuración
-3. Revisa los logs del servidor
-4. Abre un issue en GitHub
-
----
-
-**Desarrollado con ❤️ para mejorar la práctica psicológica**
+## 📚 Documentación y Enlaces
+- [Documentación oficial Angular](https://angular.io/)
+- [Documentación Flask](https://flask.palletsprojects.com/)
+- [Repositorio en GitHub](https://github.com/Grisel230/TESIS)

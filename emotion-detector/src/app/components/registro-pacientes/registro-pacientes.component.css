@@ -1,23 +1,36 @@
+/* ============================================ */
+/* FORZADO CACHE BUST - 16-NOV-2025-14:30 */
+/* BOTONES: COLORES SÓLIDOS SIN GRADIENTES */
+/* ============================================ */
 /* Dashboard Container */
 .dashboard-container {
   display: flex;
   min-height: 100vh;
-  background: #f8f9fa;
+  background: #f8f9fa !important;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Sidebar */
+/* Sidebar - ESTANDARIZADO */
 .sidebar {
   width: 280px;
-  background: #1e40af;
+  background: #1e40af !important;
   display: flex;
   flex-direction: column;
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
+  border-right: 1px solid rgba(255,255,255,0.1) !important;
+  color: white !important;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  z-index: 100;
 }
 
 .sidebar-hidden {
   transform: translateX(-100%);
+  width: 0;
+  overflow: hidden;
 }
 
 .sidebar-header {
@@ -31,13 +44,24 @@
   color: white;
   font-size: 24px;
   cursor: pointer;
-  padding: 8px;
+  padding: 8px 12px;
   border-radius: 6px;
   transition: background 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
 }
 
 .menu-toggle:hover {
   background: rgba(255, 255, 255, 0.1);
+}
+
+.menu-text {
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
 .sidebar-nav {
@@ -45,38 +69,44 @@
   padding: 20px 0;
 }
 
-.nav-item {
+.sidebar .nav-item {
   display: flex;
   align-items: center;
-  padding: 12px 20px;
-  color: rgba(255, 255, 255, 0.8);
-  text-decoration: none;
+  gap: 15px !important;
+  padding: 14px 20px !important;
+  border-left: 4px solid transparent;
   transition: all 0.3s ease;
   cursor: pointer;
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
 }
 
 .nav-item:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: white !important;
 }
 
 .nav-item.active {
-  background: rgba(255, 255, 255, 0.15);
-  color: white;
-  border-right: 3px solid #60a5fa;
+  background: rgba(255, 255, 255, 0.15) !important;
+  color: white !important;
+  border-left-color: #60a5fa !important;
 }
 
 .nav-icon {
-  width: 20px;
-  height: 20px;
-  margin-right: 12px;
+  width: 20px !important;
+  height: 20px !important;
+  min-width: 20px !important;
   stroke: currentColor;
   fill: none;
+  flex-shrink: 0 !important;
 }
 
 .nav-item span {
-  font-size: 14px;
-  font-weight: 500;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
 }
 
 /* Main Content */
@@ -86,6 +116,14 @@
   flex-direction: column;
   background: #f8f9fa;
   position: relative;
+  margin-left: 280px;
+  width: calc(100% - 280px);
+  transition: margin-left 0.3s ease, width 0.3s ease;
+}
+
+.sidebar-hidden ~ .main-content {
+  margin-left: 0 !important;
+  width: 100% !important;
 }
 
 /* Floating Hamburger Button */
@@ -96,7 +134,7 @@
   z-index: 1000;
   width: 56px;
   height: 56px;
-  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+  background: #1e40af;
   border: none;
   border-radius: 50%;
   box-shadow: 0 8px 24px rgba(30, 64, 175, 0.3);
@@ -111,7 +149,7 @@
 .floating-hamburger:hover {
   transform: translateY(-2px) scale(1.05);
   box-shadow: 0 12px 32px rgba(30, 64, 175, 0.4);
-  background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
+  background: #1e3a8a;
 }
 
 .hamburger-icon {
@@ -152,7 +190,12 @@
   margin: 0;
   font-size: 28px;
   font-weight: 700;
-  color: #1f2937;
+  color: #1e40af;
+  transition: margin-left 0.3s ease;
+}
+
+.sidebar-hidden ~ .main-content .welcome-text h2 {
+  margin-left: 80px;
 }
 
 .header-actions {
@@ -410,7 +453,7 @@
 }
 
 .btn-save-session {
-  background: linear-gradient(135deg, #10b981, #059669);
+  background: #10b981;
   color: white;
   border: none;
   padding: 16px 32px;
@@ -426,7 +469,7 @@
 }
 
 .btn-save-session:hover {
-  background: linear-gradient(135deg, #059669, #047857);
+  background: #059669;
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
 }
@@ -444,7 +487,7 @@
 
 /* Video recording button styles */
 .btn-success {
-  background: linear-gradient(135deg, #10b981, #059669);
+  background: #10b981;
   color: white;
   border: none;
   padding: 12px 20px;
@@ -460,7 +503,7 @@
 }
 
 .btn-success:hover:not(:disabled) {
-  background: linear-gradient(135deg, #059669, #047857);
+  background: #059669;
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
 }
@@ -473,7 +516,7 @@
 }
 
 .btn-warning {
-  background: linear-gradient(135deg, #f59e0b, #d97706);
+  background: #f59e0b;
   color: white;
   border: none;
   padding: 12px 20px;
@@ -489,7 +532,7 @@
 }
 
 .btn-warning:hover:not(:disabled) {
-  background: linear-gradient(135deg, #d97706, #b45309);
+  background: #d97706;
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
 }
@@ -558,7 +601,7 @@
 .success-icon {
   width: 64px;
   height: 64px;
-  background: linear-gradient(135deg, #10b981, #059669);
+  background: #10b981;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -653,7 +696,7 @@
 }
 
 .modal-footer .btn-primary {
-  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  background: #3b82f6;
   color: white;
   border: none;
   display: flex;
@@ -662,7 +705,7 @@
 }
 
 .modal-footer .btn-primary:hover {
-  background: linear-gradient(135deg, #1d4ed8, #1e40af);
+  background: #2563eb;
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 }
@@ -831,13 +874,13 @@
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+  background: #3b82f6;
   color: white;
   box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
+  background: #2563eb;
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(30, 64, 175, 0.4);
 }
@@ -854,13 +897,13 @@
 }
 
 .btn-danger {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  background: #ef4444;
   color: white;
   box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
 }
 
 .btn-danger:hover:not(:disabled) {
-  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  background: #dc2626;
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(220, 38, 38, 0.4);
 }
@@ -909,7 +952,7 @@
 }
 
 .confidence-badge {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  background: #10b981;
   color: white;
   padding: 6px 12px;
   border-radius: 20px;
@@ -1083,7 +1126,7 @@
 
 @media (max-width: 768px) {
   .sidebar {
-    width: 100%;
+    width: 280px;
     position: fixed;
     top: 0;
     left: 0;
@@ -1092,7 +1135,9 @@
   }
   
   .main-content {
-    margin-left: 0;
+    width: 100% !important;
+    padding: 70px 0 0 0;
+    margin-left: 0 !important;
   }
   
   .content-header {
@@ -1188,4 +1233,176 @@
     width: 18px;
     height: 18px;
   }
+}
+
+/* MODO OSCURO */
+/* ============================================
+   DARK MODE STYLES - MODO OSCURO
+   ============================================ */
+
+
+
+/* Sidebar en modo oscuro - ESTANDARIZADO */
+
+
+
+
+
+/* Header en modo oscuro */
+
+
+/* Floating hamburger en modo oscuro */
+
+
+/* Contenedor de análisis en modo oscuro */
+
+
+
+
+/* Botones de cámara en modo oscuro */
+
+
+
+
+/* Panel de resultados en modo oscuro */
+
+
+
+
+
+/* Cards y contenedores en modo oscuro */
+
+
+
+
+/* Selectores adicionales específicos para el contenedor blanco */
+
+
+/* Video y canvas en modo oscuro */
+
+/* Mensajes de estado en modo oscuro */
+
+
+
+/* Estilos adicionales para forzar modo oscuro en todos los contenedores */
+
+
+
+
+
+/* Forzar todos los elementos con fondo blanco a ser oscuros */
+
+
+/* COLORES ESPECÍFICOS DE BOTONES */
+
+/* Botón "Volver a Pacientes" - Azul */
+.header-actions .btn-primary {
+  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%) !important;
+  border-color: #1e40af !important;
+  color: white !important;
+  box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3) !important;
+}
+
+.header-actions .btn-primary:hover {
+  background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%) !important;
+  border-color: #1d4ed8 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 20px rgba(30, 64, 175, 0.4) !important;
+}
+
+/* Botones de cámara - Colores específicos */
+
+/* Iniciar Cámara - Verde */
+.camera-controls .btn-primary {
+  background: #059669 !important;
+  border-color: #059669 !important;
+  color: white !important;
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3) !important;
+}
+
+.camera-controls .btn-primary:hover {
+  background: linear-gradient(135deg, #047857 0%, #059669 100%) !important;
+  border-color: #047857 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 20px rgba(5, 150, 105, 0.4) !important;
+}
+
+/* Detener Cámara - Gris */
+.camera-controls .btn-secondary {
+  background: linear-gradient(135deg, #64748b 0%, #94a3b8 100%) !important;
+  border-color: #64748b !important;
+  color: white !important;
+  box-shadow: 0 4px 12px rgba(100, 116, 139, 0.3) !important;
+}
+
+.camera-controls .btn-secondary:hover {
+  background: linear-gradient(135deg, #475569 0%, #64748b 100%) !important;
+  border-color: #475569 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 20px rgba(100, 116, 139, 0.4) !important;
+}
+
+/* Grabar Video - Rojo */
+.camera-controls .btn-success {
+  background: #dc2626 !important;
+  border-color: #dc2626 !important;
+  color: white !important;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3) !important;
+}
+
+.camera-controls .btn-success:hover {
+  background: linear-gradient(135deg, #b91c1c 0%, #dc2626 100%) !important;
+  border-color: #b91c1c !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 20px rgba(220, 38, 38, 0.4) !important;
+}
+
+/* Detener Grabación - Naranja */
+.camera-controls .btn-warning {
+  background: #d97706 !important;
+  border-color: #d97706 !important;
+  color: white !important;
+  box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3) !important;
+}
+
+.camera-controls .btn-warning:hover {
+  background: linear-gradient(135deg, #b45309 0%, #d97706 100%) !important;
+  border-color: #b45309 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 20px rgba(217, 119, 6, 0.4) !important;
+}
+
+/* Botón Guardar Sesión - Verde más intenso */
+.btn-save-session {
+  background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%) !important;
+  border: none !important;
+  color: white !important;
+  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3) !important;
+  padding: 16px 32px !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  border-radius: 12px !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+}
+
+.btn-save-session:hover {
+  background: linear-gradient(135deg, #15803d 0%, #16a34a 100%) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 20px rgba(22, 163, 74, 0.4) !important;
+}
+
+/* Estilos para input de solo lectura (género) */
+.readonly-input {
+  background-color: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #64748b !important;
+  cursor: not-allowed !important;
+  font-style: normal !important;
+}
+
+.readonly-input:focus {
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(100, 116, 139, 0.1) !important;
+  border-color: #cbd5e1 !important;
 }

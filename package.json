@@ -1,0 +1,9 @@
+{
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^19.2.19",
+    "@types/eslint": "^9.6.1"
+  },
+  "dependencies": {
+    "@angular/core": "^19.2.15"
+  }
+}

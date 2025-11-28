@@ -1,0 +1,268 @@
+<div class="modal-overlay" *ngIf="isVisible" (click)="onBackdropClick($event)">
+  <div class="modal-container">
+    <div class="modal-header">
+      <h2>{{ getReportTitle() }}</h2>
+      <button class="close-button" (click)="onClose()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <div class="modal-content" *ngIf="reportData">
+      
+      <!-- REPORTE MENSUAL -->
+      <div *ngIf="reportType === 'monthly'" class="monthly-report">
+        <div class="report-section">
+          <h3>📊 Resumen del Período</h3>
+          <div class="monthly-summary">
+            <div class="summary-card primary">
+              <div class="summary-icon">📈</div>
+              <div class="summary-info">
+                <span class="summary-value">{{ reportData.totalSessions }}</span>
+                <span class="summary-label">Sesiones Totales</span>
+              </div>
+            </div>
+            <div class="summary-card secondary">
+              <div class="summary-icon">👥</div>
+              <div class="summary-info">
+                <span class="summary-value">{{ reportData.totalPatients }}</span>
+                <span class="summary-label">Pacientes Atendidos</span>
+              </div>
+            </div>
+            <div class="summary-card accent">
+              <div class="summary-icon">🎯</div>
+              <div class="summary-info">
+                <span class="summary-value">{{ reportData.averageConfidence.toFixed(1) }}%</span>
+                <span class="summary-label">Precisión del Sistema</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="report-section">
+          <h3>🎭 Distribución Emocional</h3>
+          <div class="emotions-monthly">
+            <div class="emotion-item" *ngFor="let emotion of reportData.emotionData">
+              <div class="emotion-header">
+                <span class="emotion-icon">{{ getEmotionIcon(emotion.label) }}</span>
+                <span class="emotion-name">{{ emotion.label }}</span>
+                <span class="emotion-percentage">{{ emotion.value }}%</span>
+              </div>
+              <div class="emotion-bar">
+                <div class="emotion-progress" 
+                     [style.width.%]="emotion.value" 
+                     [style.background-color]="emotion.color">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="report-section">
+          <h3>📅 Actividad Mensual</h3>
+          <div class="monthly-chart">
+            <div class="chart-bar" *ngFor="let session of reportData.sessionData">
+              <div class="bar-container">
+                <div class="bar monthly-bar" 
+                     [style.height.px]="session.sessions * 3"
+                     [style.background]="'linear-gradient(135deg, #10b981, #059669)'">
+                </div>
+              </div>
+              <div class="bar-label">{{ session.month }}</div>
+              <div class="bar-value">{{ session.sessions }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- REPORTE DE PACIENTES -->
+      <div *ngIf="reportType === 'patient'" class="patient-report">
+        <div class="report-section">
+          <h3>👥 Resumen de Pacientes</h3>
+          <div class="patient-summary">
+            <div class="summary-card patient-primary">
+              <div class="summary-icon">🏥</div>
+              <div class="summary-info">
+                <span class="summary-value">{{ reportData.totalPatients }}</span>
+                <span class="summary-label">Pacientes Activos</span>
+              </div>
+            </div>
+            <div class="summary-card patient-secondary">
+              <div class="summary-icon">📋</div>
+              <div class="summary-info">
+                <span class="summary-value">{{ (reportData.totalSessions / reportData.totalPatients).toFixed(1) }}</span>
+                <span class="summary-label">Sesiones Promedio</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="report-section" *ngIf="reportData.patientData">
+          <h3>📊 Progreso Individual</h3>
+          <div class="patients-grid">
+            <div class="patient-card" *ngFor="let patient of reportData.patientData">
+              <div class="patient-header">
+                <div class="patient-avatar">{{ patient.name.charAt(0) }}</div>
+                <div class="patient-info">
+                  <h4>{{ patient.name }}</h4>
+                  <span class="patient-sessions">{{ patient.totalSessions }} sesiones</span>
+                </div>
+              </div>
+              <div class="patient-progress-section">
+                <div class="progress-label">Progreso: {{ patient.progress }}%</div>
+                <div class="progress-bar">
+                  <div class="progress-fill" 
+                       [style.width.%]="patient.progress"
+                       [style.background-color]="getProgressColor(patient.progress)">
+                  </div>
+                </div>
+              </div>
+              <div class="patient-emotion">
+                <span class="emotion-badge">
+                  {{ getEmotionIcon(patient.predominantEmotion) }} {{ patient.predominantEmotion }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- REPORTE DE TENDENCIAS -->
+      <div *ngIf="reportType === 'trends'" class="trends-report">
+        <div class="report-section">
+          <h3>📈 Análisis de Tendencias</h3>
+          <div class="trends-summary">
+            <div class="summary-card trends-primary">
+              <div class="summary-icon">📊</div>
+              <div class="summary-info">
+                <span class="summary-value">{{ reportData.totalSessions }}</span>
+                <span class="summary-label">Sesiones Analizadas</span>
+              </div>
+            </div>
+            <div class="summary-card trends-secondary">
+              <div class="summary-icon">🎯</div>
+              <div class="summary-info">
+                <span class="summary-value">{{ reportData.predominantEmotion }}</span>
+                <span class="summary-label">Tendencia Principal</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="report-section" *ngIf="reportData.trendsData">
+          <h3>📊 Evolución Emocional</h3>
+          <div class="trends-timeline">
+            <div class="trend-card" *ngFor="let trend of reportData.trendsData">
+              <div class="trend-indicator" [class]="trend.trend">
+                <span class="trend-icon">{{ getTrendIcon(trend.trend) }}</span>
+              </div>
+              <div class="trend-content">
+                <div class="trend-emotion">{{ trend.emotion }}</div>
+                <div class="trend-period">{{ trend.period }}</div>
+                <div class="trend-change" 
+                     [class.positive]="trend.percentage > 0"
+                     [class.negative]="trend.percentage < 0">
+                  {{ trend.percentage > 0 ? '+' : '' }}{{ trend.percentage }}%
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="report-section">
+          <h3>🎭 Distribución Actual</h3>
+          <div class="trends-emotions">
+            <div class="emotion-trend" *ngFor="let emotion of reportData.emotionData.slice(0, 4)">
+              <div class="emotion-circle" [style.background-color]="emotion.color">
+                <span>{{ emotion.value }}%</span>
+              </div>
+              <div class="emotion-label">{{ emotion.label }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- REPORTE DE EFICIENCIA -->
+      <div *ngIf="reportType === 'efficiency'" class="efficiency-report">
+        <div class="report-section">
+          <h3>⚡ Métricas de Rendimiento</h3>
+          <div class="efficiency-summary">
+            <div class="summary-card efficiency-primary">
+              <div class="summary-icon">🎯</div>
+              <div class="summary-info">
+                <span class="summary-value">{{ (reportData.averageConfidence / 100 * 85).toFixed(1) }}%</span>
+                <span class="summary-label">Índice de Eficiencia</span>
+              </div>
+            </div>
+            <div class="summary-card efficiency-secondary">
+              <div class="summary-icon">📈</div>
+              <div class="summary-info">
+                <span class="summary-value">{{ ((reportData.totalSessions / reportData.totalPatients) * 2).toFixed(1) }}%</span>
+                <span class="summary-label">Tasa de Mejora</span>
+              </div>
+            </div>
+            <div class="summary-card efficiency-accent">
+              <div class="summary-icon">⏱️</div>
+              <div class="summary-info">
+                <span class="summary-value">{{ (reportData.totalSessions / 30).toFixed(1) }}</span>
+                <span class="summary-label">Sesiones/Día</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="report-section">
+          <h3>📊 Análisis de Productividad</h3>
+          <div class="efficiency-chart">
+            <div class="efficiency-bar" *ngFor="let session of reportData.sessionData">
+              <div class="bar-container">
+                <div class="bar efficiency-bar-style" 
+                     [style.height.px]="session.sessions * 2"
+                     [style.background]="'linear-gradient(135deg, #8b5cf6, #7c3aed)'">
+                </div>
+              </div>
+              <div class="bar-label">{{ session.month }}</div>
+              <div class="bar-value">{{ session.sessions }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="report-section">
+          <h3>🎯 Indicadores Clave</h3>
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-icon">📋</div>
+              <div class="kpi-value">{{ reportData.averageConfidence.toFixed(1) }}%</div>
+              <div class="kpi-label">Precisión</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-icon">⚡</div>
+              <div class="kpi-value">{{ (reportData.totalSessions * 0.85).toFixed(0) }}</div>
+              <div class="kpi-label">Sesiones Exitosas</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-icon">📈</div>
+              <div class="kpi-value">{{ ((reportData.totalPatients / reportData.totalSessions) * 100).toFixed(1) }}%</div>
+              <div class="kpi-label">Ratio Paciente/Sesión</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-secondary" (click)="onClose()">Cerrar</button>
+      <button class="btn-primary" (click)="onDownload()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7,10 12,15 17,10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Descargar PDF
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { PatientService, Paciente } from '../../services/patient.service';
-import { Psicologo } from '../../services/auth.service';
+import { AuthService, Psicologo } from '../../services/auth.service';
+import { ThemeService } from '../../services/theme.service';
 
 // Usar la interfaz del servicio
 
@@ -12,12 +13,14 @@ import { Psicologo } from '../../services/auth.service';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './nuevo-paciente.component.html',
-  styleUrls: ['./nuevo-paciente.component.css']
+  styleUrls: ['./nuevo-paciente.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class NuevoPacienteComponent implements OnInit {
   // Datos del psicólogo logueado
   psicologo: Psicologo | null = null;
   sidebarVisible: boolean = true;
+  isDarkMode = false;
 
   // Datos del formulario
   paciente: Paciente = {
@@ -48,12 +51,20 @@ export class NuevoPacienteComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private patientService: PatientService
+    private patientService: PatientService,
+    private themeService: ThemeService,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
     // Cargar datos del psicólogo desde localStorage
     this.loadPsicologo();
+    
+    // Configurar tema oscuro
+    this.isDarkMode = this.themeService.isDarkMode();
+    this.themeService.darkMode$.subscribe(isDark => {
+      this.isDarkMode = isDark;
+    });
     
     // Verificar si estamos en modo edición
     this.route.params.subscribe(params => {
@@ -175,15 +186,19 @@ export class NuevoPacienteComponent implements OnInit {
   }
 
   goToSettings(): void {
-    alert('Vista de configuración en desarrollo');
+    this.router.navigate(['/configuracion']);
   }
 
   goToReports(): void {
-    alert('Vista de reportes en desarrollo');
+    this.router.navigate(['/informes-estadisticas']);
+  }
+
+  logout(): void {
+    this.authService.logout();
   }
 
   goToResources(): void {
-    alert('Vista de recursos en desarrollo');
+    this.router.navigate(['/recursos']);
   }
 
   // Método para validar el formulario

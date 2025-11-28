@@ -92,13 +92,37 @@ class Sesion(db.Model):
             'confianza_promedio': self.confianza_promedio
         }
 
+class PasswordResetToken(db.Model):
+    __tablename__ = 'password_reset_tokens'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    psicologo_id = db.Column(db.Integer, db.ForeignKey('psicologos.id'), nullable=False)
+    token = db.Column(db.String(100), unique=True, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    expires_at = db.Column(db.DateTime, nullable=False)
+    used = db.Column(db.Boolean, default=False)
+    
+    def is_valid(self):
+        """Verifica si el token es válido (no usado y no expirado)"""
+        return not self.used and datetime.utcnow() < self.expires_at
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'psicologo_id': self.psicologo_id,
+            'token': self.token,
+            'created_at': self.created_at.isoformat(),
+            'expires_at': self.expires_at.isoformat(),
+            'used': self.used
+        }
+
 class EmocionDetectada(db.Model):
     __tablename__ = 'emociones_detectadas'
     
     id = db.Column(db.Integer, primary_key=True)
     sesion_id = db.Column(db.Integer, db.ForeignKey('sesiones.id'), nullable=False)
     emotion = db.Column(db.String(50), nullable=False)
-    confianza = db.Column(db.Float, nullable=False)
+    confidence = db.Column(db.Float, nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     
     def to_dict(self):
@@ -106,6 +130,6 @@ class EmocionDetectada(db.Model):
             'id': self.id,
             'sesion_id': self.sesion_id,
             'emotion': self.emotion,
-            'confianza': self.confianza,
+            'confidence': self.confidence,
             'timestamp': self.timestamp.isoformat()
         }

@@ -1,10 +1,11 @@
 <!-- Dashboard Container -->
-<div class="dashboard-container">
+<div class="dashboard-container" [class.dark-mode]="isDarkMode">
   <!-- Sidebar -->
   <div class="sidebar" [class.sidebar-hidden]="!sidebarVisible">
     <div class="sidebar-header">
       <button class="menu-toggle" (click)="toggleSidebar()">
         <i class="menu-icon">☰</i>
+        <span class="menu-text">Menú</span>
       </button>
     </div>
     
@@ -34,12 +35,12 @@
         </svg>
         <span>Lista de Pacientes</span>
       </a>
-      <a (click)="goToSesiones()" class="nav-item active">
+      <a (click)="goToSesiones()" class="nav-item">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="12" cy="12" r="10"/>
           <polyline points="12,6 12,12 16,14"/>
         </svg>
-        <span>Registro de Sesiones</span>
+        <span>Historial de Sesiones</span>
       </a>
       <a (click)="goToReports()" class="nav-item">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -83,13 +84,11 @@
         <h2>Registro de Sesión de Paciente</h2>
       </div>
       <div class="header-actions">
-        <button (click)="logout()" class="btn btn-danger">
+        <button (click)="goToListaPacientes()" class="btn btn-primary">
           <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-            <polyline points="16,17 21,12 16,7"/>
-            <polyline points="21,12 9,12"/>
+            <path d="m15 18-6-6 6-6"/>
           </svg>
-          Cerrar Sesión
+          Volver a Pacientes
         </button>
       </div>
     </div>
@@ -126,23 +125,17 @@
               
               <div class="form-group">
                 <label for="nombreCompletoPaciente">Nombre completo</label>
-                <input type="text" id="nombreCompletoPaciente" class="form-input" placeholder="Ingresa el nombre completo del paciente" [(ngModel)]="nombreCompletoPaciente" name="nombreCompletoPaciente">
+                <input type="text" id="nombreCompletoPaciente" class="form-input readonly-input" [(ngModel)]="nombreCompletoPaciente" name="nombreCompletoPaciente" readonly placeholder="Se cargará automáticamente">
               </div>
 
               <div class="form-row">
                 <div class="form-group">
                   <label for="edadPaciente">Edad</label>
-                  <input type="number" id="edadPaciente" class="form-input" placeholder="Edad del paciente" [(ngModel)]="edadPaciente" name="edadPaciente">
+                  <input type="text" id="edadPaciente" class="form-input readonly-input" [(ngModel)]="edadPaciente" name="edadPaciente" readonly placeholder="Se cargará automáticamente">
                 </div>
                 <div class="form-group">
                   <label for="generoPaciente">Género</label>
-                  <select id="generoPaciente" class="form-select" [(ngModel)]="generoPaciente" name="generoPaciente">
-                    <option value="">Seleccionar género</option>
-                    <option value="masculino">Masculino</option>
-                    <option value="femenino">Femenino</option>
-                    <option value="otro">Otro</option>
-                    <option value="prefiero-no-decir">Prefiero no decir</option>
-                  </select>
+                  <input type="text" id="generoPaciente" class="form-input readonly-input" [(ngModel)]="generoPaciente" name="generoPaciente" readonly placeholder="Se cargará automáticamente">
                 </div>
               </div>
             </div>
